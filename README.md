@@ -1,5 +1,3 @@
-# README.md
-
 ## PLATAFORMA PARA ONG DE PROTEÇÃO E BEM-ESTAR ANIMAL
 
 ### Introdução
