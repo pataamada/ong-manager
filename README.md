@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# README.md
 
-## Getting Started
+## PLATAFORMA PARA ONG DE PROTEÇÃO E BEM-ESTAR ANIMAL
 
-First, run the development server:
+### Introdução
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Este projeto visa fornecer aos estudantes a oportunidade de adquirir experiência prática em desenvolvimento de software, utilizando as mais recentes tecnologias e metodologias ágeis, proporcionando uma experiência prática de desenvolvimento de software em equipe.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Justificativa
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+A criação de uma plataforma digital é uma excelente prática para desenvolvedores de software, pois permite aplicar e aprimorar habilidades técnicas em um ambiente real de desenvolvimento.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Objetivos
 
-## Learn More
+Desenvolver uma plataforma web para facilitar a gestão de uma organização não governamental (ONG).
 
-To learn more about Next.js, take a look at the following resources:
+### Funcionalidades essenciais
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    1) Sistema Administrativo da ONG:
+        a) Aprimorar o sistema administrativo para a ONG, com funcionalidades necessárias para o gerenciamento eficiente das operações como cadastro, edição e exclusão de animais, cadastro, edição e exclusão de voluntários e de padrinhos, e acompanhamento de entradas (doações) e saídas financeiras, cadastro de eventos e cadastro de notícias.
+    2) Página de Doações:
+        a) Permitir que os usuários façam doações únicas ou recorrentes para apoiar a causa da ONG;
+        b) Integração com sistemas de pagamento para facilitar as transações financeiras.
+    3) Landing Page para Exibição de Animais:
+        a) Apresentar os animais disponíveis para adoção de forma atrativa e informativa;
+        b) Permitir que os usuários visualizem detalhes sobre cada animal e entrem em contato para adoção;
+        c) Mostrar agenda com próximos eventos e seção com últimas notícias;
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Funcionalidades opcionais
 
-## Deploy on Vercel
+    1) Implementação de um assistente chatbot;
+    2) Implementar sistemas de adoção e apadrinhamento, permitindo que os usuários realizem essas ações online.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Metodologia
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+O projeto será desenvolvido utilizando metodologias ágeis, como Scrum ou Kanban, que favorecem a entrega contínua de valor e a adaptação às mudanças ao longo do processo de desenvolvimento, proporcionando aos participantes uma vivência real de como ocorre o desenvolvimento em equipe em ambientes corporativos. Será realizado acompanhamento diário (daily) assíncrono e semanalmente haverá o planejamento de sprint e as revisões e retrospectivas, garantindo uma abordagem interativa e adaptativa.
+
+### Prazo de entrega
+
+O prazo para a conclusão do projeto é de um semestre.
+
+### Cliente
+
+Abrigo Cãodomínio Satuba (Instituto Betânia Vieira): https://www.instagram.com/abrigocaodominiosatuba/
+
+### Equipe
+
+| Nome       | Perfil no GitHub             |
+| ---------- | ---------------------------- | 
+| Alícia Lima | (https://github.com/aliciapslima) |
+| Arthur Clemente | (https://github.com/ArthurClemente) |
+| Carlos Roque | (https://github.com/Roque-if) |
+| João Victor Zignago | (https://github.com/zignaggo) |
+| Kaú Leal   | (https://github.com/KauLeal) |
+| Luiz Vinícius | (https://github.com/luizzvinicius) |
+| Roberto Ferreira | (https://github.com/robertoferreira7) |
+| Vivian Lopes | (https://github.com/vivski) |
