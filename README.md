@@ -48,6 +48,7 @@ Abrigo Cãodomínio Satuba (Instituto Betânia Vieira): https://www.instagram.co
 | Alícia Lima | (https://github.com/aliciapslima) |
 | Arthur Clemente | (https://github.com/ArthurClemente) |
 | Carlos Roque | (https://github.com/Roque-if) |
+| Christianny | (https://github.com/chrixtianny) |
 | João Victor Zignago | (https://github.com/zignaggo) |
 | Kaú Leal   | (https://github.com/KauLeal) |
 | Luiz Vinícius | (https://github.com/luizzvinicius) |
