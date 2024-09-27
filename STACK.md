@@ -1,5 +1,3 @@
-# STACK.md
-
 ## Tecnologias Utilizadas
 
 ### Frontend
@@ -21,3 +19,9 @@
 
 - <img src="https://static-00.iconduck.com/assets.00/file-type-firestore-icon-1780x2048-0rzupks3.png" alt="Firestore Logo" width="40" height="45" /> **Firestore** 
   - Banco de dados NoSQL em tempo real fornecido pelo Firebase para a sincronização de dados em tempo real entre clientes e o armazenamento escalável de documentos JSON.
+
+### <img src="https://s3.amazonaws.com/cdn.hotglue.xyz/images/logos/firebase-auth.png" alt="Autenticação Firebase Logo" width="35" height="35"/> [**Firebase Authentication**](https://firebase.google.com/products/auth)
+- O Firebase Authentication fornece uma maneira fácil e segura de autenticar usuários através de métodos como e-mail/senha, Google e outros provedores. Foi escolhido pela sua integração perfeita com o Firebase e a facilidade de gerenciamento de usuários, garantindo segurança ao sistema de login.
+
+### <img src="https://www.svgrepo.com/show/373597/firebasehosting.svg" alt="Hospedagem Firebase Logo" width="35" height="35"/> [**Firebase Hosting**](https://firebase.google.com/docs/hosting?hl=pt)
+- A hospedagem do Firebase oferece uma maneira simples e rápida de implantar aplicações web. Foi escolhida pela sua integração nativa com o Firebase, permitindo um deploy rápido e eficiente, além de suporte para HTTPS, CDN e configurações de redirecionamento.
