@@ -1,62 +1,85 @@
 {
 	"$schema": "https://biomejs.dev/schemas/1.9.2/schema.json",
 	"formatter": {
-		"enabled": true,
-		"formatWithErrors": false,
-		"ignore": [],
-		"attributePosition": "auto",
-		"indentStyle": "tab",
-		"indentWidth": 2,
-		"lineWidth": 100,
-		"lineEnding": "lf"
+	  "enabled": true,
+	  "formatWithErrors": false,
+	  "ignore": [],
+	  "attributePosition": "auto",
+	  "indentStyle": "tab",
+	  "indentWidth": 2,
+	  "lineWidth": 100,
+	  "lineEnding": "lf"
 	},
 	"javascript": {
-		"formatter": {
-			"arrowParentheses": "always",
-			"bracketSameLine": false,
-			"bracketSpacing": true,
-			"jsxQuoteStyle": "double",
-			"quoteProperties": "asNeeded",
-			"semicolons": "always",
-			"trailingCommas": "all"
-		}
+	  "formatter": {
+		"arrowParentheses": "asNeeded",
+		"bracketSameLine": false,
+		"bracketSpacing": true,
+		"jsxQuoteStyle": "double",
+		"quoteProperties": "asNeeded",
+		"semicolons": "asNeeded",
+		"trailingCommas": "all"
+	  }
 	},
 	"linter": {
-		"enabled": true,
-		"rules": {
-			"recommended": true,
-			"complexity": {
-				"useArrowFunction": "off"
-			},
-			"style": {
-				"noCommaOperator": "off",
-				"noNonNullAssertion": "off",
-				"noParameterAssign": "off"
-			},
-			"suspicious": {
-				"noAssignInExpressions": "off"
-			}
+	  "enabled": true,
+	  "rules": {
+		"recommended": true,
+		"complexity": {
+		  "useArrowFunction": "info",
+		  "noBannedTypes": "warn",
+		  "noForEach": "info",
+		  "noMultipleSpacesInRegularExpressionLiterals": "error",
+		  "noUselessTernary": "warn",
+		  "useFlatMap": "error"
+		},
+		"style": {
+		  "noCommaOperator": "off",
+		  "noNonNullAssertion": "off",
+		  "noParameterAssign": "off",
+		  "noNamespace": "error",
+		  "noNegationElse": "error",
+		  "noUnusedTemplateLiteral": "error",
+		  "noUselessElse": "warn",
+		  "noVar": "warn",
+		  "noYodaExpression": "error",
+		  "useNamingConvention": "info",
+		  "useImportType": "warn",
+		  "useShorthandArrayType": "error",
+		  "useShorthandAssign": "error"
+		},
+		"suspicious": {
+		  "noAssignInExpressions": "off",
+		  "noConstEnum": "error",
+		  "noDoubleEquals": "error",
+		  "useAwait": "error"
+		},
+		"a11y": {
+		  "useAltText": "warn"
+		},
+		"performance": {
+		  "noAccumulatingSpread": "error",
+		  "noDelete": "error"
 		}
-  	},
-	"json": {
-		"formatter": {
-			"trailingCommas": "none"
-		}
+	  }
 	},
-	"organizeImports": {
-    "enabled": true
-  	},
+	"json": {
+	  "formatter": {
+		"trailingCommas": "none"
+	  }
+	},
 	"files": {
-		"include": [
-			"src/**/*.js",
-			"src/**/*.ts",
-			"src/**/*.tsx",
-			"src/**/*.jsx",
-			"test/**/*.js",
-			"test/**/*.ts",
-			"test/**/*.tsx",
-			"test/**/*.jsx"
-		],
-		"ignore": ["**/*.min.js", ".next/**", "node_modules/**"]
+	  "include": [
+		"src/**/*.js",
+		"src/**/*.ts",
+		"src/**/*.tsx",
+		"src/**/*.jsx",
+		"test/**/*.js",
+		"test/**/*.ts",
+		"test/**/*.tsx",
+		"test/**/*.jsx"
+	  ],
+	  "ignore": ["**/*.min.js", ".next/**", "node_modules/**"]
 	}
-}
+  }
+  
