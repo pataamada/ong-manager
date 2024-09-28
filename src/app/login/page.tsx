@@ -1,11 +1,48 @@
+'use client'
+
 import React from 'react';
 
 import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+// zod schema validation
+const formLoginSchema = z.object({
+  email: z.string().email("Digite um email válido"),
+  password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
+  rememberMe: z.boolean().optional(),
+});
 
 export default function Login() {
+  // react hook form config with zod
+  const form = useForm<z.infer<typeof formLoginSchema>>({
+    resolver: zodResolver(formLoginSchema),
+    defaultValues: {
+			email: "",
+			password: "",
+			rememberMe: false,
+		},
+  });
+
+  const onSubmit = (data: z.infer<typeof formLoginSchema>) => {
+    console.log("Form Data:", data);
+  };
+
   return (
     <div className="relative flex flex-col items-center h-screen xl:flex-row">
       <div className="relative bg-green-500">
@@ -13,79 +50,94 @@ export default function Login() {
           src={'/img-pagina-login.svg'}
           width={100}
           height={100}
-          alt="logo"
+          alt="iamgem da página de login"
           className="h-screen w-screen object-cover"
         />
       </div>
 
-      <div className="w-full max-w-md p-8 space-y-6">
+      <div className="w-full max-w-lg p-8 space-y-6">
         <Image
           src={'/logo-caodominio-satuba.svg'}
           width={200}
           height={70}
           alt="logo do cãodominio satuba"
-          aria-describedby='imagem com a palavra cãodominio na cor verde, acima da palavra satuba, na cor preta'
           className="mb-20 mx-auto"
         />
         
-        <form className="space-y-8">
-          <div className="flex flex-col items-center gap-2 mx-auto">
-            <h2 className="text-center">Entre em sua conta</h2>
-            <h3 className="text-center">Bem-vindo de volta</h3>
-          </div>
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-black-600">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm text-black"
-              placeholder="Digite seu email"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <div className="flex flex-col items-center gap-2 mx-auto">
+              <h2 className="text-center">Entre em sua conta</h2>
+              <h3 className="text-center">Bem-vindo de volta</h3>
+            </div>
+
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="email"
+                      placeholder="Digite seu email"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-600">
-              Senha
-            </label>
-            <div className="relative">
-              <input
-                type="password"
-                id="password"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm text-black"
-                placeholder="Digite sua senha"
+
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Senha</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder="Digite sua senha"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <div className="flex items-center justify-between">
+              <FormField
+                control={form.control}
+                name="rememberMe"
+                render={({ field }) => (
+                  <FormItem className="flex items-center space-y-0">
+                    <FormControl>
+                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                    <FormLabel htmlFor="rememberMe" className="ml-2 block text-sm text-black-600">
+                      Lembrar-se
+                    </FormLabel>
+                  </FormItem>
+                )}
               />
+              <div className="text-sm">
+                <Link
+                  href="/"
+                  className="font-medium text-emerald-600 hover:text-emerald-500 underline"
+                >
+                  Esqueceu a senha?
+                </Link>
+              </div>
             </div>
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                type="checkbox"
-                className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-black-600">
-                Lembrar-se
-              </label>
-            </div>
-            <div className="text-sm">
-              <Link
-                href="/"
-                className="font-medium text-green-600 hover:text-green-500 underline"
-              >
-                Esqueceu a senha?
-              </Link>
-            </div>
-          </div>
-          <div>
             <Button className="w-full" type="submit">
               Entrar
             </Button>
-          </div>
-        </form>
+          </form>
+        </Form>
       </div>
     </div>
   );
 }
-
-
