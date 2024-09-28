@@ -44,18 +44,18 @@ export default function Login() {
   };
 
   return (
-    <div className="relative flex flex-col items-center h-screen xl:flex-row">
+    <div className="relative flex flex-col lg:items-center h-screen lg:flex-row">
       <div className="relative bg-green-500">
         <Image
           src={'/img-pagina-login.svg'}
           width={100}
           height={100}
           alt="iamgem da página de login"
-          className="h-screen w-screen object-cover"
+          className="hidden lg:block h-screen w-screen object-cover"
         />
       </div>
 
-      <div className="w-full max-w-lg p-8 space-y-6">
+      <div className="absolute lg:static top-1/2 left-1/2 lg:left-auto -translate-x-1/2 lg:-translate-x-0 -translate-y-1/2 lg:-translate-y-0 flex w-2/3 lg:p-0 flex-col lg:mx-24 lg:w-2/6 lg:h-screen justify-center gap-4">
         <Image
           src={'/logo-caodominio-satuba.svg'}
           width={200}
@@ -76,7 +76,7 @@ export default function Login() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel className="font-semibold">Email</FormLabel>
                   <FormControl>
                     <Input
                       id="email"
@@ -94,7 +94,7 @@ export default function Login() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Senha</FormLabel>
+                  <FormLabel className="font-semibold">Senha</FormLabel>
                   <FormControl>
                     <Input
                       id="password"
@@ -117,7 +117,7 @@ export default function Login() {
                     <FormControl>
                       <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                     </FormControl>
-                    <FormLabel htmlFor="rememberMe" className="ml-2 block text-sm text-black-600">
+                    <FormLabel htmlFor="rememberMe" className="ml-2 block text-sm font-semibold">
                       Lembrar-se
                     </FormLabel>
                   </FormItem>
@@ -126,7 +126,7 @@ export default function Login() {
               <div className="text-sm">
                 <Link
                   href="/"
-                  className="font-medium text-emerald-600 hover:text-emerald-500 underline"
+                  className="font-normal text-emerald-600 hover:text-emerald-500 underline"
                 >
                   Esqueceu a senha?
                 </Link>
