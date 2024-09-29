@@ -1,17 +1,17 @@
 {
 	"$schema": "https://biomejs.dev/schemas/1.9.2/schema.json",
 	"formatter": {
-	  "enabled": true,
-	  "formatWithErrors": false,
-	  "ignore": [],
-	  "attributePosition": "auto",
-	  "indentStyle": "tab",
-	  "indentWidth": 2,
-	  "lineWidth": 100,
-	  "lineEnding": "lf"
+		"enabled": true,
+		"formatWithErrors": false,
+		"ignore": [],
+		"attributePosition": "auto",
+		"indentStyle": "tab",
+		"indentWidth": 2,
+		"lineWidth": 100,
+		"lineEnding": "lf"
 	},
 	"javascript": {
-	  "formatter": {
+		"formatter": {
 		"arrowParentheses": "asNeeded",
 		"bracketSameLine": false,
 		"bracketSpacing": true,
@@ -19,57 +19,57 @@
 		"quoteProperties": "asNeeded",
 		"semicolons": "asNeeded",
 		"trailingCommas": "all"
-	  }
+		}
 	},
 	"linter": {
-	  "enabled": true,
-	  "rules": {
+		"enabled": true,
+		"rules": {
 		"recommended": true,
 		"complexity": {
-		  "useArrowFunction": "info",
-		  "noBannedTypes": "warn",
-		  "noForEach": "info",
-		  "noMultipleSpacesInRegularExpressionLiterals": "error",
-		  "noUselessTernary": "warn",
-		  "useFlatMap": "error"
+			"useArrowFunction": "info",
+			"noBannedTypes": "warn",
+			"noForEach": "info",
+			"noMultipleSpacesInRegularExpressionLiterals": "error",
+			"noUselessTernary": "warn",
+			"useFlatMap": "error"
 		},
 		"style": {
-		  "noCommaOperator": "off",
-		  "noNonNullAssertion": "off",
-		  "noParameterAssign": "off",
-		  "noNamespace": "error",
-		  "noNegationElse": "error",
-		  "noUnusedTemplateLiteral": "error",
-		  "noUselessElse": "warn",
-		  "noVar": "warn",
-		  "noYodaExpression": "error",
-		  "useNamingConvention": "info",
-		  "useImportType": "warn",
-		  "useShorthandArrayType": "error",
-		  "useShorthandAssign": "error"
+			"noCommaOperator": "off",
+			"noNonNullAssertion": "off",
+			"noParameterAssign": "off",
+			"noNamespace": "error",
+			"noNegationElse": "error",
+			"noUnusedTemplateLiteral": "error",
+			"noUselessElse": "warn",
+			"noVar": "warn",
+			"noYodaExpression": "error",
+			"useNamingConvention": "info",
+			"useImportType": "warn",
+			"useShorthandArrayType": "error",
+			"useShorthandAssign": "error"
 		},
 		"suspicious": {
-		  "noAssignInExpressions": "off",
-		  "noConstEnum": "error",
-		  "noDoubleEquals": "error",
-		  "useAwait": "error"
+			"noAssignInExpressions": "off",
+			"noConstEnum": "error",
+			"noDoubleEquals": "error",
+			"useAwait": "error"
 		},
 		"a11y": {
-		  "useAltText": "warn"
+			"useAltText": "warn"
 		},
 		"performance": {
-		  "noAccumulatingSpread": "error",
-		  "noDelete": "error"
+			"noAccumulatingSpread": "error",
+			"noDelete": "error"
 		}
-	  }
+		}
 	},
 	"json": {
-	  "formatter": {
+		"formatter": {
 		"trailingCommas": "none"
-	  }
+		}
 	},
 	"files": {
-	  "include": [
+		"include": [
 		"src/**/*.js",
 		"src/**/*.ts",
 		"src/**/*.tsx",
@@ -78,8 +78,7 @@
 		"test/**/*.ts",
 		"test/**/*.tsx",
 		"test/**/*.jsx"
-	  ],
-	  "ignore": ["**/*.min.js", ".next/**", "node_modules/**"]
+		],
+		"ignore": ["**/*.min.js", ".next/**", "node_modules/**"]
 	}
-  }
-  
+}
