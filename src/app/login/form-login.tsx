@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
-import { login } from "@/auth/useAuth"
+import { signInTest } from "@/auth/useAuth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -17,6 +17,9 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form"
+import { onAuthStateChanged } from "firebase/auth"
+import { useEffect } from "react"
+import { auth } from "@/lib/firebase/firebase-secret"
 
 // zod schema validation
 const formLoginSchema = z.object({
@@ -37,12 +40,17 @@ export default function FormLogin() {
 	})
 
 	const onSubmit = (data: z.infer<typeof formLoginSchema>) => {
-		console.log("Form Data:", data)
+		signInTest(data)
 	}
 
+	useEffect(() => {
+		onAuthStateChanged(auth, data => {
+			console.log('data', data)
+		})
+	}, [])
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(login)} className="space-y-8">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 				<div className="flex flex-col items-center gap-2 mx-auto">
 					<h2 className="text-center">Entre em sua conta</h2>
 					<h3 className="text-center">Bem-vindo de volta</h3>
