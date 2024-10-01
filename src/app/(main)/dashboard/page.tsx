@@ -9,7 +9,7 @@ export default async function Dashboard() {
 	if (!currentUser) {
 		return redirect("/login")
 	}
-	if (currentUser.role !== UserRoles.Admin) {
+	if (currentUser.role !== UserRoles.Authenticated) {
 		throw new AuthRequiredError()
 	}
 	return (

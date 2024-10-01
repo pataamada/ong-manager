@@ -1,13 +1,12 @@
 "use server"
-
-import { custom, z } from "zod"
+import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
-import { signInWithCustomToken, signInWithEmailAndPassword } from "firebase/auth"
+import { signInWithCustomToken } from "firebase/auth"
 import { auth } from "@/lib/firebase/firebase-secret"
 import { createSessionCookie, firebaseApp } from "@/lib/firebase/firebase-admin"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import { findUserByLogin } from "@/services/user.service"
+import { findUserByEmailPassword } from "@/services/user.service"
 import { getAuth } from "firebase-admin/auth"
 
 const schema = z.object({
@@ -18,8 +17,14 @@ const schema = z.object({
 export const login = actionClient
 	.schema(schema)
 	.action(async ({ parsedInput: { email, password } }) => {
-		const userDb = await findUserByLogin(email, password)
-		console.log(userDb)
+		const userDb = await findUserByEmailPassword(email, password)
+		if (!userDb) {
+			throw new Error("Usuário não encontrado")
+			// return {
+			// 	success: false,
+			// 	message: "Usuário não encontrado",
+			// }
+		}
 		const userId = userDb.id
 
 		const additionalClaims = {
