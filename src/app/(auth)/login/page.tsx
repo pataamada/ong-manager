@@ -2,8 +2,12 @@ import React from "react"
 
 import Image from "next/image"
 import FormLogin from "./form-login"
+import { isUserAuthenticated } from "@/lib/firebase/firebase-admin"
+import { redirect } from "next/navigation"
 
-export default function Login() {
+export default async function Login() {
+	const isAuthenticated = await isUserAuthenticated()
+	if (isAuthenticated) return redirect("/dashboard")
 	return (
 		<div className="relative flex flex-col lg:items-center h-screen lg:flex-row">
 			<div className="relative bg-green-500">
@@ -11,7 +15,8 @@ export default function Login() {
 					src={"/img-pagina-login.svg"}
 					width={100}
 					height={100}
-					alt="iamgem da página de login"
+					priority
+					alt="imagem da página de login"
 					className="hidden lg:block h-screen w-screen object-cover"
 				/>
 			</div>

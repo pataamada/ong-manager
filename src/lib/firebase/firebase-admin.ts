@@ -1,9 +1,13 @@
-// src/lib/firebase/firebase-admin.ts
 import "server-only";
-import { cookies } from "next/headers";
 import { type SessionCookieOptions, getAuth } from "firebase-admin/auth";
-import { initializeApp, getApps, cert, type ServiceAccount } from "firebase-admin/app";
+import {
+    initializeApp,
+    getApps,
+    cert,
+    type ServiceAccount,
+} from "firebase-admin/app";
 import { envServerSchema } from "@/types/env-schema";
+import { getSession } from "../session";
 
 export const adminService: ServiceAccount = {
     projectId: envServerSchema.projectId,
@@ -25,12 +29,10 @@ export async function isUserAuthenticated(
 ) {
     const _session = session ?? (await getSession());
     if (!_session) return false;
-
     try {
-        const isRevoked = !(await auth.verifySessionCookie(_session, true));
-        return !isRevoked;
+        const isRevoked = await auth.verifySessionCookie(_session, true);
+        return !!isRevoked;
     } catch (error) {
-        console.log(error);
         return false;
     }
 }
@@ -48,14 +50,6 @@ export async function getCurrentUser() {
     return currentUser;
 }
 
-// biome-ignore lint/suspicious/useAwait: <explanation>
-async function getSession() {
-    try {
-        return cookies().get("__session")?.value;
-    } catch (error) {
-        return undefined;
-    }
-}
 
 export function createSessionCookie(
     idToken: string,
