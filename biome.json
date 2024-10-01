@@ -28,7 +28,7 @@
 		"complexity": {
 			"useArrowFunction": "info",
 			"noBannedTypes": "warn",
-			"noForEach": "info",
+			"noForEach": "off",
 			"noMultipleSpacesInRegularExpressionLiterals": "error",
 			"noUselessTernary": "warn",
 			"useFlatMap": "error"
