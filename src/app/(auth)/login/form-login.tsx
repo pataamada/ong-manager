@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useAction } from "next-safe-action/hooks";
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import {
@@ -35,9 +36,9 @@ export default function FormLogin() {
 			rememberMe: false,
 		},
 	})
-
+	const { execute, isPending } = useAction(login);
 	const onSubmit = (data: z.infer<typeof formLoginSchema>) => {
-		login(data)
+		execute(data)
 	}
 	return (
 		<Form {...form}>
@@ -99,7 +100,7 @@ export default function FormLogin() {
 						</Link>
 					</div>
 				</div>
-				<Button className="w-full" type="submit">
+				<Button className="w-full" type="submit" disabled={isPending}>
 					Entrar
 				</Button>
 			</form>
