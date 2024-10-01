@@ -10,7 +10,8 @@ yarn.lock
 .vscode
 pnpm-lock.yaml
 package-lock.json
-
+service-account.json
+.env
 # testing
 /coverage
 

@@ -5,8 +5,8 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
-import { login } from "@/auth/useAuth"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useAction } from "next-safe-action/hooks"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import {
@@ -17,6 +17,7 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form"
+import { login } from "@/actions/auth/login"
 
 // zod schema validation
 const formLoginSchema = z.object({
@@ -35,14 +36,13 @@ export default function FormLogin() {
 			rememberMe: false,
 		},
 	})
-
+	const { execute, isPending } = useAction(login)
 	const onSubmit = (data: z.infer<typeof formLoginSchema>) => {
-		console.log("Form Data:", data)
+		execute(data)
 	}
-
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(login)} className="space-y-8">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 				<div className="flex flex-col items-center gap-2 mx-auto">
 					<h2 className="text-center">Entre em sua conta</h2>
 					<h3 className="text-center">Bem-vindo de volta</h3>
@@ -100,7 +100,7 @@ export default function FormLogin() {
 						</Link>
 					</div>
 				</div>
-				<Button className="w-full" type="submit">
+				<Button className="w-full" type="submit" disabled={isPending}>
 					Entrar
 				</Button>
 			</form>
