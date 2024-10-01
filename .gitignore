@@ -5,10 +5,11 @@
 /.pnp
 .pnp.js
 .yarn/install-state.gz
-.yarn.lock
+yarn.lock
 .firebase
 .vscode
 pnpm-lock.yaml
+package-lock.json
 
 # testing
 /coverage
