@@ -18,13 +18,12 @@ import {
 	FormMessage,
 } from "@/components/ui/form"
 import { login } from "@/actions/auth/login"
-import { useEffect } from "react"
 import { useToast } from "@/hooks/use-toast"
 
 // zod schema validation
 const formLoginSchema = z.object({
 	email: z.string().email("Digite um email válido"),
-	password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
+	password: z.string().min(8, "A senha deve ter pelo menos 8 caracteres"),
 	rememberMe: z.boolean().optional(),
 })
 
@@ -41,8 +40,6 @@ export default function FormLogin() {
 	const { executeAsync, isPending, result } = useAction(login)
 	const onSubmit = async (data: z.infer<typeof formLoginSchema>) => {
 		await executeAsync(data)
-	}
-	useEffect(() => {
 		if (result.serverError) {
 			toast({
 				title: "Ocorreu um erro ao tentar entrar",
@@ -50,7 +47,7 @@ export default function FormLogin() {
 				variant: "destructive",
 			})
 		}
-	}, [result, toast])
+	}
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

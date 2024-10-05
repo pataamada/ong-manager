@@ -1,3 +1,5 @@
+import { UsersTable } from "./_components/user-table"
+
 export default function Users() {
-	return <div>Usuários</div>
+	return <UsersTable />
 }
