@@ -1,13 +1,17 @@
-export interface Donation {
-	userId?: string
-  animalId?: string
+export interface IDonation {
+	transactionType: transactionType
+	animalId?: string
+	userName?: string
+	userCpfCnpj?: string
 	category: Category
 	value: number
 	description: string
+	proof: string[]
 	date: string
 }
 
-export interface Expense {
+export interface IExpense {
+	transactionType: transactionType
 	userId: string
 	category: Category
 	value: number
@@ -15,6 +19,8 @@ export interface Expense {
 	proof: string[]
 	date: string
 }
+
+type transactionType = "donation" | "expense"
 
 type Category =
 	| "Aluguel"
