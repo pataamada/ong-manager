@@ -35,13 +35,13 @@ O projeto será desenvolvido utilizando metodologias ágeis, como Scrum ou Kanba
 
 ### Prazo de entrega
 
-O prazo para a conclusão do projeto é de um semestre.
+O prazo para a conclusão do projeto é de um semestre ou 27/12/2024.
 
 ### Cliente
 
 Abrigo Cãodomínio Satuba (Instituto Betânia Vieira): https://www.instagram.com/abrigocaodominiosatuba/
 
-### Equipe
+### Equipe no Projeto de Extensão
 
 | Nome       | Perfil no GitHub             |
 | ---------- | ---------------------------- | 
@@ -54,3 +54,12 @@ Abrigo Cãodomínio Satuba (Instituto Betânia Vieira): https://www.instagram.co
 | Luiz Vinícius | (https://github.com/luizzvinicius) |
 | Roberto Ferreira | (https://github.com/robertoferreira7) |
 | Vivian Lopes | (https://github.com/vivski) |
+
+Equipe em PROINT 1
+| Nome       | Perfil no GitHub             |
+| ---------- | ---------------------------- | 
+| Alícia Lima | (https://github.com/aliciapslima) |
+| Christianny | (https://github.com/chrixtianny) |
+| João Victor Zignago | (https://github.com/zignaggo) |
+| Kaú Leal   | (https://github.com/KauLeal) |
+| Luiz Vinícius | (https://github.com/luizzvinicius) |
