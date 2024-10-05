@@ -1,5 +1,5 @@
 import { collection, query, getDocs, getDoc, doc } from "firebase/firestore";
-import { db, storage } from "@/lib/firebase/firebaseDev-secret"; // Change to firebase-secret.ts
+import { db, storage } from "@/lib/firebase/firebase-secret";
 import {
   ref,
   uploadBytesResumable,
