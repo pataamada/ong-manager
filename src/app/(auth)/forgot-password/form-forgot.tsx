@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useAction } from "next-safe-action/hooks";
 import { resetPassword } from "@/actions/auth/reset-password";
+import { useToast } from "@/hooks/use-toast";
 
 // Definindo o esquema de validação com Zod
 const forgotPasswordSchema = z.object({
@@ -35,19 +36,21 @@ export default function FormForgotPassword() {
 			email: "",
 		},
 	});
-
+    const {toast} = useToast()
 	const {
 		handleSubmit,
-		formState: { errors, isSubmitting },
+		formState: { errors },
 	} = methods;
-    const {execute, isPending} = useAction(resetPassword)
+    const {executeAsync, isPending} = useAction(resetPassword)
 	// Função que será chamada ao submeter o formulário
-	const onSubmit = (data: ForgotPasswordFormData) => {
-		execute({email:data.email})
+	const onSubmit = async (data: ForgotPasswordFormData) => {
+		await executeAsync({email:data.email})
+		toast({title:"Recuperação de senha", description:"Email enviado com sucesso!", variant:"default"})
 	};
 
 	return (
 		<FormProvider {...methods}>
+
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
 				<div className="flex flex-col items-center gap-2 mx-auto">
 					<h2 className="text-center">Recuperação de senha</h2>
