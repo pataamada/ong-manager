@@ -20,15 +20,10 @@ export const login = actionClient
 		const userDb = await findUserByEmailPassword(email, password)
 		if (!userDb) {
 			throw new Error("Usuário não encontrado")
-			// return {
-			// 	success: false,
-			// 	message: "Usuário não encontrado",
-			// }
 		}
 		const userId = userDb.id
-
 		const additionalClaims = {
-			role: userDb?.data.role || "AUTHENTICATED",
+			role: userDb.data.role || "AUTHENTICATED",
 		}
 		const customToken = await getAuth(firebaseApp).createCustomToken(userId, additionalClaims)
 		const token = await signInWithCustomToken(auth, customToken)
