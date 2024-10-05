@@ -103,7 +103,7 @@ export default function FormLogin() {
 					/>
 					<div className="text-sm">
 						<Link
-							href="/"
+							href="/forgot-password"
 							className="font-normal text-emerald-600 hover:text-emerald-500 underline"
 						>
 							Esqueceu a senha?
