@@ -1,5 +1,16 @@
 import { UsersTable } from "./_components/user-table"
+import { getCurrentUser } from "@/lib/firebase/firebase-admin"
+import { AuthRequiredError } from "@/lib/exceptions"
+import { UserRoles } from "@/models/user.model"
+import { redirect } from "next/navigation"
 
-export default function Users() {
+export default async function Users() {
+	const currentUser = await getCurrentUser()
+	if (!currentUser) {
+		return redirect("/login")
+	}
+	if (currentUser.role !== UserRoles.Authenticated) {
+		throw new AuthRequiredError()
+	}
 	return <UsersTable />
 }

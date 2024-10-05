@@ -1,19 +1,17 @@
 "use client"
 import { BadgeMenu } from "@/components/custom-ui/badge-menu"
-// import { BadgeMenu } from "@/components/custom-ui/badge-menu"
-import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import type { User, UserRoles } from "@/models/user.model"
 import type { ColumnDef, Row } from "@tanstack/react-table"
-import { Edit2, MoreHorizontal, Trash } from "lucide-react"
+import { ActionMenu } from "./action-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { initialLetters } from "@/utils"
 
-export const columns = (roleChangeCallback: (row: Row<User>) => unknown): ColumnDef<User>[] => [
+export const columns = (callbacks: {
+	roleChange?: (row: Row<User>) => unknown
+	edit?: (row: Row<User>) => unknown
+	delete?: (row: Row<User>) => unknown
+}): ColumnDef<User>[] => [
 	{
 		id: "select",
 		header: ({ table }) => (
@@ -46,9 +44,15 @@ export const columns = (roleChangeCallback: (row: Row<User>) => unknown): Column
 			return user.original.email.includes(filterValue.toLowerCase())
 		},
 		cell: ({ row }) => (
-			<div className="capitalize">
-				<h6>{row.original.name}</h6>
-				<span>{row.original.email}</span>
+			<div className="capitalize flex items-center gap-2">
+				<Avatar>
+					<AvatarImage src={row.original.photo} />
+					<AvatarFallback>{initialLetters(row.original.name)}</AvatarFallback>
+				</Avatar>
+				<div>
+					<h6 className="font-semibold text-md text-zinc-900">{row.original.name}</h6>
+					<span className="text-zinc-500">{row.original.email}</span>
+				</div>
 			</div>
 		),
 	},
@@ -81,7 +85,7 @@ export const columns = (roleChangeCallback: (row: Row<User>) => unknown): Column
 					value={getValue() as string}
 					onValueChange={value => {
 						row.original.role = value as UserRoles
-						roleChangeCallback(row)
+						callbacks.roleChange?.(row)
 					}}
 					options={[
 						{
@@ -103,27 +107,10 @@ export const columns = (roleChangeCallback: (row: Row<User>) => unknown): Column
 		},
 		header: () => <div className="text-right">Ações</div>,
 		enableHiding: false,
-		cell: () => {
+		cell: ({ row }) => {
 			return (
 				<div className="w-full flex justify-end">
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant="ghost" size="icon">
-								<span className="sr-only">Open menu</span>
-								<MoreHorizontal size={16} />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align="end">
-							<DropdownMenuItem className="gap-2">
-								<Edit2 size={16} />
-								<span>Editar</span>
-							</DropdownMenuItem>
-							<DropdownMenuItem className="gap-2 text-red-500">
-								<Trash size={16} />
-								<span>Apagar</span>
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
+					<ActionMenu value={row} onEditClick={callbacks.edit} onDeleteClick={callbacks.delete} />
 				</div>
 			)
 		},

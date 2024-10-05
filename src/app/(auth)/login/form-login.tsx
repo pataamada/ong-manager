@@ -107,7 +107,7 @@ export default function FormLogin() {
 						</Link>
 					</div>
 				</div>
-				<Button className="w-full" type="submit" disabled={isPending}>
+				<Button variant="success" className="w-full" type="submit" disabled={isPending}>
 					Entrar
 				</Button>
 			</form>
