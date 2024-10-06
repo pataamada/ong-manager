@@ -10,7 +10,7 @@ import { MoreHorizontal, Edit2, Trash } from "lucide-react"
 interface ActionMenuProps<T> {
 	value: T
 	onEditClick?: ((value: T) => unknown) | undefined
-	onDeleteClick?: ((value: T) => unknown)  | undefined
+	onDeleteClick?: ((value: T) => unknown) | undefined
 }
 export function ActionMenu<T>({ onEditClick, value, onDeleteClick }: ActionMenuProps<T>) {
 	return (
