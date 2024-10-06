@@ -4,6 +4,7 @@ import { initializeApp, getApps, cert, type ServiceAccount } from "firebase-admi
 import { getFirestore } from "firebase-admin/firestore"
 import { envServerSchema } from "@/types/env-schema"
 import { getSession } from "../session"
+import type { UserRoles } from "@/models/user.model"
 
 export const adminService: ServiceAccount = {
 	projectId: envServerSchema.projectId,
@@ -41,7 +42,7 @@ export async function getCurrentUser() {
 	const decodedIdToken = await auth.verifySessionCookie(session!)
 	const currentUser = await auth.getUser(decodedIdToken.uid)
 
-	return { user: currentUser, role: decodedIdToken.role }
+	return { user: currentUser, role: decodedIdToken.role as UserRoles }
 }
 
 export function createSessionCookie(idToken: string, sessionCookieOptions: SessionCookieOptions) {

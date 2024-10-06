@@ -18,7 +18,9 @@ import {
 	FormMessage,
 } from "@/components/ui/form"
 import { login } from "@/actions/auth/login"
-
+import { useEffect } from "react"
+import { useToast } from "@/hooks/use-toast"
+import { useRouter } from 'nextjs-toploader/app';
 // zod schema validation
 const formLoginSchema = z.object({
 	email: z.string().email("Digite um email válido"),
@@ -27,7 +29,7 @@ const formLoginSchema = z.object({
 })
 
 export default function FormLogin() {
-	// react hook form config with zod
+	const router = useRouter();
 	const form = useForm<z.infer<typeof formLoginSchema>>({
 		resolver: zodResolver(formLoginSchema),
 		defaultValues: {
@@ -36,10 +38,26 @@ export default function FormLogin() {
 			rememberMe: false,
 		},
 	})
-	const { execute, isPending } = useAction(login)
-	const onSubmit = (data: z.infer<typeof formLoginSchema>) => {
-		execute(data)
+	const { toast } = useToast()
+	const { executeAsync, isPending, result } = useAction(login)
+	const onSubmit = async (data: z.infer<typeof formLoginSchema>) => {
+		await executeAsync(data)
+		router.replace('/dashboard')
+		toast({
+			title: "Bem vindo ao Cão domínio",
+			description: "Acompanhe/gerencia a ong",
+			variant: "default",
+		})
 	}
+	useEffect(() => {
+		if (result.serverError) {
+			toast({
+				title: "Ocorreu um erro ao tentar entrar",
+				description: result.serverError,
+				variant: "destructive",
+			})
+		}
+	}, [result, toast])
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -75,7 +93,6 @@ export default function FormLogin() {
 						</FormItem>
 					)}
 				/>
-
 				<div className="flex items-center justify-between">
 					<FormField
 						control={form.control}
@@ -93,7 +110,7 @@ export default function FormLogin() {
 					/>
 					<div className="text-sm">
 						<Link
-							href="/"
+							href="/forgot-password"
 							className="font-normal text-emerald-600 hover:text-emerald-500 underline"
 						>
 							Esqueceu a senha?

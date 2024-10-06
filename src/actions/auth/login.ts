@@ -5,7 +5,6 @@ import { signInWithCustomToken } from "firebase/auth"
 import { auth } from "@/lib/firebase/firebase-secret"
 import { createSessionCookie, firebaseApp } from "@/lib/firebase/firebase-admin"
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
 import { findUserByEmailPassword } from "@/services/user.service"
 import { getAuth } from "firebase-admin/auth"
 
@@ -20,15 +19,10 @@ export const login = actionClient
 		const userDb = await findUserByEmailPassword(email, password)
 		if (!userDb) {
 			throw new Error("Usuário não encontrado")
-			// return {
-			// 	success: false,
-			// 	message: "Usuário não encontrado",
-			// }
 		}
 		const userId = userDb.id
-
 		const additionalClaims = {
-			role: userDb?.data.role || "AUTHENTICATED",
+			role: userDb.data.role || "AUTHENTICATED",
 		}
 		const customToken = await getAuth(firebaseApp).createCustomToken(userId, additionalClaims)
 		const token = await signInWithCustomToken(auth, customToken)
@@ -40,5 +34,4 @@ export const login = actionClient
 			httpOnly: true,
 			secure: true,
 		})
-		redirect("/dashboard")
 	})

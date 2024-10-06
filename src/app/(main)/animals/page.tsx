@@ -1,3 +1,6 @@
+import AnimalsCard from "./animals-card";
+
+
 export default function Animals() {
-	return <div>Animais</div>
+  return <AnimalsCard />
 }
