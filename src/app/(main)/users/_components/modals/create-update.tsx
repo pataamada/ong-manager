@@ -19,22 +19,33 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import type { User } from "@/models/user.model"
+import { validateCpf } from "@/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { DialogProps } from "@radix-ui/react-dialog"
 import { useEffect, type ReactNode } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { InputMask } from "@react-input/mask"
 interface CreateUpdateUserModal extends DialogProps {
 	children?: ReactNode
 	data?: Partial<User> | null
 	onSubmit?: (user: Partial<User>) => unknown
 }
-const createUserSchema = z.object({
-	name: z.string().min(4, "Nome deve ter no mínimo 4 carateres").trim(),
-	email: z.string().email("Digite um email válido").trim(),
-	cpf: z.string().min(11, "O CPF deve ter pelo menos 11 caracteres").trim(),
-	password: z.string().min(8, "A senha deve ter pelo menos 8 caracteres").trim().optional(),
-})
+const createUserSchema = z
+	.object({
+		name: z.string().min(4, "Nome deve ter no mínimo 4 carateres").trim(),
+		email: z.string().email("Digite um email válido").trim(),
+		cpf: z.string().min(11, "O CPF deve ter pelo menos 11 caracteres").trim(),
+		password: z.string().min(8, "A senha deve ter pelo menos 8 caracteres").trim().optional(),
+	})
+	.superRefine((value, ctx) => {
+		const isValidCpf = validateCpf(value.cpf)
+		if (isValidCpf) {
+			return
+		}
+		ctx.addIssue({ code: "custom", message: "Digite um cpf válido", path: ["cpf"] })
+	})
+
 export function CreateUpdateUserModal({
 	children,
 	data,
@@ -44,14 +55,24 @@ export function CreateUpdateUserModal({
 }: CreateUpdateUserModal) {
 	const form = useForm<z.infer<typeof createUserSchema>>({
 		resolver: zodResolver(createUserSchema),
-		values: { name: data?.name || "", cpf: data?.cpf || "", email: data?.email || "" },
+		values: {
+			name: data?.name || "",
+			cpf: data?.cpf || "",
+			email: data?.email || "",
+			password: "",
+		},
 	})
-	const handleOnSubmit = (data: z.infer<typeof createUserSchema>) => {
-		onSubmit?.({ email: data.email, name: data.name, cpf: data.cpf })
+	const handleOnSubmit = (values: z.infer<typeof createUserSchema>) => {
+		if (!values.password?.length && !data) {
+			form.setError("password", { type: "required", message: "Senha é obrigatória" })
+			return
+		}
+		onSubmit?.({ email: values.email, name: values.name, cpf: values.cpf })
 	}
 	useEffect(() => {
 		if (!open) {
 			form.clearErrors()
+            form.reset()
 		}
 	}, [open, form])
 	return (
@@ -87,7 +108,14 @@ export function CreateUpdateUserModal({
 									<FormItem>
 										<FormLabel className="font-semibold">CPF</FormLabel>
 										<FormControl>
-											<Input id="cpf" placeholder="Digite o CPF do usuário" {...field} />
+											<InputMask
+												mask="___.___.___-__"
+												replacement={{ _: /\d/ }}
+												component={Input}
+												id="cpf"
+												placeholder="Digite o CPF do usuário"
+												{...field}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
