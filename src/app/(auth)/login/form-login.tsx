@@ -19,7 +19,8 @@ import {
 } from "@/components/ui/form"
 import { login } from "@/actions/auth/login"
 import { useToast } from "@/hooks/use-toast"
-import { useRouter } from 'nextjs-toploader/app';
+import { useRouter } from "nextjs-toploader/app"
+import { PasswordInput } from "@/components/custom-ui/password-input"
 // zod schema validation
 const formLoginSchema = z.object({
 	email: z.string().email("Digite um email válido"),
@@ -28,7 +29,7 @@ const formLoginSchema = z.object({
 })
 
 export default function FormLogin() {
-	const router = useRouter();
+	const router = useRouter()
 	const form = useForm<z.infer<typeof formLoginSchema>>({
 		resolver: zodResolver(formLoginSchema),
 		defaultValues: {
@@ -47,9 +48,9 @@ export default function FormLogin() {
 				description: result.serverError,
 				variant: "destructive",
 			})
-			return;
+			return
 		}
-		router.replace('/dashboard')
+		router.replace("/dashboard")
 		toast({
 			title: "Bem vindo ao Cão domínio",
 			description: "Acompanhe/gerencia a ong",
@@ -85,7 +86,11 @@ export default function FormLogin() {
 						<FormItem>
 							<FormLabel className="font-semibold">Senha</FormLabel>
 							<FormControl>
-								<Input id="password" type="password" placeholder="Digite sua senha" {...field} />
+								<PasswordInput
+									id="password"
+									placeholder="Digite sua senha"
+									{...field}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>

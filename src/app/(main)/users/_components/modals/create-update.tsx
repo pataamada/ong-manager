@@ -26,6 +26,7 @@ import { useEffect, type ReactNode } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { InputMask } from "@react-input/mask"
+import { PasswordInput } from "@/components/custom-ui/password-input"
 interface CreateUpdateUserModal extends DialogProps {
 	children?: ReactNode
 	data?: Partial<User> | null
@@ -36,7 +37,12 @@ const createUserSchema = z
 		name: z.string().min(4, "Nome deve ter no mínimo 4 carateres").trim(),
 		email: z.string().email("Digite um email válido").trim(),
 		cpf: z.string().min(11, "O CPF deve ter pelo menos 11 caracteres").trim(),
-		password: z.string().min(8, "A senha deve ter pelo menos 8 caracteres").trim().optional(),
+		password: z
+			.string()
+			.min(8, "A senha deve ter pelo menos 8 caracteres")
+			.trim()
+			.optional()
+			.or(z.literal("")),
 	})
 	.superRefine((value, ctx) => {
 		const isValidCpf = validateCpf(value.cpf)
@@ -72,7 +78,7 @@ export function CreateUpdateUserModal({
 	useEffect(() => {
 		if (!open) {
 			form.clearErrors()
-            form.reset()
+			form.reset()
 		}
 	}, [open, form])
 	return (
@@ -141,7 +147,11 @@ export function CreateUpdateUserModal({
 									<FormItem>
 										<FormLabel className="font-semibold">Senha</FormLabel>
 										<FormControl>
-											<Input id="password" placeholder="Digite a senha do usuário" {...field} />
+											<PasswordInput
+												id="password"
+												placeholder="Digite a senha do usuário"
+												{...field}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
