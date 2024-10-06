@@ -3,6 +3,8 @@ import localFont from "next/font/local"
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { Provider } from "jotai"
+import NextTopLoader from "nextjs-toploader"
 
 const geistSans = localFont({
 	src: "../fonts/GeistVF.woff",
@@ -29,7 +31,10 @@ export default function RootLayout({
 		<html lang="en">
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen`}>
 				<Toaster />
-				<TooltipProvider>{children}</TooltipProvider>
+				<TooltipProvider>
+					<NextTopLoader color="#10b981" showSpinner={false} />
+					<Provider>{children}</Provider>
+				</TooltipProvider>
 			</body>
 		</html>
 	)

@@ -5,7 +5,6 @@ import { signInWithCustomToken } from "firebase/auth"
 import { auth } from "@/lib/firebase/firebase-secret"
 import { createSessionCookie, firebaseApp } from "@/lib/firebase/firebase-admin"
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
 import { findUserByEmailPassword } from "@/services/user.service"
 import { getAuth } from "firebase-admin/auth"
 
@@ -35,5 +34,4 @@ export const login = actionClient
 			httpOnly: true,
 			secure: true,
 		})
-		redirect("/dashboard")
 	})

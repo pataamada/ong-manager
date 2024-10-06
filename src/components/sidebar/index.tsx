@@ -17,12 +17,18 @@ import {
 	DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import { logout } from "@/actions/auth/logout"
+import { useRouter } from "nextjs-toploader/app"
 
 export function Sidebar({
 	currentUser,
 }: { currentUser: { user: UserRecord; role: UserRoles } | null }) {
 	useHydrateAtoms([[userAtom, currentUser]])
 	const user = useAtomValue(userAtom)
+    const router = useRouter();
+    const handleLogout = async () => {
+        await logout()
+        router.replace('/login')
+    }
 	return (
 		<aside className="flex flex-col gap-4 bg-white p-3 border-r border-zinc-300">
 			<DropdownMenu>
@@ -37,7 +43,7 @@ export function Sidebar({
 				<DropdownMenuContent side="right" sideOffset={8} align="start">
 					<DropdownMenuLabel>{user?.user.email}</DropdownMenuLabel>
 					<DropdownMenuSeparator />
-					<DropdownMenuItem className="gap-2 text-red-500" onClick={() => logout()}>
+					<DropdownMenuItem className="gap-2 text-red-500" onClick={handleLogout}>
 						<Icon name="DoorOpen" size={16} />
 						<span>Sair</span>
 					</DropdownMenuItem>
