@@ -20,7 +20,7 @@ import {
 import { login } from "@/actions/auth/login"
 import { useEffect } from "react"
 import { useToast } from "@/hooks/use-toast"
-
+import { useRouter } from 'nextjs-toploader/app';
 // zod schema validation
 const formLoginSchema = z.object({
 	email: z.string().email("Digite um email válido"),
@@ -29,6 +29,7 @@ const formLoginSchema = z.object({
 })
 
 export default function FormLogin() {
+	const router = useRouter();
 	const form = useForm<z.infer<typeof formLoginSchema>>({
 		resolver: zodResolver(formLoginSchema),
 		defaultValues: {
@@ -41,6 +42,12 @@ export default function FormLogin() {
 	const { executeAsync, isPending, result } = useAction(login)
 	const onSubmit = async (data: z.infer<typeof formLoginSchema>) => {
 		await executeAsync(data)
+		router.replace('/dashboard')
+		toast({
+			title: "Bem vindo ao Cão domínio",
+			description: "Acompanhe/gerencia a ong",
+			variant: "default",
+		})
 	}
 	useEffect(() => {
 		if (result.serverError) {

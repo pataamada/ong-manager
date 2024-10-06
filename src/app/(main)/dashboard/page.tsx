@@ -1,6 +1,5 @@
 import { getCurrentUser } from "@/lib/firebase/firebase-admin"
 import { redirect,  } from "next/navigation"
-import FormLogout from "./form-logout"
 import { AuthRequiredError } from "@/lib/exceptions"
 import { UserRoles } from "@/models/user.model"
 
@@ -9,13 +8,12 @@ export default async function Dashboard() {
 	if (!currentUser) {
 		return redirect("/login")
 	}
-	if (currentUser.role !== UserRoles.Authenticated) {
+	if (currentUser.role !== UserRoles.Admin) {
 		throw new AuthRequiredError()
 	}
 	return (
-		<div className="flex flex-col p-6">
+		<div className="flex flex-col">
 			<span>{currentUser.user.email}</span>
-			<FormLogout />
 		</div>
 	)
 }

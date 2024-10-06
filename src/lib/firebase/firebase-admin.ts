@@ -3,6 +3,7 @@ import { type SessionCookieOptions, getAuth } from "firebase-admin/auth"
 import { initializeApp, getApps, cert, type ServiceAccount } from "firebase-admin/app"
 import { envServerSchema } from "@/types/env-schema"
 import { getSession } from "../session"
+import type { UserRoles } from "@/models/user.model"
 
 export const adminService: ServiceAccount = {
 	projectId: envServerSchema.projectId,
@@ -39,7 +40,7 @@ export async function getCurrentUser() {
 	const decodedIdToken = await auth.verifySessionCookie(session!)
 	const currentUser = await auth.getUser(decodedIdToken.uid)
 
-	return { user: currentUser, role: decodedIdToken.role }
+	return { user: currentUser, role: decodedIdToken.role as UserRoles }
 }
 
 export function createSessionCookie(idToken: string, sessionCookieOptions: SessionCookieOptions) {
