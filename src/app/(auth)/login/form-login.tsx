@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/form"
 import { login } from "@/actions/auth/login"
 import { useToast } from "@/hooks/use-toast"
-
+import { useRouter } from 'nextjs-toploader/app';
 // zod schema validation
 const formLoginSchema = z.object({
 	email: z.string().email("Digite um email válido"),
@@ -28,6 +28,7 @@ const formLoginSchema = z.object({
 })
 
 export default function FormLogin() {
+	const router = useRouter();
 	const form = useForm<z.infer<typeof formLoginSchema>>({
 		resolver: zodResolver(formLoginSchema),
 		defaultValues: {
@@ -46,7 +47,14 @@ export default function FormLogin() {
 				description: result.serverError,
 				variant: "destructive",
 			})
+			return;
 		}
+		router.replace('/dashboard')
+		toast({
+			title: "Bem vindo ao Cão domínio",
+			description: "Acompanhe/gerencia a ong",
+			variant: "default",
+		})
 	}
 	return (
 		<Form {...form}>
@@ -100,7 +108,7 @@ export default function FormLogin() {
 					/>
 					<div className="text-sm">
 						<Link
-							href="/"
+							href="/forgot-password"
 							className="font-normal text-emerald-600 hover:text-emerald-500 underline"
 						>
 							Esqueceu a senha?
