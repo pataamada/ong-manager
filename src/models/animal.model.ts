@@ -5,10 +5,9 @@ export interface Animal {
   type: string;
   sex: string;
   size: string;
-  photo: string[];
+  photos: string[];
   observations: string;
   castration: boolean;
   vaccines: string[];
   available: boolean;
-  birthDate: Date;
 }
