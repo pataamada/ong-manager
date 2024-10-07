@@ -9,9 +9,9 @@ export default async function Layout({
 }>) {
 	const currentUser = await getCurrentUser()
 	return (
-		<main className="grid grid-cols-[auto_1fr] bg-zinc-100 min-h-full">
+		<main className="grid grid-cols-[auto_1fr] h-full bg-zinc-100">
 			<Sidebar currentUser={JSON.parse(JSON.stringify(currentUser))} />
-			<section className="p-6">{children}</section>
+			<section className="p-6 overflow-y-scroll">{children}</section>
 		</main>
 	)
 }

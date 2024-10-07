@@ -30,7 +30,7 @@ export function Sidebar({
         router.replace('/login')
     }
 	return (
-		<aside className="flex flex-col gap-4 bg-white p-3 border-r border-zinc-300">
+		<aside className="sticky flex flex-col gap-4 bg-white p-3 border-r border-zinc-300">
 			<DropdownMenu>
 				<DropdownMenuTrigger>
 					<Avatar className="select-none">

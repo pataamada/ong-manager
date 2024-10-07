@@ -39,10 +39,10 @@ export default function FormLogin() {
 		},
 	})
 	const { toast } = useToast()
-	const { executeAsync, isPending, result } = useAction(login)
+	const { executeAsync, isPending } = useAction(login)
 	const onSubmit = async (data: z.infer<typeof formLoginSchema>) => {
-		await executeAsync(data)
-		if (result.serverError) {
+		const result = await executeAsync(data)
+		if (result?.serverError) {
 			toast({
 				title: "Ocorreu um erro ao tentar entrar",
 				description: result.serverError,
@@ -50,12 +50,12 @@ export default function FormLogin() {
 			})
 			return
 		}
-		router.replace("/dashboard")
 		toast({
 			title: "Bem vindo ao Cão domínio",
 			description: "Acompanhe/gerencia a ong",
 			variant: "default",
 		})
+		router.replace("/dashboard")
 	}
 	return (
 		<Form {...form}>

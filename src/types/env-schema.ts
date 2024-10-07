@@ -1,6 +1,7 @@
 import z from "zod";
 
 export const envSchema = z.object({
+    appId: z.string(),
     apiKey: z.string(),
     authDomain: z.string(),
     projectId: z.string(),
@@ -12,6 +13,7 @@ export const envSchema = z.object({
 });
 
 export const envServer = envSchema.safeParse({
+    appId: process.env.NEXT_PUBLIC_APP_ID,
     apiKey: process.env.NEXT_PUBLIC_API_KEY,
     authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
     projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
@@ -28,4 +30,4 @@ if (!envServer.success) {
     );
 }
 
-export const envServerSchema = envServer.data;
+export const envServerData = envServer.data;
