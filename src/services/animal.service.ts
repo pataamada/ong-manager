@@ -1,4 +1,14 @@
-import { collection, query, getDocs, getDoc, doc } from "firebase/firestore";
+import { 
+  collection,
+  query, 
+  getDocs, 
+  getDoc, 
+  doc, 
+  addDoc, 
+  updateDoc, 
+  serverTimestamp, 
+  deleteDoc
+} from "firebase/firestore";
 import { db, storage } from "@/lib/firebase/firebase-secret";
 import {
   ref,
@@ -7,6 +17,38 @@ import {
   listAll,
   deleteObject,
 } from "firebase/storage";
+
+export const saveAnimalDb = async (
+  nome: string,
+  idade: number,
+  tipo: string,
+  sexo: string,
+  tamanho: string,
+  fotos: string[],
+  observacoes: string,
+  castrado: boolean,
+  vacinas: string[],
+  disponivel: boolean,
+  atualizadoPor: string
+) => {
+  const document = await addDoc(collection(db, "animais"), {
+    animalId: crypto.randomUUID(),
+    nome: nome,
+    idade: idade,
+    tipo: tipo,
+    sexo: sexo,
+    tamanho: tamanho,
+    fotos: fotos,
+    observacoes: observacoes,
+    castrado: castrado,
+    vacinas: vacinas,
+    disponivel: disponivel,
+    cadastradoEm: serverTimestamp(),
+    atualizadoEm: serverTimestamp(),
+    atualizadoPor: atualizadoPor,
+  });
+  return JSON.stringify(document);
+}
 
 export const findAnimal = async () => {
   const q = query(collection(db, "animais"));
@@ -18,6 +60,42 @@ export const findAnimal = async () => {
 export const findAnimalById = async (animalId: string) => {
   const document = await getDoc(doc(db, `animais/${animalId}`));
   return document.data();
+}
+
+export const updateAnimal = async (
+  animalId: string,
+  nome: string,
+  idade: number,
+  tipo: string,
+  sexo: string,
+  tamanho: string,
+  fotos: string[],
+  observacoes: string,
+  castrado: boolean,
+  vacinas: string[],
+  disponivel: boolean,
+  atualizadoPor: string
+) => {
+  const updatedDocument = await updateDoc(doc(db, `animais/${animalId}`), {
+    nome: nome,
+    idade: idade,
+    tipo: tipo,
+    sexo: sexo,
+    tamanho: tamanho,
+    fotos: fotos,
+    observacoes: observacoes,
+    castrado: castrado,
+    vacinas: vacinas,
+    disponivel: disponivel,
+    atualizadoEm: serverTimestamp(),
+    atualizadoPor: atualizadoPor,
+  });
+  return JSON.stringify(updatedDocument);
+}
+
+export const deleteAnimal = async (animalId: string) => {
+  const deletedAnimal = await deleteDoc(doc(db, `animais/${animalId}`));
+  return JSON.stringify(deletedAnimal);
 }
 
 export const uploadAnimalImage = async (params: FormData) => {
