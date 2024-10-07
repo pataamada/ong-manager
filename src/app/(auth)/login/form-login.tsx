@@ -18,10 +18,9 @@ import {
 	FormMessage,
 } from "@/components/ui/form"
 import { login } from "@/actions/auth/login"
-import { useEffect } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "nextjs-toploader/app"
-
+// zod schema validation
 const formLoginSchema = z.object({
 	email: z.string().email("Digite um email válido"),
 	password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
@@ -39,25 +38,24 @@ export default function FormLogin() {
 		},
 	})
 	const { toast } = useToast()
-	const { executeAsync, isPending, result } = useAction(login)
+	const { executeAsync, isPending } = useAction(login)
 	const onSubmit = async (data: z.infer<typeof formLoginSchema>) => {
-		await executeAsync(data)
-		router.replace("/dashboard")
-		toast({
-			title: "Bem vindo ao Cão domínio",
-			description: "Acompanhe/gerencia a ong",
-			variant: "default",
-		})
-	}
-	useEffect(() => {
-		if (result.serverError) {
+		const result = await executeAsync(data)
+		if (result?.serverError) {
 			toast({
 				title: "Ocorreu um erro ao tentar entrar",
 				description: result.serverError,
 				variant: "destructive",
 			})
+			return
 		}
-	}, [result, toast])
+		toast({
+			title: "Bem vindo ao Cão domínio",
+			description: "Acompanhe/gerencia a ong",
+			variant: "default",
+		})
+		router.replace("/dashboard")
+	}
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

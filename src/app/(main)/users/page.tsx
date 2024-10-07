@@ -1,3 +1,3 @@
 export default function Users() {
-	return <div>Usuários</div>
+	return <div className="h-[1300px]">Usuários</div>
 }
