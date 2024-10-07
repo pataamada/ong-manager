@@ -1,11 +1,10 @@
 import { db } from "@/lib/firebase/firebase-secret"
 import { UserRoles, type CreateUserPayload } from "@/models/user.model"
-import { genSaltSync, hashSync } from "bcrypt-ts"
+import { compareSync, genSaltSync, hashSync } from "bcrypt-ts"
 import {
 	collection,
 	deleteDoc,
 	doc,
-	type DocumentData,
 	getDoc,
 	getDocs,
 	query,
@@ -33,21 +32,20 @@ export const findOne = async (id: string) => {
 }
 
 export const findUserByEmailPassword = async (email: string, password: string) => {
-	const q = query(
-		collection(db, "users"),
-		where("email", "==", email),
-		where("password", "==", password),
-	)
+	const q = query(collection(db, "users"), where("email", "==", email))
 	const querySnapshot = await getDocs(q)
 	const doc = querySnapshot.docs.map(doc => {
 		return { id: doc.id, data: doc.data() }
 	})
-	return doc[0] as
-		| {
-				id: string
-				data: DocumentData
-		  }
-		| undefined
+	const result = doc[0]
+	if (!result) {
+		return
+	}
+	const isSamePassword = compareSync(password, result.data.password)
+	if(!isSamePassword) {
+		throw new Error("Senha incorreta!")
+	}
+	return result
 }
 
 export const deleteUser = async (userId: string) => {

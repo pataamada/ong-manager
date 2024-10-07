@@ -21,7 +21,6 @@ export const firebaseApp =
 	)
 export const auth = getAuth(firebaseApp)
 export const db = getFirestore(firebaseApp)
-
 export async function isUserAuthenticated(session: string | undefined = undefined) {
 	const _session = session ?? (await getSession())
 	if (!_session) return false
