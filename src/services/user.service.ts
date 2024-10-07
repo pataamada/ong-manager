@@ -1,5 +1,31 @@
 import { db } from "@/lib/firebase/firebase-secret"
-import { collection, doc, type DocumentData, getDoc, getDocs, query, where } from "firebase/firestore"
+import { UserRoles, type CreateUserPayload } from "@/models/user.model"
+import { genSaltSync, hashSync } from "bcrypt-ts"
+import {
+	collection,
+	deleteDoc,
+	doc,
+	type DocumentData,
+	getDoc,
+	getDocs,
+	query,
+	setDoc,
+	where,
+} from "firebase/firestore"
+
+export const createUser = async (userId: string, params: CreateUserPayload) => {
+	const salt = genSaltSync(10)
+	const hash = hashSync(params.password, salt)
+	const document = await setDoc(doc(db, "users", userId), {
+		name: params.name,
+		email: params.email,
+		password: hash,
+		role: UserRoles.Authenticated,
+		birthDate: null,
+		address: null,
+	})
+	return document
+}
 
 export const findOne = async (id: string) => {
 	const document = await getDoc(doc(db, `users/${id}`))
@@ -22,4 +48,8 @@ export const findUserByEmailPassword = async (email: string, password: string) =
 				data: DocumentData
 		  }
 		| undefined
+}
+
+export const deleteUser = async (userId: string) => {
+	return await deleteDoc(doc(db, `users/${userId}`))
 }
