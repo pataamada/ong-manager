@@ -27,7 +27,7 @@ export const login = actionClient
 		const customToken = await getAuth(firebaseApp).createCustomToken(userId, additionalClaims)
 		const token = await signInWithCustomToken(auth, customToken)
 		const tokenId = await token.user.getIdToken()
-		const expiresIn = 5 * 60 * 60 * 1000 // 1 hour
+		const expiresIn = 1 * 60 * 60 * 1000 // 1 hour
 		const sessionCookie = await createSessionCookie(tokenId, { expiresIn })
 		cookies().set("__session", sessionCookie, {
 			maxAge: expiresIn,
