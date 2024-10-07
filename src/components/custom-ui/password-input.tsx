@@ -15,6 +15,7 @@ const PasswordInput = forwardRef<HTMLInputElement, Omit<InputProps, "type">>(({ 
 				<Icon
 					size={20}
 					name={visible ? "Eye" : "EyeOff"}
+					className="cursor-pointer"
 					onClick={() => setVisible(value => !value)}
 				/>
 			}
