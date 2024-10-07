@@ -1,18 +1,15 @@
 "use server";
 import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
-import { doc, deleteDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase/firebase-secret";
-import { revalidatePath } from "next/cache";
+import { deleteAnimal } from "@/services/animal.service"
 
 const schema = z.object({
   animalId: z.string(),
 })
 
-export const deleteAnimal = actionClient
+export const deleteAnimalAction = actionClient
   .schema(schema)
-  .action(async ({ parsedInput: animalId }) => {
-    const deletedAnimal = await(deleteDoc(doc(db, `animais/${animalId}`)));
-    revalidatePath("/");
+  .action(async ({ parsedInput: { animalId } }) => {
+    const deletedAnimal = await deleteAnimal(animalId);
     return JSON.stringify(deletedAnimal);
   })
