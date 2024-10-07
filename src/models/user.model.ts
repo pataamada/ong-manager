@@ -1,14 +1,17 @@
 export enum UserRoles {
-    Admin = 'ADMIN',
-    Authenticated = 'AUTHENTICATED'
+	Admin = "ADMIN",
+	Authenticated = "AUTHENTICATED",
 }
 export interface User {
-    name: string;
-    cpf: string;
-    role: UserRoles;
-    email: string;
-    uid: string;
-    photo: string;
-    birthDate: Date;
-    phone: string;
+	name: string
+	cpf: string
+	role: UserRoles
+	email: string
+	password: string
+	uid: string
+	photo: string
+	birthDate: Date
+	phone: string
 }
+
+export type CreateUserPayload = Pick<User, "name" | "cpf" | "email" | "password">

@@ -14,9 +14,9 @@ const firebaseConfig = {
     serviceAccountId: envServerData.firebaseAdminProjectId
 };
 
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-const auth = getAuth(app);
-export const db = getFirestore(app);
-export const storage = getStorage(app);
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp()
+const auth = getAuth(app)
+export const db = getFirestore(app)
+export const storage = getStorage(app)
 
-export { app, auth };
+export { app, auth }
