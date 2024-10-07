@@ -1,56 +1,29 @@
 "use server";
 import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase/firebase-secret";
-import { revalidatePath } from "next/cache";
+import { saveAnimalDb } from "@/services/animal.service";
 
-export const schema = z.object({
+const schema = z.object({
   nome: z.string(),
-  idade: z.string(),
+  idade: z.number(),
   tipo: z.string(),
   sexo: z.string(),
   tamanho: z.string(),
   fotos: z.array(z.string()),
   observacoes: z.string(),
-  castrado: z.string(),
+  castrado: z.boolean(),
   vacinas: z.array(z.string()),
-  disponivel: z.string(),
+  disponivel: z.boolean(),
   atualizadoPor: z.string(),
 })
 
-export const saveAnimalDb = actionClient
+export const saveAnimalAction = actionClient
   .schema(schema)
-  .action(async ({ parsedInput: { 
-    nome,
-    idade,
-    tipo,
-    sexo,
-    tamanho,
-    fotos,
-    observacoes,
-    castrado,
-    vacinas,
-    disponivel,
-    atualizadoPor
+  .action(async ({ parsedInput: {
+    nome, idade, tipo, sexo, tamanho, fotos, observacoes, castrado, vacinas, disponivel, atualizadoPor,
   }}) => {
-    const document = await addDoc(collection(db, "animais"), 
-    {
-      animalId: crypto.randomUUID(),
-      nome: nome,
-      idade: idade,
-      tipo: tipo,
-      sexo: sexo,
-      tamanho: tamanho,
-      fotos: fotos,
-      observacoes: observacoes,
-      castrado: castrado,
-      vacinas: vacinas,
-      disponivel: disponivel,
-      cadastradoEm: serverTimestamp(),
-      atualizadoEm: serverTimestamp(),
-      atualizadoPor: atualizadoPor,
-    });
-    revalidatePath("/");
-    return JSON.stringify(document);
+    const createdAnimal = await saveAnimalDb(
+      nome, idade, tipo, sexo, tamanho, fotos, observacoes, castrado, vacinas, disponivel, atualizadoPor
+    );
+    return JSON.stringify(createdAnimal);
   })
