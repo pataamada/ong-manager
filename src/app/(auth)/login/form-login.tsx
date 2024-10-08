@@ -58,7 +58,7 @@ export default function FormLogin() {
 	}
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-[340px] w-full">
 				<div className="flex flex-col items-center gap-2 mx-auto">
 					<h2 className="text-center">Entre em sua conta</h2>
 					<h3 className="text-center">Bem-vindo de volta</h3>
