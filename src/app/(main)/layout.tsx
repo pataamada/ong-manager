@@ -12,10 +12,10 @@ export default async function Layout({
 	const currentUser = await getCurrentUser()
 	return (
 		<main className="grid grid-col-1 sm:grid-cols-[auto_1fr] h-full bg-zinc-100">
-			<Sidebar currentUser={JSON.parse(JSON.stringify(currentUser))} />
+			<Sidebar currentUser={currentUser} />
 			<section className="p-6 overflow-y-scroll">
 				<div className="flex gap-2 items-center mb-6">
-					<LeftDrawer currentUser={JSON.parse(JSON.stringify(currentUser))}/>
+					<LeftDrawer />
 					<BreadCrumb />
 				</div>
 				{children}

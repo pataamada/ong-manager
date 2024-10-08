@@ -22,6 +22,6 @@ export const routesAliasesList: Route[] = [
 	},
 	{
 		alias: "Agenda",
-		href: "/agenda",
+		href: "/schedules",
 	},
 ]
