@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase/firebase-secret"
-import { UserRoles, type CreateUserPayload } from "@/models/user.model"
+import { type User, UserRoles, type CreateUserPayload } from "@/models/user.model"
 import { compareSync, genSaltSync, hashSync } from "bcrypt-ts"
 import {
 	collection,
@@ -9,6 +9,7 @@ import {
 	getDocs,
 	query,
 	setDoc,
+	updateDoc,
 	where,
 } from "firebase/firestore"
 
@@ -31,6 +32,13 @@ export const findOne = async (id: string) => {
 	return document.data()
 }
 
+export const findAll = async () => {
+	const q = query(collection(db, "users"))
+	const querySnapshot = await getDocs(q)
+	const docs = querySnapshot.docs.map(doc => doc.data()) as User[]	
+	return docs
+}
+
 export const findUserByEmailPassword = async (email: string, password: string) => {
 	const q = query(collection(db, "users"), where("email", "==", email))
 	const querySnapshot = await getDocs(q)
@@ -47,6 +55,20 @@ export const findUserByEmailPassword = async (email: string, password: string) =
 	}
 	return result
 }
+
+export const updateUser = async (params: Partial<User>) => {	
+	console.log("params: ",params);
+	
+	const updatedDocument = await setDoc(
+		doc(db, `users/${params.uid}`), {
+			name: params.name,
+			
+		}
+	)
+	
+	return JSON.stringify(updatedDocument)
+}
+
 
 export const deleteUser = async (userId: string) => {
 	return await deleteDoc(doc(db, `users/${userId}`))

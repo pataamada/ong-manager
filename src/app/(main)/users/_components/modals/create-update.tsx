@@ -27,6 +27,15 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { InputMask } from "@react-input/mask"
 import { PasswordInput } from "@/components/custom-ui/password-input"
+import { useAction } from "next-safe-action/hooks"
+import { createUser } from "@/actions/auth/user/create"
+import { updateUser } from "@/actions/auth/user/update"
+import type { CreateUserPayload } from "@/models/user.model"
+import { toast } from "@/hooks/use-toast"
+import { SafeActionResult } from "next-safe-action"
+import { getCurrentUser } from "@/lib/firebase/firebase-admin"
+import { useAtom } from "jotai"
+import { userAtom } from "@/store/user"
 interface CreateUpdateUserModal extends DialogProps {
 	children?: ReactNode
 	data?: Partial<User> | null
@@ -36,7 +45,13 @@ const createUserSchema = z
 	.object({
 		name: z.string().min(4, "Nome deve ter no mínimo 4 carateres").trim(),
 		email: z.string().email("Digite um email válido").trim(),
-		cpf: z.string().min(11, "O CPF deve ter pelo menos 11 caracteres").trim(),
+		cpf: z
+			.string()
+			// .min(11, "O CPF deve ter pelo menos 11 caracteres")
+			.trim()
+			.transform(cpf => cpf.replaceAll(".", "").replace("-", ""))
+			.optional()
+			.or(z.literal("")),
 		password: z
 			.string()
 			.min(8, "A senha deve ter pelo menos 8 caracteres")
@@ -45,11 +60,11 @@ const createUserSchema = z
 			.or(z.literal("")),
 	})
 	.superRefine((value, ctx) => {
-		const isValidCpf = validateCpf(value.cpf)
+		const isValidCpf = validateCpf(value.cpf!)
 		if (isValidCpf) {
 			return
 		}
-		ctx.addIssue({ code: "custom", message: "Digite um cpf válido", path: ["cpf"] })
+		// ctx.addIssue({ code: "custom", message: "Digite um cpf válido", path: ["cpf"] })
 	})
 
 export function CreateUpdateUserModal({
@@ -59,6 +74,7 @@ export function CreateUpdateUserModal({
 	open,
 	...props
 }: CreateUpdateUserModal) {
+	const [user, setUser] = useAtom(userAtom)
 	const form = useForm<z.infer<typeof createUserSchema>>({
 		resolver: zodResolver(createUserSchema),
 		values: {
@@ -68,12 +84,44 @@ export function CreateUpdateUserModal({
 			password: "",
 		},
 	})
-	const handleOnSubmit = (values: z.infer<typeof createUserSchema>) => {
-		if (!values.password?.length && !data) {
+	const { executeAsync: create, isPending: pendingCreate } = useAction(createUser)
+	const { executeAsync: update, isPending: pendingUpdate } = useAction(updateUser)
+
+	const handleOnSubmit = async ({
+		name,
+		email,
+		password,
+		cpf,
+	}: z.infer<typeof createUserSchema>) => {
+		if (!password?.length && !data) {
 			form.setError("password", { type: "required", message: "Senha é obrigatória" })
 			return
 		}
-		onSubmit?.({ email: values.email, name: values.name, cpf: values.cpf })
+
+		// let result: SafeActionResult<CreateUserSchema>
+
+		if (!data && password) {
+			const result = await create({ name, email, password, cpf: cpf! })
+			return result
+		}
+		// if (result?.serverError) {
+		// 	toast({
+		// 		title: "Erro ao criar usuário",
+		// 		description: result.serverError,
+		// 		variant: "destructive",
+		// 	})
+		// 	return
+		// }
+		// toast({
+		// 	title: "Usuário Criado",
+		// 	description: "",
+		// 	variant: "default",
+		// })
+
+		const result = await update({ uid: user!.user.uid, name, email, password, cpf: cpf! })
+		console.log(result);
+		
+		return result
 	}
 	useEffect(() => {
 		if (!open) {
@@ -162,7 +210,9 @@ export function CreateUpdateUserModal({
 							<DialogClose asChild>
 								<Button variant="outline">Cancelar</Button>
 							</DialogClose>
-							<Button type="submit">{data ? "Salvar" : "Criar"}</Button>
+							<Button type="submit" disabled={pendingCreate || pendingUpdate}>
+								{data ? "Salvar" : "Criar"}
+							</Button>
 						</DialogFooter>
 					</form>
 				</Form>
