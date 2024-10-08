@@ -15,7 +15,7 @@ export default function Layout({children}: Readonly<{children: ReactNode}>) {
 				/>
 			</div>
 
-			<div className="absolute lg:static top-1/2 left-1/2 lg:left-auto -translate-x-1/2 lg:-translate-x-0 -translate-y-1/2 lg:-translate-y-0 flex w-2/3 lg:p-0 flex-col lg:mx-24 lg:w-2/6 lg:h-screen justify-center gap-4">
+			<div className="absolute min-w-[400px] lg:static top-1/2 left-1/2 lg:left-auto -translate-x-1/2 lg:-translate-x-0 -translate-y-1/2 lg:-translate-y-0 flex w-2/3 lg:p-0 flex-col lg:mx-24 lg:w-2/6 lg:h-screen justify-center items-center gap-4">
 				<Image
 					src={"/logo-caodominio-satuba.svg"}
 					width={200}

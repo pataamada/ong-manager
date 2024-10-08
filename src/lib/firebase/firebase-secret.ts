@@ -1,17 +1,16 @@
-import { envServerData } from "@/types/env-schema";
+import { envClientData } from "@/types/client-schema";
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-    apiKey: envServerData.apiKey,
-    authDomain: envServerData.authDomain,
-    projectId: envServerData.projectId,
-    storageBucket: envServerData.storageBucket,
-    messagingSenderId: envServerData.messagingSenderId,
-    appId: envServerData.appId,
-    serviceAccountId: envServerData.firebaseAdminProjectId
+    apiKey: envClientData.apiKey,
+    authDomain: envClientData.authDomain,
+    projectId: envClientData.projectId,
+    storageBucket: envClientData.storageBucket,
+    messagingSenderId: envClientData.messagingSenderId,
+    appId: envClientData.appId,
 };
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp()
