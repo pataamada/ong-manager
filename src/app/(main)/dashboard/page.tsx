@@ -1,6 +1,5 @@
 import { getCurrentUser } from "@/lib/firebase/firebase-admin"
 import { redirect,  } from "next/navigation"
-import { AuthRequiredError } from "@/lib/exceptions"
 import { UserRoles } from "@/models/user.model"
 
 export default async function Dashboard() {
@@ -9,7 +8,7 @@ export default async function Dashboard() {
 		return redirect("/login")
 	}
 	if (currentUser.role !== UserRoles.Admin) {
-		throw new AuthRequiredError()
+		return redirect("/animals")
 	}
 	return (
 		<div className="flex flex-col">

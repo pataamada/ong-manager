@@ -7,6 +7,7 @@ import { createSessionCookie, firebaseApp } from "@/lib/firebase/firebase-admin"
 import { cookies } from "next/headers"
 import { findUserByEmailPassword } from "@/services/user.service"
 import { getAuth } from "firebase-admin/auth"
+import {  revalidateTag } from "next/cache"
 
 const schema = z.object({
 	email: z.string().email(),
@@ -34,4 +35,5 @@ export const login = actionClient
 			httpOnly: true,
 			secure: true,
 		})
+		revalidateTag('auth-layout')
 	})

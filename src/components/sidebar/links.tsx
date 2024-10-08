@@ -1,5 +1,9 @@
+import type { UserRoles } from "@/models/user.model"
 import type { IconName } from "../icon"
-
+export const linksByRole: Record<UserRoles, string[]> = {
+	ADMIN: ['/dashboard', '/users','/finance', '/schedules', '/animals'],
+	AUTHENTICATED: ['/animals', '/schedules'],
+}
 export const links: {
 	href: string
 	icon: IconName

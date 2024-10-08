@@ -1,13 +1,13 @@
 "use client"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { links } from "./links"
+import { links, linksByRole } from "./links"
 import { SidebarItem } from "./item"
 import { Icon } from "../icon"
 import type { UserRecord } from "firebase-admin/auth"
 import { useAtomValue } from "jotai"
 import { userAtom } from "@/store/user"
 import { useHydrateAtoms } from "jotai/utils"
-import type { UserRoles } from "@/models/user.model"
+import { UserRoles } from "@/models/user.model"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -24,13 +24,16 @@ export function Sidebar({
 }: { currentUser: { user: UserRecord; role: UserRoles } | null }) {
 	useHydrateAtoms([[userAtom, currentUser]])
 	const user = useAtomValue(userAtom)
-    const router = useRouter();
-    const handleLogout = async () => {
-        await logout()
-        router.replace('/login')
-    }
+	const router = useRouter()
+	const handleLogout = async () => {
+		await logout()
+		router.replace("/login")
+	}
+	const filteredLinks = links.filter(link =>
+		linksByRole[user?.role || UserRoles.Authenticated].includes(link.href),
+	)
 	return (
-		<aside className="sticky flex flex-col gap-4 bg-white p-3 border-r border-zinc-300">
+		<aside className="hidden sm:flex sticky flex-col gap-4 bg-white p-3 border-r border-zinc-300">
 			<DropdownMenu>
 				<DropdownMenuTrigger>
 					<Avatar className="select-none">
@@ -50,7 +53,7 @@ export function Sidebar({
 				</DropdownMenuContent>
 			</DropdownMenu>
 			<nav className="flex flex-col gap-2">
-				{links.map(({ href, icon, title }) => (
+				{filteredLinks.map(({ href, icon, title }) => (
 					<SidebarItem key={href} size="icon" href={href} icon={icon} title={title} />
 				))}
 			</nav>

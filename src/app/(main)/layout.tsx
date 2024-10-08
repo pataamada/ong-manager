@@ -1,3 +1,5 @@
+import BreadCrumb from "@/components/breadcrumb"
+import LeftDrawer from "@/components/sidebar/drawer"
 import { Sidebar } from "@/components/sidebar/index"
 import { getCurrentUser } from "@/lib/firebase/firebase-admin"
 import type { ReactNode } from "react"
@@ -9,9 +11,15 @@ export default async function Layout({
 }>) {
 	const currentUser = await getCurrentUser()
 	return (
-		<main className="grid grid-cols-[auto_1fr] h-full bg-zinc-100">
+		<main className="grid grid-col-1 sm:grid-cols-[auto_1fr] h-full bg-zinc-100">
 			<Sidebar currentUser={JSON.parse(JSON.stringify(currentUser))} />
-			<section className="p-6 overflow-y-scroll">{children}</section>
+			<section className="p-6 overflow-y-scroll">
+				<div className="flex gap-2 items-center mb-6">
+					<LeftDrawer currentUser={JSON.parse(JSON.stringify(currentUser))}/>
+					<BreadCrumb />
+				</div>
+				{children}
+			</section>
 		</main>
 	)
 }
