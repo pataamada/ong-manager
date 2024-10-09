@@ -7,6 +7,8 @@ import { createSessionCookie, firebaseApp } from "@/lib/firebase/firebase-admin"
 import { cookies } from "next/headers"
 import { findUserByEmailPassword } from "@/services/user.service"
 import { getAuth } from "firebase-admin/auth"
+import {  revalidatePath } from "next/cache"
+import type { UserRoles } from "@/models/user.model"
 
 const schema = z.object({
 	email: z.string().email(),
@@ -22,7 +24,7 @@ export const login = actionClient
 		}
 		const userId = userDb.id
 		const additionalClaims = {
-			role: userDb.data.role || "AUTHENTICATED",
+			role: (userDb.data.role || "AUTHENTICATED") as UserRoles,
 		}
 		const customToken = await getAuth(firebaseApp).createCustomToken(userId, additionalClaims)
 		const token = await signInWithCustomToken(auth, customToken)
@@ -34,4 +36,8 @@ export const login = actionClient
 			httpOnly: true,
 			secure: true,
 		})
+		revalidatePath('/', 'layout')
+		return {
+			role: additionalClaims.role
+		}
 	})

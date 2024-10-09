@@ -21,6 +21,7 @@ import { login } from "@/actions/auth/login"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "nextjs-toploader/app"
 import { PasswordInput } from "@/components/custom-ui/password-input"
+import { UserRoles } from "@/models/user.model"
 // zod schema validation
 const formLoginSchema = z.object({
 	email: z.string().email("Digite um email válido"),
@@ -55,11 +56,11 @@ export default function FormLogin() {
 			description: "Acompanhe/gerencia a ong",
 			variant: "default",
 		})
-		router.replace("/dashboard")
+		router.replace(result?.data?.role === UserRoles.Admin ? "/dashboard" : "animals")
 	}
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-[340px] w-full">
 				<div className="flex flex-col items-center gap-2 mx-auto">
 					<h2 className="text-center">Entre em sua conta</h2>
 					<h3 className="text-center">Bem-vindo de volta</h3>
