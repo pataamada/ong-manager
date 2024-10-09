@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import { Provider } from "jotai"
 import NextTopLoader from "nextjs-toploader"
 
 export const metadata: Metadata = {
@@ -21,7 +20,7 @@ export default function RootLayout({
 				<Toaster />
 				<TooltipProvider>
 					<NextTopLoader color="#10b981" showSpinner={false} />
-					<Provider>{children}</Provider>
+					{children}
 				</TooltipProvider>
 			</body>
 		</html>

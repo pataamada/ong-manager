@@ -20,6 +20,7 @@ import {
 import { login } from "@/actions/auth/login"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "nextjs-toploader/app"
+import { UserRoles } from "@/models/user.model"
 // zod schema validation
 const formLoginSchema = z.object({
 	email: z.string().email("Digite um email válido"),
@@ -54,7 +55,7 @@ export default function FormLogin() {
 			description: "Acompanhe/gerencia a ong",
 			variant: "default",
 		})
-		router.replace("/dashboard")
+		router.replace(result?.data?.role === UserRoles.Admin ? "/dashboard" : "animals")
 	}
 	return (
 		<Form {...form}>

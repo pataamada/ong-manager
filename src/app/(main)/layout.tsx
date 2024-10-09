@@ -1,6 +1,6 @@
 import BreadCrumb from "@/components/breadcrumb"
 import LeftDrawer from "@/components/sidebar/drawer"
-import { Sidebar } from "@/components/sidebar/index"
+import Sidebar from "@/components/sidebar/index"
 import { getCurrentUser } from "@/lib/firebase/firebase-admin"
 import type { ReactNode } from "react"
 
