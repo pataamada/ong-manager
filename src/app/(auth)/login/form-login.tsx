@@ -52,7 +52,7 @@ export default function FormLogin() {
 			return
 		}
 		toast({
-			title: "Bem vindo ao Cão domínio",
+			title: "Bem vindo ao Cãodomínio",
 			description: "Acompanhe/gerencia a ong",
 			variant: "default",
 		})

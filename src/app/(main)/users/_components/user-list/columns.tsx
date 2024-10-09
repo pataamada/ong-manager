@@ -44,7 +44,7 @@ export const columns = (callbacks: {
 			return user.original.email.includes(filterValue.toLowerCase())
 		},
 		cell: ({ row }) => (
-			<div className="capitalize flex items-center gap-2">
+			<div className="flex items-center gap-2">
 				<Avatar>
 					<AvatarImage src={row.original.photo} />
 					<AvatarFallback>{initialLetters(row.original.name)}</AvatarFallback>
