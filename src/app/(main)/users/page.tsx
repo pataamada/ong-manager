@@ -1,6 +1,5 @@
 import { UserList } from "./_components/user-list"
 import { getCurrentUser } from "@/lib/firebase/firebase-admin"
-import { AuthRequiredError } from "@/lib/exceptions"
 import { UserRoles } from "@/models/user.model"
 import { redirect } from "next/navigation"
 import { findAll } from "@/services/user.service"
@@ -12,7 +11,7 @@ export default async function Users() {
 		return redirect("/login")
 	}
 	if (currentUser.role !== UserRoles.Admin) {
-		throw new AuthRequiredError()
+		redirect("/animals")
 	}
 	return <UserList users={users}/>
 }

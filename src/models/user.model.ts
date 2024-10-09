@@ -14,7 +14,7 @@ export interface User {
 	phone: string
 }
 
-export type CreateUserPayload = Pick<User, "name" | "cpf" | "email" | "password">
+export type CreateUserPayload = Pick<User, "cpf">
 export const accessPageList: Record<UserRoles, string[]> = {
 	ADMIN: ['/dashboard', '/users','/finance', '/schedules', '/animals'],
 	AUTHENTICATED: ['/animals', '/schedules'],
