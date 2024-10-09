@@ -30,51 +30,40 @@ import { PasswordInput } from "@/components/custom-ui/password-input"
 import { useAction } from "next-safe-action/hooks"
 import { createUser } from "@/actions/auth/user/create"
 import { updateUser } from "@/actions/auth/user/update"
-import type { CreateUserPayload } from "@/models/user.model"
-import { toast } from "@/hooks/use-toast"
-import { SafeActionResult } from "next-safe-action"
-import { getCurrentUser } from "@/lib/firebase/firebase-admin"
-import { useAtom } from "jotai"
-import { userAtom } from "@/store/user"
+import { user$ } from "@/store/user"
+import { useToast } from "@/hooks/use-toast"
+
 interface CreateUpdateUserModal extends DialogProps {
 	children?: ReactNode
 	data?: Partial<User> | null
 	onSubmit?: (user: Partial<User>) => unknown
+	onClose?: () => unknown
 }
-const createUserSchema = z
-	.object({
-		name: z.string().min(4, "Nome deve ter no mínimo 4 carateres").trim(),
-		email: z.string().email("Digite um email válido").trim(),
-		cpf: z
-			.string()
-			// .min(11, "O CPF deve ter pelo menos 11 caracteres")
-			.trim()
-			.transform(cpf => cpf.replaceAll(".", "").replace("-", ""))
-			.optional()
-			.or(z.literal("")),
-		password: z
-			.string()
-			.min(8, "A senha deve ter pelo menos 8 caracteres")
-			.trim()
-			.optional()
-			.or(z.literal("")),
-	})
-	.superRefine((value, ctx) => {
-		const isValidCpf = validateCpf(value.cpf!)
-		if (isValidCpf) {
-			return
-		}
-		// ctx.addIssue({ code: "custom", message: "Digite um cpf válido", path: ["cpf"] })
-	})
+const createUserSchema = z.object({
+	name: z.string().min(4, "Nome deve ter no mínimo 4 carateres").trim(),
+	email: z.string().email("Digite um email válido").trim(),
+	cpf: z
+		.string()
+		.min(11, "O CPF deve ter pelo menos 11 caracteres")
+		.trim()
+		.transform(cpf => cpf.replaceAll(".", "").replace("-", ""))
+		.optional()
+		.or(z.literal("")),
+	password: z
+		.string()
+		.min(8, "A senha deve ter pelo menos 8 caracteres")
+		.trim()
+		.optional()
+		.or(z.literal("")),
+})
 
 export function CreateUpdateUserModal({
 	children,
 	data,
-	onSubmit,
 	open,
+	onClose,
 	...props
 }: CreateUpdateUserModal) {
-	const [user, setUser] = useAtom(userAtom)
 	const form = useForm<z.infer<typeof createUserSchema>>({
 		resolver: zodResolver(createUserSchema),
 		values: {
@@ -84,6 +73,8 @@ export function CreateUpdateUserModal({
 			password: "",
 		},
 	})
+	const user = user$.get()
+	const { toast } = useToast()
 	const { executeAsync: create, isPending: pendingCreate } = useAction(createUser)
 	const { executeAsync: update, isPending: pendingUpdate } = useAction(updateUser)
 
@@ -97,30 +88,35 @@ export function CreateUpdateUserModal({
 			form.setError("password", { type: "required", message: "Senha é obrigatória" })
 			return
 		}
+		const isValidCpf = validateCpf(cpf || "")
 
-		// let result: SafeActionResult<CreateUserSchema>
+		if ((!cpf?.length && !data) || (!isValidCpf && !data)) {
+			form.setError("cpf", { type: "validate", message: "Digite um cpf válido" })
+			return
+		}
 
 		if (!data && password) {
 			const result = await create({ name, email, password, cpf: cpf! })
+
+			if (result?.serverError) {
+				toast({
+					title: "Erro ao criar usuário",
+					description: result.serverError,
+					variant: "destructive",
+				})
+				return
+			}
+
+			toast({
+				title: "Usuário Criado",
+				description: "com sucesso!",
+				variant: "default",
+			})
+			onClose?.()
 			return result
 		}
-		// if (result?.serverError) {
-		// 	toast({
-		// 		title: "Erro ao criar usuário",
-		// 		description: result.serverError,
-		// 		variant: "destructive",
-		// 	})
-		// 	return
-		// }
-		// toast({
-		// 	title: "Usuário Criado",
-		// 	description: "",
-		// 	variant: "default",
-		// })
 
 		const result = await update({ uid: user!.user.uid, name, email, password, cpf: cpf! })
-		console.log(result);
-		
 		return result
 	}
 	useEffect(() => {

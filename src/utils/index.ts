@@ -6,7 +6,7 @@ export const redirectTo = (request: NextRequest, to: string) =>
 export const initialLetters = (fullname: string) => {
 	const names = fullname.split(" ")
 	if (names.length < 2) {
-		return fullname.slice(2)
+		return fullname.slice(0, 2)
 	}
 	return names[0][0] + names[1][0]
 }

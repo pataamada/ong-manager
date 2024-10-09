@@ -49,6 +49,7 @@ export function UserList({users = []}: UsersListProps) {
 				open={!!(updateUser || updateUser === null)}
 				onOpenChange={() => setUpdateUser(undefined)}
 				data={updateUser}
+				onClose={() => setUpdateUser(undefined)}
 			/>
 		</>
 	)
