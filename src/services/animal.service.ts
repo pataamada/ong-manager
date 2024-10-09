@@ -44,7 +44,7 @@ export const saveAnimalDb = async (
 	return JSON.stringify(document)
 }
 
-export const findAnimal = async () => {
+export const findAnimals = async () => {
 	const q = query(collection(db, "animais"))
 	const querySnapshot = await getDocs(q)
 	const animals = querySnapshot.docs.map(doc => doc.data())
