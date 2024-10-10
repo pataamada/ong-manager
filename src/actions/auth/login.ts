@@ -17,14 +17,16 @@ export const login = actionClient
 		const { user } = await signInWithEmailAndPassword(auth, email, password)
 		const token = await user.getIdToken()
 		const tokenData = await user.getIdTokenResult()
-		const expiresIn = 1 * 60 * 60 * 1000 // 1 hour
+		const expiresIn = new Date(tokenData.expirationTime)
 		cookies().set("__session", token, {
-			maxAge: expiresIn,
+			expires: expiresIn,
 			httpOnly: true,
 			secure: true,
+			sameSite: "strict",
+			priority: "high",
 		})
 		revalidatePath("/", "layout")
 		return {
-			role: tokenData.claims.role
+			role: tokenData.claims.role,
 		}
 	})
