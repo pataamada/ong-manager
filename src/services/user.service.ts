@@ -13,6 +13,7 @@ import {
 	where,
 } from "firebase/firestore"
 
+
 export const createUser = async (userId: string, params: CreateUserPayload) => {
 	const document = await setDoc(doc(db, "users", userId), {
 		birthDate: null,
@@ -52,7 +53,7 @@ export const findAll = async () => {
 		return userValue
 	})
 	return filledUsers as User[]
-} 
+}
 
 export const findUserByEmailPassword = async (email: string, password: string) => {
 	const q = query(collection(db, "users"), where("email", "==", email))
