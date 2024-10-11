@@ -25,7 +25,7 @@ export async function isUserAuthenticated(session: string | undefined = undefine
 	const _session = session ?? (await getSession())
 	if (!_session) return false
 	try {
-		const isRevoked = await auth.verifySessionCookie(_session, true)
+		const isRevoked = await auth.verifyIdToken(_session, true)
 		return !!isRevoked
 	} catch (error) {
 		return false
@@ -38,9 +38,8 @@ export async function getCurrentUser() {
 		return null
 	}
 
-	const decodedIdToken = await auth.verifySessionCookie(session!)
+	const decodedIdToken = await auth.verifyIdToken(session!)
 	const currentUser = await auth.getUser(decodedIdToken.uid)
-
 	return { user: currentUser, role: decodedIdToken.role as UserRoles }
 }
 
@@ -49,7 +48,7 @@ export function createSessionCookie(idToken: string, sessionCookieOptions: Sessi
 }
 
 export async function revokeAllSessions(session: string) {
-	const decodedIdToken = await auth.verifySessionCookie(session)
+	const decodedIdToken = await auth.verifyIdToken(session)
 
 	return await auth.revokeRefreshTokens(decodedIdToken.sub)
 }
