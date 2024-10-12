@@ -9,36 +9,31 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
-import { createUser } from "@/actions/auth/user/create" // Import the action
+import { createUser } from "@/actions/auth/user/create"
 import { PasswordInput } from "@/components/custom-ui/password-input"
 import { validateCpf } from "@/utils"
 import { InputMask } from "@react-input/mask"
 import { useAction } from "next-safe-action/hooks"
 
-// Validação de schema com Zod
-const formRegisterSchema = z
-	.object({
-		fullName: z.string().min(4, "Nome completo é obrigatório"),
-		cpf: z
-			.string()
-			.min(11, "O CPF deve ter pelo menos 11 caracteres")
-			.trim()
-			.transform(cpf => cpf.replaceAll(".", "").replace("-", "")),
-		email: z.string().email("Por favor, insira um e-mail válido"),
-		password: z.string().min(8, "A senha deve ter pelo menos 8 caracteres"),
-		confirmPassword: z.string().min(8, "A confirmação de senha deve ter pelo menos 8 caracteres"),
-	})
-	.refine(data => data.password === data.confirmPassword, {
-		message: "As senhas não coincidem",
-		path: ["confirmPassword"],
-	})
-	.superRefine((data, ctx) => {
-		const isValidCpf = validateCpf(data.cpf || "")
-		if (!isValidCpf) {
-			ctx.addIssue({ path: ["cpf"], code: "custom", message: "Digite um cpf válido" })
-			return
-		}
-	})
+const formRegisterSchema = z.object({
+	fullName: z.string().min(4, "Nome completo é obrigatório"),
+	cpf: z
+		.string()
+		.min(11, "O CPF deve ter pelo menos 11 caracteres")
+		.trim()
+		.transform(cpf => cpf.replaceAll(".", "").replace("-", "")),
+	email: z.string().email("Por favor, insira um e-mail válido"),
+	password: z.string().min(8, "A senha deve ter pelo menos 8 caracteres"),
+	confirmPassword: z.string().min(8, "A confirmação de senha deve ter pelo menos 8 caracteres"),
+}).refine(data => data.password === data.confirmPassword, {
+	message: "As senhas não coincidem",
+	path: ["confirmPassword"],
+}).superRefine((data, ctx) => {
+	const isValidCpf = validateCpf(data.cpf || "")
+	if (!isValidCpf) {
+		ctx.addIssue({ path: ["cpf"], code: "custom", message: "Digite um cpf válido" })
+	}
+})
 
 type RegisterFormData = z.infer<typeof formRegisterSchema>
 
@@ -55,10 +50,7 @@ export default function FormRegister() {
 	})
 
 	const { toast } = useToast()
-	const {
-		handleSubmit,
-		formState: { errors },
-	} = methods
+	const { handleSubmit, formState: { errors } } = methods
 	const { executeAsync, isPending } = useAction(createUser)
 	const onSubmit = async (data: RegisterFormData) => {
 		const result = await executeAsync({
@@ -67,13 +59,13 @@ export default function FormRegister() {
 			email: data.email,
 			password: data.password,
 		})
-		if(!result?.serverError) {
+		if (!result?.serverError) {
 			toast({
 				title: "Cadastro realizado com sucesso",
 				description: "Você foi cadastrado com sucesso!",
 				variant: "default",
 			})
-			return;
+			return
 		}
 		toast({
 			title: "Erro no cadastro",
@@ -84,8 +76,8 @@ export default function FormRegister() {
 
 	return (
 		<FormProvider {...methods}>
-			<form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-				<div className="flex flex-col items-center gap-2 mx-auto">
+			<form onSubmit={handleSubmit(onSubmit)} className="gap-6 max-w-[90%] md:max-w-[400px] w-full flex flex-col mt-8 mx-auto">
+				<div className="flex flex-col items-center gap-2">
 					<h2 className="text-center">Apadrinhe seu animal</h2>
 					<h3 className="text-center">Cadastre-se na plataforma</h3>
 				</div>
@@ -162,9 +154,7 @@ export default function FormRegister() {
 							<FormControl>
 								<PasswordInput id="confirmPassword" placeholder="Confirme sua senha" {...field} />
 							</FormControl>
-							{errors.confirmPassword && (
-								<FormMessage>{errors.confirmPassword.message}</FormMessage>
-							)}
+							{errors.confirmPassword && <FormMessage>{errors.confirmPassword.message}</FormMessage>}
 						</FormItem>
 					)}
 				/>
@@ -173,12 +163,9 @@ export default function FormRegister() {
 					Cadastrar
 				</Button>
 
-				<div className="text-center">
+				<div className="text-center mt-4">
 					<span className="text-sm font-normal">Já tem uma conta? </span>
-					<Link
-						href="/login"
-						className="text-sm font-semibold text-emerald-600 hover:text-emerald-500"
-					>
+					<Link href="/login" className="text-sm font-semibold text-emerald-600 hover:text-emerald-500">
 						Entrar
 					</Link>
 				</div>
