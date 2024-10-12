@@ -1,35 +1,46 @@
-"use client";
+"use client"
 
-import React from "react";
-import { useForm, FormProvider } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { useToast } from "@/hooks/use-toast";
-import { createUser } from "@/actions/auth/user/create"; // Import the action
+import React from "react"
+import { useForm, FormProvider } from "react-hook-form"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import Link from "next/link"
+import { useToast } from "@/hooks/use-toast"
+import { createUser } from "@/actions/auth/user/create" // Import the action
+import { PasswordInput } from "@/components/custom-ui/password-input"
+import { validateCpf } from "@/utils"
+import { InputMask } from "@react-input/mask"
+import { useAction } from "next-safe-action/hooks"
 
 // Validação de schema com Zod
-const formRegisterSchema = z.object({
-	fullName: z.string().min(4, "Nome completo é obrigatório"),
-	cpf: z.string().regex(/^\d{11}$/, "CPF deve ter 11 dígitos"),
-	email: z.string().email("Por favor, insira um e-mail válido"),
-	password: z.string().min(8, "A senha deve ter pelo menos 8 caracteres"),
-	confirmPassword: z.string().min(8, "A confirmação de senha deve ter pelo menos 8 caracteres"),
-}).refine(data => data.password === data.confirmPassword, {
-	message: "As senhas não coincidem",
-	path: ["confirmPassword"],
-});
+const formRegisterSchema = z
+	.object({
+		fullName: z.string().min(4, "Nome completo é obrigatório"),
+		cpf: z
+			.string()
+			.min(11, "O CPF deve ter pelo menos 11 caracteres")
+			.trim()
+			.transform(cpf => cpf.replaceAll(".", "").replace("-", "")),
+		email: z.string().email("Por favor, insira um e-mail válido"),
+		password: z.string().min(8, "A senha deve ter pelo menos 8 caracteres"),
+		confirmPassword: z.string().min(8, "A confirmação de senha deve ter pelo menos 8 caracteres"),
+	})
+	.refine(data => data.password === data.confirmPassword, {
+		message: "As senhas não coincidem",
+		path: ["confirmPassword"],
+	})
+	.superRefine((data, ctx) => {
+		const isValidCpf = validateCpf(data.cpf || "")
+		if (!isValidCpf) {
+			ctx.addIssue({ path: ["cpf"], code: "custom", message: "Digite um cpf válido" })
+			return
+		}
+	})
 
-type RegisterFormData = z.infer<typeof formRegisterSchema>;
+type RegisterFormData = z.infer<typeof formRegisterSchema>
 
 export default function FormRegister() {
 	const methods = useForm<RegisterFormData>({
@@ -41,35 +52,35 @@ export default function FormRegister() {
 			password: "",
 			confirmPassword: "",
 		},
-	});
+	})
 
-	const { toast } = useToast();
+	const { toast } = useToast()
 	const {
 		handleSubmit,
 		formState: { errors },
-	} = methods;
-
+	} = methods
+	const { executeAsync, isPending } = useAction(createUser)
 	const onSubmit = async (data: RegisterFormData) => {
-		try {
-			await createUser({
-				name: data.fullName,
-				cpf: data.cpf,
-				email: data.email,
-				password: data.password,
-			});
+		const result = await executeAsync({
+			name: data.fullName,
+			cpf: data.cpf,
+			email: data.email,
+			password: data.password,
+		})
+		if(!result?.serverError) {
 			toast({
 				title: "Cadastro realizado com sucesso",
 				description: "Você foi cadastrado com sucesso!",
 				variant: "default",
-			});
-		} catch (error) {
-			toast({
-				title: "Erro no cadastro",
-				description: "Ocorreu um erro ao tentar se cadastrar.",
-				variant: "destructive",
-			});
+			})
+			return;
 		}
-	};
+		toast({
+			title: "Erro no cadastro",
+			description: "Ocorreu um erro ao tentar se cadastrar.",
+			variant: "destructive",
+		})
+	}
 
 	return (
 		<FormProvider {...methods}>
@@ -88,9 +99,7 @@ export default function FormRegister() {
 							<FormControl>
 								<Input id="fullName" placeholder="Digite seu nome completo" {...field} />
 							</FormControl>
-							{errors.fullName && (
-								<FormMessage>{errors.fullName.message}</FormMessage>
-							)}
+							{errors.fullName && <FormMessage>{errors.fullName.message}</FormMessage>}
 						</FormItem>
 					)}
 				/>
@@ -102,11 +111,16 @@ export default function FormRegister() {
 						<FormItem>
 							<FormLabel className="font-semibold">CPF</FormLabel>
 							<FormControl>
-								<Input id="cpf" placeholder="Digite seu CPF" {...field} />
+								<InputMask
+									mask="___.___.___-__"
+									replacement={{ _: /\d/ }}
+									component={Input}
+									id="cpf"
+									placeholder="Digite seu CPF"
+									{...field}
+								/>
 							</FormControl>
-							{errors.cpf && (
-								<FormMessage>{errors.cpf.message}</FormMessage>
-							)}
+							{errors.cpf && <FormMessage>{errors.cpf.message}</FormMessage>}
 						</FormItem>
 					)}
 				/>
@@ -120,9 +134,7 @@ export default function FormRegister() {
 							<FormControl>
 								<Input id="email" placeholder="Digite seu email" {...field} />
 							</FormControl>
-							{errors.email && (
-								<FormMessage>{errors.email.message}</FormMessage>
-							)}
+							{errors.email && <FormMessage>{errors.email.message}</FormMessage>}
 						</FormItem>
 					)}
 				/>
@@ -134,11 +146,9 @@ export default function FormRegister() {
 						<FormItem>
 							<FormLabel className="font-semibold">Senha</FormLabel>
 							<FormControl>
-								<Input id="password" type="password" placeholder="Digite sua senha" {...field} />
+								<PasswordInput id="password" placeholder="Digite sua senha" {...field} />
 							</FormControl>
-							{errors.password && (
-								<FormMessage>{errors.password.message}</FormMessage>
-							)}
+							{errors.password && <FormMessage>{errors.password.message}</FormMessage>}
 						</FormItem>
 					)}
 				/>
@@ -150,7 +160,7 @@ export default function FormRegister() {
 						<FormItem>
 							<FormLabel className="font-semibold">Confirmar senha</FormLabel>
 							<FormControl>
-								<Input id="confirmPassword" type="password" placeholder="Confirme sua senha" {...field} />
+								<PasswordInput id="confirmPassword" placeholder="Confirme sua senha" {...field} />
 							</FormControl>
 							{errors.confirmPassword && (
 								<FormMessage>{errors.confirmPassword.message}</FormMessage>
@@ -159,17 +169,20 @@ export default function FormRegister() {
 					)}
 				/>
 
-				<Button className="w-full" type="submit">
+				<Button className="w-full" type="submit" disabled={isPending}>
 					Cadastrar
 				</Button>
 
 				<div className="text-center">
 					<span className="text-sm font-normal">Já tem uma conta? </span>
-					<Link href="/login" className="text-sm font-semibold text-emerald-600 hover:text-emerald-500">
+					<Link
+						href="/login"
+						className="text-sm font-semibold text-emerald-600 hover:text-emerald-500"
+					>
 						Entrar
 					</Link>
 				</div>
 			</form>
 		</FormProvider>
-	);
+	)
 }
