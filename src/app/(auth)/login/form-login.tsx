@@ -119,6 +119,13 @@ export default function FormLogin() {
 				<Button className="w-full" type="submit" disabled={isPending}>
 					Entrar
 				</Button>
+
+				<div className="text-center">
+					<span className="text-sm font-normal">Ainda não tem uma conta? </span>
+					<Link href="/register" className="text-sm font-bold text-emerald-600 hover:text-emerald-500 no-underline">
+						Cadastre-se
+					</Link>
+				</div>
 			</form>
 		</Form>
 	)
