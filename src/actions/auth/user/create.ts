@@ -1,9 +1,10 @@
 "use server"
 import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
-import { createUserWithEmailAndPassword } from "firebase/auth"
-import { auth } from "@/lib/firebase/firebase-secret"
+import { auth as authAdmin } from "@/lib/firebase/firebase-admin"
 import { createUser as createUserService } from "@/services/user.service"
+import { revalidatePath } from "next/cache"
+import { UserRoles } from "@/models/user.model"
 
 const schema = z.object({
 	name: z.string().trim().min(4).max(255),
@@ -15,7 +16,15 @@ const schema = z.object({
 export const createUser = actionClient
 	.schema(schema)
 	.action(async ({ parsedInput: { name, cpf, email, password } }) => {
-		const { user } = await createUserWithEmailAndPassword(auth, email, password)
-		const userId = user.uid
-		await createUserService(userId, { name, email, password, cpf })
+		const user = await authAdmin.createUser({
+			displayName: name,
+			email,
+			password,
+		})
+		if (!user) {
+			throw new Error("Erro ao criar o usuário")
+		}
+		await authAdmin.setCustomUserClaims(user.uid, { role: UserRoles.Admin })
+		await createUserService(user.uid, { cpf })
+		revalidatePath('/users')
 	})
