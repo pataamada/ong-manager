@@ -7,7 +7,7 @@ export const verifySession = async (request: NextRequest, session: string) => {
 		body: JSON.stringify({ session }),
 		next: { revalidate: 30 },
 	})
-	const response: { user: null , role: null } | { user: UserRecord; role: UserRoles } =
+	const response: { user: null; role: null } | { user: UserRecord; role: UserRoles } =
 		await verifyRequest.json()
 	return response
 }

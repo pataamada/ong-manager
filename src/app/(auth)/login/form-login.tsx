@@ -20,8 +20,9 @@ import {
 import { login } from "@/actions/auth/login"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "nextjs-toploader/app"
-import { PasswordInput } from "@/components/custom-ui/password-input"
 import { UserRoles } from "@/models/user.model"
+import { PasswordInput } from "@/components/custom-ui/password-input"
+
 // zod schema validation
 const formLoginSchema = z.object({
 	email: z.string().email("Digite um email válido"),
@@ -80,18 +81,14 @@ export default function FormLogin() {
 					)}
 				/>
 
-				<FormField
+                <FormField
 					control={form.control}
 					name="password"
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel className="font-semibold">Senha</FormLabel>
 							<FormControl>
-								<PasswordInput
-									id="password"
-									placeholder="Digite sua senha"
-									{...field}
-								/>
+								<PasswordInput id="password" placeholder="Digite sua senha" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -124,6 +121,13 @@ export default function FormLogin() {
 				<Button variant="success" className="w-full" type="submit" disabled={isPending}>
 					Entrar
 				</Button>
+
+				<div className="text-center">
+					<span className="text-sm font-normal">Ainda não tem uma conta? </span>
+					<Link href="/register" className="text-sm font-bold text-emerald-600 hover:text-emerald-500 no-underline">
+						Cadastre-se
+					</Link>
+				</div>
 			</form>
 		</Form>
 	)

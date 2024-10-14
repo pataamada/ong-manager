@@ -22,7 +22,6 @@ export const createUser = async (userId: string, params: CreateUserPayload) => {
 	})
 	return document
 }
-
 export const findOne = async (id: string) => {
 	const document = await getDoc(doc(db, `users/${id}`))
 	return document.data()
