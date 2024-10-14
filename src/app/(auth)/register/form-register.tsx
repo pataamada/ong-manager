@@ -16,7 +16,10 @@ import { InputMask } from "@react-input/mask"
 import { useAction } from "next-safe-action/hooks"
 
 const formRegisterSchema = z.object({
-	fullName: z.string().min(4, "Nome completo é obrigatório"),
+	fullName: z
+		.string()
+		.min(4, "Nome completo é obrigatório")
+		.max(256, "O nome completo deve ter no máximo 256 caracteres"),
 	cpf: z
 		.string()
 		.min(11, "O CPF deve ter pelo menos 11 caracteres")
