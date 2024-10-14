@@ -22,9 +22,18 @@ const formRegisterSchema = z.object({
 		.min(11, "O CPF deve ter pelo menos 11 caracteres")
 		.trim()
 		.transform(cpf => cpf.replaceAll(".", "").replace("-", "")),
-	email: z.string().email("Por favor, insira um e-mail válido"),
-	password: z.string().min(8, "A senha deve ter pelo menos 8 caracteres"),
-	confirmPassword: z.string().min(8, "A confirmação de senha deve ter pelo menos 8 caracteres"),
+	email: z
+		.string()
+		.email("Por favor, insira um e-mail válido")
+		.max(256, "Máximo de 256 caracteres"),
+	password: z
+		.string()
+		.min(8, "A senha deve ter pelo menos 8 caracteres")
+		.max(256, "Máximo de 256 caracteres"),
+	confirmPassword: z
+		.string()
+		.min(8, "A confirmação de senha deve ter pelo menos 8 caracteres")
+		.max(256, "Máximo de 256 caracteres"),
 }).refine(data => data.password === data.confirmPassword, {
 	message: "As senhas não coincidem",
 	path: ["confirmPassword"],
