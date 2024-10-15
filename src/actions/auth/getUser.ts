@@ -1,22 +1,21 @@
-import { db } from "@/lib/firebase/firebase-admin"
+import { getAllUsers, findOne, findUserByEmailPassword } from "@/services/user.service"
 
-export const getUser = async () => {
+export const getUser = async (id?: string, email?: string, password?: string) => {
 	try {
-		const usersCollection = db.collection("users")
-		const snapshot = await usersCollection.get()
-
-		if (snapshot.empty) {
-			console.log("Nenhum usuário encontrado.")
-			return []
+		if (id) {
+			// Busca usuário por ID
+			const user = await findOne(id)
+			return user ? [user] : []
 		}
 
-		const usersList = snapshot.docs.map(doc => ({
-			id: doc.id,
-			...doc.data(),
-		}))
+		if (email && password) {
+			// Busca usuário por email e senha
+			const user = await findUserByEmailPassword(email, password)
+			return user ? [user] : []
+		}
 
-		console.log("Usuários requisitados com sucesso!")
-		return usersList
+		const users = await getAllUsers()
+		return users
 	} catch (error) {
 		console.error("Erro ao requisitar usuários: ", error)
 		throw error
