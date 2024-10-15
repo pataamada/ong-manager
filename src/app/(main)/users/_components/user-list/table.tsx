@@ -24,15 +24,15 @@ import {
 	TableRow,
 } from "@/components/ui/table"
 import { columns } from "./columns"
-import type { User } from "@/models/user.model"
+import type { UserWOutPassword } from "@/models/user.model"
 import { useState } from "react"
 import Image from "next/image"
 
 interface UsersTableProps {
-	data: User[]
-	onDelete?: (row: Row<User>) => unknown
-	onEdit?: (row: Row<User>) => unknown
-	onRoleChange?: (row: Row<User>) => unknown
+	data: UserWOutPassword[]
+	onDelete?: (row: Row<UserWOutPassword>) => unknown
+	onEdit?: (row: Row<UserWOutPassword>) => unknown
+	onRoleChange?: (row: Row<UserWOutPassword>) => unknown
 	onCreate?: () => unknown
 	pageSize?: number
 }

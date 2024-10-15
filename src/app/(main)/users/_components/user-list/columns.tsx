@@ -1,17 +1,18 @@
 "use client"
 import { BadgeMenu } from "@/components/custom-ui/badge-menu"
 import { Checkbox } from "@/components/ui/checkbox"
-import type { User, UserRoles } from "@/models/user.model"
+import type { UserWOutPassword, UserRoles } from "@/models/user.model"
 import type { ColumnDef, Row } from "@tanstack/react-table"
 import { ActionMenu } from "./action-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { initialLetters } from "@/utils"
+import { format } from "@react-input/mask"
 
 export const columns = (callbacks: {
-	roleChange?: (row: Row<User>) => unknown
-	edit?: (row: Row<User>) => unknown
-	delete?: (row: Row<User>) => unknown
-}): ColumnDef<User>[] => [
+	roleChange?: (row: Row<UserWOutPassword>) => unknown
+	edit?: (row: Row<UserWOutPassword>) => unknown
+	delete?: (row: Row<UserWOutPassword>) => unknown
+}): ColumnDef<UserWOutPassword>[] => [
 	{
 		id: "select",
 		header: ({ table }) => (
@@ -70,7 +71,11 @@ export const columns = (callbacks: {
 			title: "CPF",
 		},
 		header: () => <div className="text-center">CPF</div>,
-		cell: ({ row }) => <div className="text-center font-medium">{row.original.cpf}</div>,
+		cell: ({ row }) => (
+			<div className="text-center font-medium">
+				{format(row.original.cpf, { mask: "___.___.___-__", replacement: { _: /\d/ } })}
+			</div>
+		),
 	},
 	{
 		accessorKey: "role",
@@ -93,8 +98,7 @@ export const columns = (callbacks: {
 							value: "ADMIN",
 							description: "Ver, Criar, Atualizar e Apagar",
 						},
-						{ title: "Funcionário", value: "WORKER", description: "Ver, Criar, Atualizar" },
-						{ title: "Padrinho", value: "PARTNER", description: "Ver" },
+						{ title: "Autenticado", value: "AUTHENTICATED", description: "Ver" },
 					]}
 				/>
 			</div>

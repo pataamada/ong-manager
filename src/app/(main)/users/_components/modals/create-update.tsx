@@ -25,7 +25,7 @@ import type { DialogProps } from "@radix-ui/react-dialog"
 import { useEffect, type ReactNode } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { InputMask } from "@react-input/mask"
+import { InputMask, format } from "@react-input/mask"
 import { PasswordInput } from "@/components/custom-ui/password-input"
 import { useAction } from "next-safe-action/hooks"
 import { createUser } from "@/actions/auth/user/create"
@@ -40,8 +40,12 @@ interface CreateUpdateUserModal extends DialogProps {
 	onClose?: () => unknown
 }
 const createUserSchema = z.object({
-	name: z.string().min(4, "Nome deve ter no mínimo 4 carateres").trim(),
-	email: z.string().email("Digite um email válido").trim(),
+	name: z
+		.string()
+		.min(4, "Nome deve ter no mínimo 4 carateres")
+		.trim()
+		.max(256, "Máximo de 256 caracteres"),
+	email: z.string().email("Digite um email válido").trim().max(256, "Máximo de 256 caracteres"),
 	cpf: z
 		.string()
 		.min(11, "O CPF deve ter pelo menos 11 caracteres")
@@ -53,6 +57,7 @@ const createUserSchema = z.object({
 		.string()
 		.min(8, "A senha deve ter pelo menos 8 caracteres")
 		.trim()
+		.max(256, "Máximo de 256 caracteres")
 		.optional()
 		.or(z.literal("")),
 })
@@ -68,7 +73,7 @@ export function CreateUpdateUserModal({
 		resolver: zodResolver(createUserSchema),
 		values: {
 			name: data?.name || "",
-			cpf: data?.cpf || "",
+			cpf: format(data?.cpf || "", { mask: "___.___.___-__", replacement: { _: /\d/ } }),
 			email: data?.email || "",
 			password: "",
 		},

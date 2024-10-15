@@ -1,6 +1,6 @@
 import { UserRoles, type User } from "@/models/user.model"
 
-export const usersMock: User[] = [
+export const usersMock: Omit<User, "password">[] = [
 	{
 		uid: "m5gr84i9",
 		name: "Ken 99",
