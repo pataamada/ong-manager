@@ -1,36 +1,39 @@
 "use client"
 
-import type { User } from "@/models/user.model"
+import type { UserWOutPassword } from "@/models/user.model"
 import { ConfirmDeleteUserAlert } from "../modals/confirm-delete"
 import { useState } from "react"
 import { CreateUpdateUserModal } from "../modals/create-update"
 import { UserTable } from "./table"
 import type { Row } from "@tanstack/react-table"
+import { useDeleteUser, useGetUsers } from "../../mutations"
+import { useQueryClient } from "@tanstack/react-query"
 
 interface UsersListProps {
-	users?: User[]
+	users?: UserWOutPassword[]
 }
-export function UserList({users = []}: UsersListProps) {
-	const [data, setData] = useState(users)
-	const [updateUser, setUpdateUser] = useState<User | undefined | null>()
-	const [deleteUser, setDeleteUser] = useState<User | null>()
-	const handleRoleChange = (row: Row<User>) => {
+export function UserList({ users = [] }: UsersListProps) {
+	const { data } = useGetUsers(users)
+	const queryClient = useQueryClient()
+	const { mutateAsync, isPending } = useDeleteUser()
+	const [updateUser, setUpdateUser] = useState<UserWOutPassword | undefined | null>()
+	const [deleteUser, setDeleteUser] = useState<UserWOutPassword | null>()
+	const handleRoleChange = (row: Row<UserWOutPassword>) => {
 		const rowValue = row.original
-		const updatedData = data.map(oldRow => {
+		data.map(oldRow => {
 			if (oldRow.uid === rowValue.uid) {
 				return rowValue
 			}
 			return oldRow
 		})
-		setData(() => updatedData)
 	}
 	const handleOpenCreate = () => {
 		setUpdateUser(null)
 	}
-	const handleOpenEdit = (row: Row<User>) => {
+	const handleOpenEdit = (row: Row<UserWOutPassword>) => {
 		setUpdateUser(row.original)
 	}
-	const handleOpenDelete = (row: Row<User>) => {
+	const handleOpenDelete = (row: Row<UserWOutPassword>) => {
 		setDeleteUser(row.original)
 	}
 
@@ -44,12 +47,26 @@ export function UserList({users = []}: UsersListProps) {
 				onCreate={handleOpenCreate}
 				pageSize={10}
 			/>
-			<ConfirmDeleteUserAlert open={!!deleteUser} onOpenChange={() => setDeleteUser(null)} />
+			<ConfirmDeleteUserAlert
+				open={!!deleteUser}
+				onOpenChange={() => setDeleteUser(null)}
+				onSubmit={async () => {
+					if (!deleteUser) {
+						return
+					}
+					await mutateAsync({ uid: deleteUser.uid })
+					setDeleteUser(null)
+				}}
+				loading={isPending}
+			/>
 			<CreateUpdateUserModal
 				open={!!(updateUser || updateUser === null)}
 				onOpenChange={() => setUpdateUser(undefined)}
 				data={updateUser}
 				onClose={() => setUpdateUser(undefined)}
+				onSubmit={() => {
+					queryClient.invalidateQueries({ queryKey: ["users"] })
+				}}
 			/>
 		</>
 	)

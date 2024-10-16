@@ -1,5 +1,5 @@
 import type { UserRoles } from "@/models/user.model"
-import { observable } from "@legendapp/state"
 import type { UserRecord } from "firebase-admin/auth"
+import { atom } from "jotai";
 
-export const user$ = observable<{ user: UserRecord; role?: UserRoles } | null>(null)
+export const userAtom = atom<{ user: UserRecord; role?: UserRoles } | null>(null)

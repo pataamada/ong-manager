@@ -1,6 +1,5 @@
 import {
 	AlertDialog,
-	AlertDialogAction,
 	AlertDialogCancel,
 	AlertDialogContent,
 	AlertDialogDescription,
@@ -9,17 +8,20 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
 import type { AlertDialogProps } from "@radix-ui/react-alert-dialog"
 import Image from "next/image"
 import type { ReactNode } from "react"
 
 interface ConfirmDeleteUserAlertProps extends AlertDialogProps {
 	children?: ReactNode
-	onSubmit?: () => unknown
+	onSubmit?: () => unknown | Promise<unknown>
+	loading?: boolean
 }
 export function ConfirmDeleteUserAlert({
 	children,
 	onSubmit,
+	loading,
 	...props
 }: ConfirmDeleteUserAlertProps) {
 	return (
@@ -35,7 +37,9 @@ export function ConfirmDeleteUserAlert({
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel>Cancel</AlertDialogCancel>
-					<AlertDialogAction onClick={onSubmit}>Excluir</AlertDialogAction>
+					<Button onClick={onSubmit} disabled={loading}>
+						{loading ? "Apagando..." : "Excluir"}
+					</Button>
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>

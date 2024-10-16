@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button"
 import {
 	Dialog,
@@ -30,13 +31,14 @@ import { PasswordInput } from "@/components/custom-ui/password-input"
 import { useAction } from "next-safe-action/hooks"
 import { createUser } from "@/actions/auth/user/create"
 import { updateUser } from "@/actions/auth/user/update"
-import { user$ } from "@/store/user"
+import { userAtom } from "@/store/user"
 import { useToast } from "@/hooks/use-toast"
+import { useAtomValue } from "jotai"
 
 interface CreateUpdateUserModal extends DialogProps {
 	children?: ReactNode
 	data?: Partial<User> | null
-	onSubmit?: (user: Partial<User>) => unknown
+	onSubmit?: () => unknown
 	onClose?: () => unknown
 }
 const createUserSchema = z.object({
@@ -67,6 +69,7 @@ export function CreateUpdateUserModal({
 	data,
 	open,
 	onClose,
+	onSubmit,
 	...props
 }: CreateUpdateUserModal) {
 	const form = useForm<z.infer<typeof createUserSchema>>({
@@ -78,7 +81,7 @@ export function CreateUpdateUserModal({
 			password: "",
 		},
 	})
-	const user = user$.get()
+	const user = useAtomValue(userAtom)
 	const { toast } = useToast()
 	const { executeAsync: create, isPending: pendingCreate } = useAction(createUser)
 	const { executeAsync: update, isPending: pendingUpdate } = useAction(updateUser)
@@ -117,11 +120,26 @@ export function CreateUpdateUserModal({
 				description: "com sucesso!",
 				variant: "default",
 			})
+			onSubmit?.()
 			onClose?.()
 			return result
 		}
 
 		const result = await update({ uid: user!.user.uid, name, email, password, cpf: cpf! })
+		if (result?.serverError) {
+			toast({
+				title: "Erro ao editar usuário",
+				description: result.serverError,
+				variant: "destructive",
+			})
+			return
+		}
+		toast({
+			title: "Usuário editado",
+			description: "com sucesso!",
+			variant: "default",
+		})
+		onSubmit?.()
 		return result
 	}
 	useEffect(() => {

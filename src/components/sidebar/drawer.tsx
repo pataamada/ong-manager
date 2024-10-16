@@ -10,15 +10,16 @@ import { logout } from "@/actions/auth/logout"
 import { UserMenu } from "./user-menu"
 import { Links } from "./Items"
 import { useRouter } from "nextjs-toploader/app"
-import { observer } from "@legendapp/state/react"
-import { user$ } from "@/store/user"
-function LeftDrawer() {
+import { userAtom } from "@/store/user"
+import { useAtom } from "jotai"
+export function LeftDrawer() {
+	const [user, setUser] = useAtom(userAtom)
 	const router = useRouter()
 	const handleLogout = async () => {
 		await logout()
         router.replace("/login")
 		setTimeout(() => {
-            user$.delete()
+            setUser(null)
 		}, 100)
 	}
 	return (
@@ -34,20 +35,19 @@ function LeftDrawer() {
 					<div className="flex gap-2">
 						<UserMenu
 							className="mb-4"
-							email={user$.get()?.user.email}
+							email={user?.user.email}
 							onLogout={handleLogout}
-							photo={user$.get()?.user.photoURL}
+							photo={user?.user.photoURL}
                             side="bottom"
 						/>
 						<div className="flex flex-col">
-							<h6>{user$.get()?.user.displayName}</h6>
-							<span>{user$.get()?.user.email}</span>
+							<h6>{user?.user.displayName}</h6>
+							<span>{user?.user.email}</span>
 						</div>
 					</div>
-					<Links items={links} size="default" role={user$.get()?.role || UserRoles.Authenticated} />
+					<Links items={links} size="default" role={user?.role || UserRoles.Authenticated} />
 				</DrawerContent>
 			</Drawer>
 		</div>
 	)
 }
-export default observer(LeftDrawer)
