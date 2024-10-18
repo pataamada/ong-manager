@@ -42,6 +42,7 @@ interface CreateUpdateUserModal extends DialogProps {
 	onClose?: () => unknown
 }
 const createUserSchema = z.object({
+	uuid: z.string(),
 	name: z
 		.string()
 		.min(4, "Nome deve ter no mínimo 4 carateres")
@@ -75,18 +76,20 @@ export function CreateUpdateUserModal({
 	const form = useForm<z.infer<typeof createUserSchema>>({
 		resolver: zodResolver(createUserSchema),
 		values: {
+			uuid: data?.uid || "",
 			name: data?.name || "",
 			cpf: format(data?.cpf || "", { mask: "___.___.___-__", replacement: { _: /\d/ } }),
 			email: data?.email || "",
 			password: "",
 		},
 	})
-	const user = useAtomValue(userAtom)
+
 	const { toast } = useToast()
 	const { executeAsync: create, isPending: pendingCreate } = useAction(createUser)
 	const { executeAsync: update, isPending: pendingUpdate } = useAction(updateUser)
 
 	const handleOnSubmit = async ({
+		uuid,
 		name,
 		email,
 		password,
@@ -125,7 +128,7 @@ export function CreateUpdateUserModal({
 			return result
 		}
 
-		const result = await update({ uid: user!.user.uid, name, email, password, cpf: cpf! })
+		const result = await update({ uid: uuid, name, email, password, cpf: cpf! })
 		if (result?.serverError) {
 			toast({
 				title: "Erro ao editar usuário",

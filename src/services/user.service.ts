@@ -13,7 +13,6 @@ import {
 	where,
 } from "firebase/firestore"
 
-
 export const createUser = async (userId: string, params: CreateUserPayload) => {
 	const document = await setDoc(doc(db, "users", userId), {
 		birthDate: null,
@@ -22,6 +21,7 @@ export const createUser = async (userId: string, params: CreateUserPayload) => {
 	})
 	return document
 }
+
 export const findOne = async (id: string) => {
 	const document = await getDoc(doc(db, `users/${id}`))
 	return document.data()
@@ -72,10 +72,11 @@ export const findUserByEmailPassword = async (email: string, password: string) =
 }
 
 export const updateUser = async (params: Partial<User>) => {
-	console.log("params: ", params)
-
 	const updatedDocument = await setDoc(doc(db, `users/${params.uid}`), {
 		name: params.name,
+		cpf: params.cpf,
+		birthDate: params.birthDate,
+		phone: params.photo,
 	})
 
 	return JSON.stringify(updatedDocument)
