@@ -9,8 +9,8 @@ export interface User {
 	email: string
 	password: string
 	uid: string
-	photo: string
-	birthDate: Date
+	photo?: string
+	birthDate: Date | null
 	phone: string
 }
 
