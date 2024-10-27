@@ -12,7 +12,7 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from "@tanstack/react-table"
-import { Plus } from "lucide-react"
+import { Plus, Filter } from "lucide-react" // Importando os ícones
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -28,6 +28,9 @@ import type { UserWOutPassword } from "@/models/user.model"
 import { useState } from "react"
 import Image from "next/image"
 
+import { Sidebar, useSidebar } from "@/components/ui/sidebar";
+import { DrawerFilter } from "../drawer-filter"
+
 interface UsersTableProps {
 	data: UserWOutPassword[]
 	onDelete?: (row: Row<UserWOutPassword>) => unknown
@@ -35,7 +38,9 @@ interface UsersTableProps {
 	onRoleChange?: (row: Row<UserWOutPassword>) => unknown
 	onCreate?: () => unknown
 	pageSize?: number
+	toggle?: () => void
 }
+
 export function UserTable({
 	onDelete,
 	onEdit,
@@ -44,6 +49,7 @@ export function UserTable({
 	onCreate,
 	pageSize = 5,
 }: UsersTableProps) {
+
 	const [sorting, setSorting] = useState<SortingState>([])
 	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
@@ -52,6 +58,11 @@ export function UserTable({
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 	const [rowSelection, setRowSelection] = useState({})
+
+	//drawer filter - estado
+	const [isDrawerOpen, setDrawerOpen] = useState(false)
+	//
+
 	const table = useReactTable({
 		data,
 		columns: columns({ roleChange: onRoleChange, delete: onDelete, edit: onEdit }),
@@ -72,6 +83,7 @@ export function UserTable({
 			rowSelection,
 		},
 	})
+
 	return (
 		<div className="w-full flex flex-col bg-white rounded-lg p-6 gap-6 min-h-full">
 			<div className="flex items-center gap-2">
@@ -81,25 +93,34 @@ export function UserTable({
 					onChange={event => table.getColumn("user")?.setFilterValue(event.target.value)}
 					className="max-w-sm mr-auto"
 				/>
-				<Button onClick={() => onCreate?.()}>
+
+                {/* botão de Filtros!!!! */}
+	          <Button 
+               onClick={() => setDrawerOpen(true)} 
+               className="flex items-center gap-2 bg-white text-black p-2 rounded-md border border-gray-300">
+                  <Filter className="h-4 w-4 text-black fill-white" />
+               </Button>
+
+				{/* Botão "Novo usuário" */}
+				<Button onClick={() => onCreate?.()} className="flex items-center gap-2">
 					<Plus />
 					Novo usuário
 				</Button>
+
 			</div>
+
 			{table.getRowModel().rows?.length ? (
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map(headerGroup => (
 							<TableRow key={headerGroup.id}>
-								{headerGroup.headers.map(header => {
-									return (
-										<TableHead key={header.id}>
-											{header.isPlaceholder
-												? null
-												: flexRender(header.column.columnDef.header, header.getContext())}
-										</TableHead>
-									)
-								})}
+								{headerGroup.headers.map(header => (
+									<TableHead key={header.id}>
+										{header.isPlaceholder
+											? null
+											: flexRender(header.column.columnDef.header, header.getContext())}
+									</TableHead>
+								))}
 							</TableRow>
 						))}
 					</TableHeader>
@@ -119,7 +140,7 @@ export function UserTable({
 			) : (
 				<div className="w-full flex-grow flex flex-col items-center justify-center">
 					<Image src="empty-state.svg" alt="empty users image" height={200} width={200} />
-					<span className="text-lg text-zinc-400"> Parece que não tem usuários cadastrados</span>
+					<span className="text-lg text-zinc-400">Parece que não tem usuários cadastrados</span>
 				</div>
 			)}
 			{!!table.getRowModel().rows?.length && (
@@ -147,6 +168,10 @@ export function UserTable({
 						</Button>
 					</div>
 				</div>
+			)}
+
+            {isDrawerOpen && (
+				<DrawerFilter onClose={() => setDrawerOpen(false)} /> // Fecha o drawer ao clicar em "onClose"
 			)}
 		</div>
 	)

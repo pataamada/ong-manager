@@ -18,6 +18,7 @@ export function UserList({ users = [] }: UsersListProps) {
 	const { mutateAsync, isPending } = useDeleteUser()
 	const [updateUser, setUpdateUser] = useState<UserWOutPassword | undefined | null>()
 	const [deleteUser, setDeleteUser] = useState<UserWOutPassword | null>()
+
 	const handleRoleChange = (row: Row<UserWOutPassword>) => {
 		const rowValue = row.original
 		data.map(oldRow => {
@@ -37,8 +38,11 @@ export function UserList({ users = [] }: UsersListProps) {
 		setDeleteUser(row.original)
 	}
 
+
+
 	return (
 		<>
+		{/* <DrawerFilter /> */}
 			<UserTable
 				data={data}
 				onDelete={handleOpenDelete}
