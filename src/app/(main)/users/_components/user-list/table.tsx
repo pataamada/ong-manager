@@ -27,9 +27,15 @@ import { columns } from "./columns"
 import type { UserWOutPassword } from "@/models/user.model"
 import { useState } from "react"
 import Image from "next/image"
-
-import { Sidebar, useSidebar } from "@/components/ui/sidebar";
 import { DrawerFilter } from "../drawer-filter"
+import {
+	Drawer,
+	DrawerContent,
+	DrawerDescription,
+	DrawerHeader,
+	DrawerTitle,
+} from "@/components/custom-ui/drawer"
+import { DrawerTrigger } from "@/components/ui/drawer"
 
 interface UsersTableProps {
 	data: UserWOutPassword[]
@@ -49,7 +55,6 @@ export function UserTable({
 	onCreate,
 	pageSize = 5,
 }: UsersTableProps) {
-
 	const [sorting, setSorting] = useState<SortingState>([])
 	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
@@ -93,20 +98,28 @@ export function UserTable({
 					onChange={event => table.getColumn("user")?.setFilterValue(event.target.value)}
 					className="max-w-sm mr-auto"
 				/>
-
-                {/* botão de Filtros!!!! */}
-	          <Button 
-               onClick={() => setDrawerOpen(true)} 
-               className="flex items-center gap-2 bg-white text-black p-2 rounded-md border border-gray-300">
-                  <Filter className="h-4 w-4 text-black fill-white" />
-               </Button>
+				<Drawer>
+					<DrawerTrigger>
+						<Button variant="outline" size="icon">
+							<Filter className="h-4 w-4 text-black" />
+						</Button>
+					</DrawerTrigger>
+					<DrawerContent side="right" backgroundOverlay="transparent">
+						<DrawerHeader>
+							<DrawerTitle>Are you absolutely sure?</DrawerTitle>
+							<DrawerDescription>
+								This action cannot be undone. This will permanently delete your account and remove
+								your data from our servers.
+							</DrawerDescription>
+						</DrawerHeader>
+					</DrawerContent>
+				</Drawer>
 
 				{/* Botão "Novo usuário" */}
 				<Button onClick={() => onCreate?.()} className="flex items-center gap-2">
 					<Plus />
 					Novo usuário
 				</Button>
-
 			</div>
 
 			{table.getRowModel().rows?.length ? (
@@ -170,7 +183,7 @@ export function UserTable({
 				</div>
 			)}
 
-            {isDrawerOpen && (
+			{isDrawerOpen && (
 				<DrawerFilter onClose={() => setDrawerOpen(false)} /> // Fecha o drawer ao clicar em "onClose"
 			)}
 		</div>
