@@ -5,8 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { Montserrat } from "next/font/google"
 import NextTopLoader from "nextjs-toploader"
 import { cn } from "@/lib/utils"
-import { CustomQueryClientProvider } from "@/components/query-client-provider"
-
+import QueryProvider from "@/providers/query-provider"
 
 export const metadata: Metadata = {
 	title: "Cãodomínio Satuba",
@@ -27,12 +26,12 @@ export default function RootLayout({
 		<html lang="pt">
 			<body className={cn("antialiased h-screen", montserrat.className)}>
 				<Toaster />
-				<CustomQueryClientProvider>
+				<QueryProvider>
 					<TooltipProvider>
 						<NextTopLoader color="#10b981" showSpinner={false} />
 						{children}
 					</TooltipProvider>
-				</CustomQueryClientProvider>
+				</QueryProvider>
 			</body>
 		</html>
 	)

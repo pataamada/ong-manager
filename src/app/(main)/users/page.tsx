@@ -1,13 +1,15 @@
+import { HydrationBoundary } from "@tanstack/react-query"
 import { UserList } from "./_components/user-list"
-import { findAll } from "@/services/user.service"
-import { SidebarProvider} from "@/components/ui/sidebar"
-
+import { dehydrate, QueryClient } from "@tanstack/query-core"
+import { getUsersOptions } from "./mutations"
+import { getQueryClient } from "@/lib/query/get-query-client"
 
 export default async function Users() {
-	const users = await findAll() // fazer paginação
-	return ( 
-	<SidebarProvider> 
-	<UserList users={users}/>
-	</SidebarProvider> 
+	const queryClient = getQueryClient()
+	await queryClient.prefetchQuery(getUsersOptions)
+	return (
+		<HydrationBoundary state={dehydrate(queryClient)}>
+			<UserList />
+		</HydrationBoundary>
 	)
 }

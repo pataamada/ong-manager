@@ -10,10 +10,9 @@ import { logout } from "@/actions/auth/logout"
 import { UserMenu } from "./user-menu"
 import { Links } from "./Items"
 import { useRouter } from "nextjs-toploader/app"
-import { userAtom } from "@/store/user"
-import { useAtom } from "jotai"
+import { useAuth } from "@/hooks/use-auth"
 export function LeftDrawer() {
-	const [user, setUser] = useAtom(userAtom)
+	const { user, setUser } = useAuth()
 	const router = useRouter()
 	const handleLogout = async () => {
 		await logout()

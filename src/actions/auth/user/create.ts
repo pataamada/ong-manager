@@ -6,7 +6,7 @@ import { createUser as createUserService } from "@/services/user.service"
 import { revalidatePath } from "next/cache"
 import { UserRoles } from "@/models/user.model"
 
-const schema = z.object({
+const userSchema = z.object({
 	name: z.string().trim().min(4).max(255),
 	email: z.string().trim().email(),
 	password: z.string().trim().min(8).max(100),
@@ -14,7 +14,7 @@ const schema = z.object({
 })
 
 export const createUser = actionClient
-	.schema(schema)
+	.schema(userSchema)
 	.action(async ({ parsedInput: { name, cpf, email, password } }) => {
 		const user = await authAdmin.createUser({
 			displayName: name,

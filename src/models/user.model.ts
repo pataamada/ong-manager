@@ -10,8 +10,8 @@ export interface User {
 	password: string
 	uid: string
 	photo?: string
-	birthDate: Date | null
-	phone: string
+	birthDate?: Date | null
+	phone?: string | null
 }
 
 export type UserWOutPassword = Omit<User, "password">

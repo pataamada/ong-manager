@@ -19,7 +19,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import type { User } from "@/models/user.model"
+import { UserRoles, type User } from "@/models/user.model"
 import { validateCpf } from "@/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { DialogProps } from "@radix-ui/react-dialog"
@@ -29,11 +29,9 @@ import { z } from "zod"
 import { InputMask, format } from "@react-input/mask"
 import { PasswordInput } from "@/components/custom-ui/password-input"
 import { useAction } from "next-safe-action/hooks"
-import { createUser } from "@/actions/auth/user/create"
 import { updateUser } from "@/actions/auth/user/update"
-import { userAtom } from "@/store/user"
 import { useToast } from "@/hooks/use-toast"
-import { useAtomValue } from "jotai"
+import { useCreateUser } from "../../mutations"
 
 interface CreateUpdateUserModal extends DialogProps {
 	children?: ReactNode
@@ -85,7 +83,7 @@ export function CreateUpdateUserModal({
 	})
 
 	const { toast } = useToast()
-	const { executeAsync: create, isPending: pendingCreate } = useAction(createUser)
+	const { mutateAsync: create, isPending: pendingCreate, error } = useCreateUser()
 	const { executeAsync: update, isPending: pendingUpdate } = useAction(updateUser)
 
 	const handleOnSubmit = async ({
@@ -107,12 +105,12 @@ export function CreateUpdateUserModal({
 		}
 
 		if (!data && password) {
-			const result = await create({ name, email, password, cpf: cpf! })
+			await create({ name, email, password, cpf: cpf!, role: UserRoles.Authenticated })
 
-			if (result?.serverError) {
+			if (error) {
 				toast({
 					title: "Erro ao criar usuário",
-					description: result.serverError,
+					description: error.message,
 					variant: "destructive",
 				})
 				return
@@ -125,7 +123,7 @@ export function CreateUpdateUserModal({
 			})
 			onSubmit?.()
 			onClose?.()
-			return result
+			return
 		}
 
 		const result = await update({ uid: uuid, name, email, password, cpf: cpf! })

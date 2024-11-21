@@ -1,19 +1,13 @@
 "use client"
 import { links } from "./links"
-import type { UserRecord } from "firebase-admin/auth"
 import { UserRoles } from "@/models/user.model"
 import { logout } from "@/actions/auth/logout"
 import { useRouter } from "nextjs-toploader/app"
 import { UserMenu } from "./user-menu"
 import { Links } from "./Items"
-import { useAtom } from "jotai"
-import { useHydrateAtoms } from "jotai/utils"
-import { userAtom } from "@/store/user"
-export const Sidebar = ({
-	currentUser,
-}: { currentUser: { user: UserRecord; role: UserRoles } | null }) => {
-	useHydrateAtoms([[userAtom, currentUser]], { dangerouslyForceHydrate: true })
-	const [user, setUser] = useAtom(userAtom)
+import { useAuth } from "@/hooks/use-auth"
+export const Sidebar = () => {
+	const { user, setUser } = useAuth()
 	const router = useRouter()
 	const handleLogout = async () => {
 		await logout()

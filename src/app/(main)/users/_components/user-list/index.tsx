@@ -7,14 +7,13 @@ import { CreateUpdateUserModal } from "../modals/create-update"
 import { UserTable } from "./table"
 import type { Row } from "@tanstack/react-table"
 import { useDeleteUser, useGetUsers } from "../../mutations"
-import { useQueryClient } from "@tanstack/react-query"
+import { FilterDrawer } from "../modals/filter"
 
 interface UsersListProps {
 	users?: UserWOutPassword[]
 }
 export function UserList({ users = [] }: UsersListProps) {
 	const { data } = useGetUsers(users)
-	const queryClient = useQueryClient()
 	const { mutateAsync, isPending } = useDeleteUser()
 	const [updateUser, setUpdateUser] = useState<UserWOutPassword | undefined | null>()
 	const [deleteUser, setDeleteUser] = useState<UserWOutPassword | null>()
@@ -38,11 +37,9 @@ export function UserList({ users = [] }: UsersListProps) {
 		setDeleteUser(row.original)
 	}
 
-
-
 	return (
 		<>
-		{/* <DrawerFilter /> */}
+			{/* <DrawerFilter /> */}
 			<UserTable
 				data={data}
 				onDelete={handleOpenDelete}
@@ -68,10 +65,8 @@ export function UserList({ users = [] }: UsersListProps) {
 				onOpenChange={() => setUpdateUser(undefined)}
 				data={updateUser}
 				onClose={() => setUpdateUser(undefined)}
-				onSubmit={() => {
-					queryClient.invalidateQueries({ queryKey: ["users"] })
-				}}
 			/>
+			<FilterDrawer />
 		</>
 	)
 }
