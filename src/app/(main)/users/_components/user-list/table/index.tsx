@@ -2,10 +2,8 @@
 
 import {
 	type ColumnFiltersState,
-	type PaginationState,
 	type Row,
 	type SortingState,
-	type VisibilityState,
 	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
@@ -25,62 +23,58 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table"
-import { columns } from "./columns"
+import { getColumns } from "./columns"
 import type { UserWOutPassword } from "@/models/user.model"
 import { useState } from "react"
 import Image from "next/image"
-import { filterDrawerAtom } from "../filters"
-import { useSetAtom } from "jotai"
+import { filterAtom, filterDrawerAtom } from "../../filters"
+import { useAtom, useSetAtom } from "jotai"
+import type { UserInfo } from "@/hooks/use-auth"
+import { ListFilters } from "./list-filters"
 
 interface UsersTableProps {
 	data: UserWOutPassword[]
+	currentUser?: UserInfo | null
 	onDelete?: (row: Row<UserWOutPassword>) => unknown
 	onEdit?: (row: Row<UserWOutPassword>) => unknown
 	onRoleChange?: (row: Row<UserWOutPassword>) => unknown
 	onCreate?: () => unknown
-	pageSize?: number
 	toggle?: () => void
 }
 
 export function UserTable({
 	onDelete,
 	onEdit,
-	data,
 	onRoleChange,
 	onCreate,
-	pageSize = 5,
+	currentUser,
+	data,
 }: UsersTableProps) {
-	const [sorting, setSorting] = useState<SortingState>([])
-	const [pagination, setPagination] = useState<PaginationState>({
-		pageIndex: 0,
-		pageSize,
-	})
-	const setFilter = useSetAtom(filterDrawerAtom)
-	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-	const [rowSelection, setRowSelection] = useState({})
-
+	const [sorting, setSorting] = useState<SortingState>([{ id: "user", desc: false }])
+	const setDrawerFilter = useSetAtom(filterDrawerAtom)
+	const [columnFilters, setColumnFilters] = useAtom<ColumnFiltersState>(filterAtom)
+	const columns = getColumns(
+		{ roleChange: onRoleChange, delete: onDelete, edit: onEdit },
+		currentUser,
+	)
 	const table = useReactTable({
 		data,
-		columns: columns({ roleChange: onRoleChange, delete: onDelete, edit: onEdit }),
+		columns,
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
-		onPaginationChange: setPagination,
 		getSortedRowModel: getSortedRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
-		onColumnVisibilityChange: setColumnVisibility,
-		onRowSelectionChange: setRowSelection,
 		state: {
 			sorting,
 			columnFilters,
-			pagination,
-			columnVisibility,
-			rowSelection,
 		},
 	})
 
+	const onRemoveFilter = (id: string) => {
+		setColumnFilters(columnFilters => columnFilters.filter(filter => filter.id !== id))
+	}
 	return (
 		<div className="w-full flex flex-col bg-white rounded-lg p-6 gap-6 min-h-full">
 			<div className="flex items-center gap-2">
@@ -90,8 +84,7 @@ export function UserTable({
 					onChange={event => table.getColumn("user")?.setFilterValue(event.target.value)}
 					className="max-w-sm mr-auto"
 				/>
-
-				<Button variant="outline" size="icon" onClick={() => setFilter(true)}>
+				<Button variant="outline" size="icon" onClick={() => setDrawerFilter(true)}>
 					<Filter className="h-4 w-4 text-black" />
 				</Button>
 				<Button onClick={() => onCreate?.()} className="flex items-center gap-2">
@@ -99,7 +92,7 @@ export function UserTable({
 					Novo usuário
 				</Button>
 			</div>
-
+			<ListFilters columnFilters={columnFilters} onRemoveFilter={onRemoveFilter} />
 			{table.getRowModel().rows?.length ? (
 				<Table>
 					<TableHeader>
@@ -117,7 +110,10 @@ export function UserTable({
 					</TableHeader>
 					<TableBody>
 						{table.getRowModel().rows.map(row => (
-							<TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+							<TableRow
+								key={row.id}
+								data-state={row.original.uid === currentUser?.user.uid && "current"}
+							>
 								{row.getVisibleCells().map(cell => (
 									<TableCell key={cell.id}>
 										{flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -131,33 +127,6 @@ export function UserTable({
 				<div className="w-full flex-grow flex flex-col items-center justify-center">
 					<Image src="empty-state.svg" alt="empty users image" height={200} width={200} />
 					<span className="text-lg text-zinc-400">Parece que não tem usuários cadastrados</span>
-				</div>
-			)}
-
-			{!!table.getRowModel().rows?.length && (
-				<div className="flex items-center justify-end space-x-2 py-4">
-					<div className="flex-1 text-sm text-muted-foreground">
-						{table.getFilteredSelectedRowModel().rows.length} de{" "}
-						{table.getFilteredRowModel().rows.length} linha(s) selecionada.
-					</div>
-					<div className="space-x-2">
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => table.previousPage()}
-							disabled={!table.getCanPreviousPage()}
-						>
-							Anterior
-						</Button>
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => table.nextPage()}
-							disabled={!table.getCanNextPage()}
-						>
-							Próximo
-						</Button>
-					</div>
 				</div>
 			)}
 		</div>

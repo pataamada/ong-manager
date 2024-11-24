@@ -1,6 +1,6 @@
 import { auth } from "@/lib/firebase/firebase-admin"
 import { db } from "@/lib/firebase/firebase-secret"
-import type { User, CreateUserPayload, UserRoles } from "@/models/user.model"
+import type { User, CreateUserPayload, UserRoles, UserWOutPassword } from "@/models/user.model"
 import { compareSync } from "bcrypt-ts"
 import {
 	collection,
@@ -51,7 +51,7 @@ export const findAll = async () => {
 		}
 		return userValue
 	})
-	return filledUsers as User[]
+	return filledUsers as UserWOutPassword[]
 }
 
 export const findUserByEmailPassword = async (email: string, password: string) => {

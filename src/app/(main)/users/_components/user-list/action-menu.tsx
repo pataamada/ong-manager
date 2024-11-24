@@ -12,8 +12,14 @@ interface ActionMenuProps<T> {
 	value: T
 	onEditClick?: ((value: T) => unknown) | undefined
 	onDeleteClick?: ((value: T) => unknown) | undefined
+	noDelete?: boolean
 }
-export function ActionMenu<T>({ onEditClick, value, onDeleteClick }: ActionMenuProps<T>) {
+export function ActionMenu<T>({
+	onEditClick,
+	value,
+	onDeleteClick,
+	noDelete = false,
+}: ActionMenuProps<T>) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -27,10 +33,12 @@ export function ActionMenu<T>({ onEditClick, value, onDeleteClick }: ActionMenuP
 					<Edit2 size={16} />
 					<span>Editar</span>
 				</DropdownMenuItem>
-				<DropdownMenuItem className="gap-2 text-red-500" onClick={() => onDeleteClick?.(value)}>
-					<Trash size={16} />
-					<span>Apagar</span>
-				</DropdownMenuItem>
+				{!noDelete && (
+					<DropdownMenuItem className="gap-2 text-red-500" onClick={() => onDeleteClick?.(value)}>
+						<Trash size={16} />
+						<span>Apagar</span>
+					</DropdownMenuItem>
+				)}
 			</DropdownMenuContent>
 		</DropdownMenu>
 	)

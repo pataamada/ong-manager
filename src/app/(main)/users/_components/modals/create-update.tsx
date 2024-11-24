@@ -28,10 +28,8 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { InputMask, format } from "@react-input/mask"
 import { PasswordInput } from "@/components/custom-ui/password-input"
-import { useAction } from "next-safe-action/hooks"
-import { updateUser } from "@/actions/auth/user/update"
 import { useToast } from "@/hooks/use-toast"
-import { useCreateUser } from "../../mutations"
+import { useCreateUser, useUpdateUser } from "../../mutations"
 
 interface CreateUpdateUserModal extends DialogProps {
 	children?: ReactNode
@@ -83,8 +81,8 @@ export function CreateUpdateUserModal({
 	})
 
 	const { toast } = useToast()
-	const { mutateAsync: create, isPending: pendingCreate, error } = useCreateUser()
-	const { executeAsync: update, isPending: pendingUpdate } = useAction(updateUser)
+	const { mutateAsync: create, isPending: pendingCreate, error: errorCreate } = useCreateUser()
+	const { mutateAsync: update, isPending: pendingUpdate, error: errorUpdate } = useUpdateUser()
 
 	const handleOnSubmit = async ({
 		uuid,
@@ -104,13 +102,14 @@ export function CreateUpdateUserModal({
 			return
 		}
 
+		onClose?.()
 		if (!data && password) {
 			await create({ name, email, password, cpf: cpf!, role: UserRoles.Authenticated })
 
-			if (error) {
+			if (errorCreate) {
 				toast({
 					title: "Erro ao criar usuário",
-					description: error.message,
+					description: errorCreate.message,
 					variant: "destructive",
 				})
 				return
@@ -122,15 +121,13 @@ export function CreateUpdateUserModal({
 				variant: "default",
 			})
 			onSubmit?.()
-			onClose?.()
 			return
 		}
-
-		const result = await update({ uid: uuid, name, email, password, cpf: cpf! })
-		if (result?.serverError) {
+		const result = await update({ uid: uuid, name })
+		if (errorUpdate) {
 			toast({
 				title: "Erro ao editar usuário",
-				description: result.serverError,
+				description: errorUpdate.message,
 				variant: "destructive",
 			})
 			return

@@ -1,6 +1,6 @@
 import { HydrationBoundary } from "@tanstack/react-query"
 import { UserList } from "./_components/user-list"
-import { dehydrate, QueryClient } from "@tanstack/query-core"
+import { dehydrate } from "@tanstack/query-core"
 import { getUsersOptions } from "./mutations"
 import { getQueryClient } from "@/lib/query/get-query-client"
 

@@ -22,6 +22,7 @@ export interface BadgeMenuProps extends BadgeProps {
 	options?: BadgeMenuItem[]
 	title?: string
 	value?: string
+	readonly?: boolean
 	onValueChange?: (value: string) => void
 }
 
@@ -31,18 +32,19 @@ const BadgeMenu = ({
 	value,
 	onValueChange,
 	className,
+	readonly = false,
 	...props
 }: BadgeMenuProps) => {
 	const selectedValue = options.find(option => option.value === value)
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
+			<DropdownMenuTrigger asChild disabled={readonly}>
 				<Badge variant="outline" className={cn("cursor-pointer", className)} {...props}>
 					{selectedValue?.title || title}
-					<ChevronDown size={20} />
+					{!readonly && <ChevronDown size={16} />}
 				</Badge>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent className="w-72">
+			<DropdownMenuContent className="w-72" aria-readonly={readonly}>
 				<DropdownMenuLabel>{title}</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuRadioGroup value={value} onValueChange={onValueChange}>

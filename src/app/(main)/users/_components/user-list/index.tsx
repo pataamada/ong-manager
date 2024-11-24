@@ -8,24 +8,26 @@ import { UserTable } from "./table"
 import type { Row } from "@tanstack/react-table"
 import { useDeleteUser, useGetUsers } from "../../mutations"
 import { FilterDrawer } from "../modals/filter"
+import { useQueryClient } from "@tanstack/react-query"
+import { useAuth } from "@/hooks/use-auth"
 
-interface UsersListProps {
-	users?: UserWOutPassword[]
-}
-export function UserList({ users = [] }: UsersListProps) {
-	const { data } = useGetUsers(users)
+export function UserList() {
+	const { data } = useGetUsers()
+	const { user } = useAuth()
+	const queryClient = useQueryClient()
 	const { mutateAsync, isPending } = useDeleteUser()
 	const [updateUser, setUpdateUser] = useState<UserWOutPassword | undefined | null>()
 	const [deleteUser, setDeleteUser] = useState<UserWOutPassword | null>()
 
 	const handleRoleChange = (row: Row<UserWOutPassword>) => {
 		const rowValue = row.original
-		data.map(oldRow => {
+		const updatedData = data?.map(oldRow => {
 			if (oldRow.uid === rowValue.uid) {
 				return rowValue
 			}
 			return oldRow
 		})
+		queryClient.setQueryData<UserWOutPassword[]>(["users"], updatedData)
 	}
 	const handleOpenCreate = () => {
 		setUpdateUser(null)
@@ -36,17 +38,16 @@ export function UserList({ users = [] }: UsersListProps) {
 	const handleOpenDelete = (row: Row<UserWOutPassword>) => {
 		setDeleteUser(row.original)
 	}
-
 	return (
 		<>
 			{/* <DrawerFilter /> */}
 			<UserTable
-				data={data}
+				data={data || []}
+				currentUser={user}
 				onDelete={handleOpenDelete}
 				onEdit={handleOpenEdit}
 				onRoleChange={handleRoleChange}
 				onCreate={handleOpenCreate}
-				pageSize={10}
 			/>
 			<ConfirmDeleteUserAlert
 				open={!!deleteUser}

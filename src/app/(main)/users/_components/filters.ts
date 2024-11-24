@@ -1,9 +1,5 @@
-import type { UserRoles } from "@/models/user.model"
+import type { ColumnFiltersState } from "@tanstack/react-table"
 import { atom } from "jotai"
 
 export const filterDrawerAtom = atom(false)
-export const filterAtom = atom<{
-	role: UserRoles | undefined
-}>({
-	role: undefined,
-})
+export const filterAtom = atom<ColumnFiltersState>([])

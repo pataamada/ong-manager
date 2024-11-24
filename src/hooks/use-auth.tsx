@@ -3,7 +3,7 @@ import type { UserRoles } from "@/models/user.model"
 import type { UserRecord } from "firebase-admin/auth"
 import { createContext, type Dispatch, type SetStateAction, useContext, useState } from "react"
 
-type UserInfo = { user: UserRecord; role?: UserRoles }
+export type UserInfo = { user: UserRecord; role?: UserRoles }
 interface AuthContextType {
 	user: UserInfo | null
 	setUser: Dispatch<SetStateAction<UserInfo | null>>

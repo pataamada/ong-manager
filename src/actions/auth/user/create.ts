@@ -27,4 +27,5 @@ export const createUser = actionClient
 		await authAdmin.setCustomUserClaims(user.uid, { role: UserRoles.Authenticated })
 		await createUserService(user.uid, { cpf })
 		revalidatePath('/users')
+		return user
 	})

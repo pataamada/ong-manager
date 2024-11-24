@@ -10,6 +10,7 @@ export interface User {
 	password: string
 	uid: string
 	photo?: string
+	address?: string | null
 	birthDate?: Date | null
 	phone?: string | null
 }
