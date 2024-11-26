@@ -16,6 +16,7 @@ const userSchema = z.object({
 export const createUser = actionClient
 	.schema(userSchema)
 	.action(async ({ parsedInput: { name, cpf, email, password } }) => {
+		// TODO: verify if cpf already exists and throw an error
 		const user = await authAdmin.createUser({
 			displayName: name,
 			email,

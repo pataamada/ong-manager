@@ -30,6 +30,13 @@ import { InputMask, format } from "@react-input/mask"
 import { PasswordInput } from "@/components/custom-ui/password-input"
 import { useToast } from "@/hooks/use-toast"
 import { useCreateUser, useUpdateUser } from "../../mutations"
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select"
 
 interface CreateUpdateUserModal extends DialogProps {
 	children?: ReactNode
@@ -39,13 +46,18 @@ interface CreateUpdateUserModal extends DialogProps {
 }
 const createUserSchema = z
 	.object({
-		uuid: z.string(),
+		uid: z.string(),
+		role: z.nativeEnum(UserRoles),
 		name: z
 			.string()
 			.min(4, "Nome deve ter no mínimo 4 carateres")
 			.trim()
 			.max(256, "Máximo de 256 caracteres"),
-		email: z.string().email("Digite um email válido").trim().max(256, "Máximo de 256 caracteres"),
+		email: z
+			.string({ message: "Email é obrigatório" })
+			.email("Digite um email válido")
+			.trim()
+			.max(256, "Máximo de 256 caracteres"),
 		cpf: z
 			.string()
 			.min(11, "O CPF deve ter pelo menos 11 caracteres")
@@ -80,21 +92,24 @@ export function CreateUpdateUserModal({
 	const form = useForm<z.infer<typeof createUserSchema>>({
 		resolver: zodResolver(createUserSchema),
 		values: {
-			uuid: data?.uid || "",
+			uid: data?.uid || "",
 			name: data?.name || "",
 			cpf: format(data?.cpf || "", { mask: "___.___.___-__", replacement: { _: /\d/ } }),
 			email: data?.email || "",
 			password: "",
+			role: data?.role || UserRoles.Authenticated,
 		},
 	})
 
 	const handleOnSubmit = async ({
-		uuid,
+		uid,
 		name,
 		email,
 		password,
 		cpf,
+		role,
 	}: z.infer<typeof createUserSchema>) => {
+		const tempUid = crypto.randomUUID()
 		if (!password && !data) {
 			form.setError("password", { type: "required", message: "Senha é obrigatória" })
 			return
@@ -107,7 +122,7 @@ export function CreateUpdateUserModal({
 
 		onClose?.()
 		if (!data && password) {
-			await create({ name, email, password, cpf: cpf!, role: UserRoles.Authenticated })
+			await create({ name, email, password, cpf: cpf!, role: UserRoles.Authenticated, tempUid })
 
 			if (errorCreate) {
 				toast({
@@ -126,7 +141,7 @@ export function CreateUpdateUserModal({
 			onSubmit?.()
 			return
 		}
-		const result = await update({ uid: uuid, name })
+		const result = await update({ uid, name, role })
 		if (errorUpdate) {
 			toast({
 				title: "Erro ao editar usuário",
@@ -178,6 +193,7 @@ export function CreateUpdateUserModal({
 							<FormField
 								control={form.control}
 								name="cpf"
+								disabled={!!data}
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="font-semibold">CPF</FormLabel>
@@ -202,8 +218,34 @@ export function CreateUpdateUserModal({
 									<FormItem>
 										<FormLabel className="font-semibold">Email</FormLabel>
 										<FormControl>
-											<Input id="email" placeholder="Digite o E-mail do usuário" {...field} />
+											<Input
+												id="email"
+												placeholder="Digite o E-mail do usuário"
+												disabled={!!data}
+												{...field}
+											/>
 										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="role"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel className="font-semibold">Cargo</FormLabel>
+										<Select onValueChange={field.onChange} defaultValue={field.value}>
+											<FormControl>
+												<SelectTrigger>
+													<SelectValue placeholder="Selecionar cargo" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												<SelectItem value={UserRoles.Authenticated}>Autenticado</SelectItem>
+												<SelectItem value={UserRoles.Admin}>Administrador</SelectItem>
+											</SelectContent>
+										</Select>
 										<FormMessage />
 									</FormItem>
 								)}

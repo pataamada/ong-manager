@@ -34,6 +34,7 @@ import { ListFilters } from "./list-filters"
 // import { Loader } from "./loader"
 import { PawLoader } from "@/components/paw-loader"
 import { When } from "@/components/when"
+import { cn } from "@/lib/utils"
 
 interface UsersTableProps {
 	data: UserWOutPassword[]
@@ -136,6 +137,8 @@ export function UserTable({
 								<TableRow
 									key={row.id}
 									data-state={row.original.uid === currentUser?.user.uid && "current"}
+									aria-disabled={!row.original.uid}
+									className={cn(!row.original.uid && "opacity-50 pointer-events-none")}
 								>
 									{row.getVisibleCells().map(cell => (
 										<TableCell key={cell.id}>

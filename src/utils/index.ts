@@ -3,12 +3,10 @@ import { type NextRequest, NextResponse } from "next/server"
 export const redirectTo = (request: NextRequest, to: string) =>
 	NextResponse.redirect(new URL(to, request.nextUrl))
 
-export const initialLetters = (fullname: string) => {
-	const names = fullname.split(" ")
-	if (names.length < 2) {
-		return fullname.slice(0, 2)
-	}
-	return names[0][0] + names[1][0]
+export const initialLetters = (fullname: string): string => {
+	const [firstName = " ", secondName = " "] = fullname
+		.split(/\s+/)
+	return `${firstName[0]}${secondName[0]}`
 }
 
 export function validateCpf(cpf: string) {

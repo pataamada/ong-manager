@@ -63,8 +63,8 @@ export function UserList() {
 						return
 					}
 					await mutateAsync({ uid: modalUserData.uid })
-					setModalUserData(null)
 					setConfirmDeleteModal(false)
+					setModalUserData(null)
 				}}
 				loading={isPending}
 			/>
@@ -72,7 +72,7 @@ export function UserList() {
 				open={userModal}
 				onOpenChange={open => setUserModal(open)}
 				data={modalUserData}
-				onClose={() => setModalUserData(null)}
+				onClose={() => setUserModal(false)}
 			/>
 			<FilterDrawer />
 		</>

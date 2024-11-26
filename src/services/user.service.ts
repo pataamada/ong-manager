@@ -1,7 +1,7 @@
 import { auth } from "@/lib/firebase/firebase-admin"
 import { db } from "@/lib/firebase/firebase-secret"
+import { auth as authAdmin } from "@/lib/firebase/firebase-admin"
 import type { User, CreateUserPayload, UserRoles, UserWOutPassword } from "@/models/user.model"
-import { compareSync } from "bcrypt-ts"
 import {
 	collection,
 	deleteDoc,
@@ -10,7 +10,7 @@ import {
 	getDocs,
 	query,
 	setDoc,
-	where,
+	updateDoc,
 } from "firebase/firestore"
 
 export const createUser = async (userId: string, params: CreateUserPayload) => {
@@ -54,31 +54,25 @@ export const findAll = async () => {
 	return filledUsers as UserWOutPassword[]
 }
 
-export const findUserByEmailPassword = async (email: string, password: string) => {
-	const q = query(collection(db, "users"), where("email", "==", email))
-	const querySnapshot = await getDocs(q)
-	const doc = querySnapshot.docs.map(doc => {
-		return { id: doc.id, data: doc.data() }
-	})
-	const result = doc[0]
-	if (!result) {
+export const updateUser = async (params: AtLeast<User, "uid">) => {
+	const values = Object.fromEntries(
+		Object.entries({
+			name: params.name,
+			cpf: params.cpf,
+			birthDate: params.birthDate,
+			phone: params.photo,
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		}).filter(([_, value]) => value !== undefined),
+	) as AtLeast<User, "uid">
+
+	if (Object.entries(values).length === 0) {
 		return
 	}
-	const isSamePassword = compareSync(password, result.data.password)
-	if (!isSamePassword) {
-		throw new Error("Senha incorreta!")
+	const updatedDocument = await updateDoc(doc(db, `users/${params.uid}`), values)
+	if (params.role) {
+		await authAdmin.setCustomUserClaims(params.uid, { role: params.role })
 	}
-	return result
-}
-
-export const updateUser = async (params: Partial<User>) => {
-	const updatedDocument = await setDoc(doc(db, `users/${params.uid}`), {
-		name: params.name,
-		cpf: params.cpf,
-		birthDate: params.birthDate,
-		phone: params.photo,
-	})
-
+	console.log(updatedDocument)
 	return JSON.stringify(updatedDocument)
 }
 

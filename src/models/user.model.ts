@@ -15,7 +15,8 @@ export interface User {
 	phone?: string | null
 }
 
-export type UserWOutPassword = Omit<User, "password">
+export type UserWTempUid = User & { tempUid?: string | null }
+export type UserWOutPassword = Omit<UserWTempUid, "password">
 export type CreateUserPayload = Pick<User, "cpf">
 export const accessPageList: Record<UserRoles, string[]> = {
 	ADMIN: ['/dashboard', '/users','/finance'],

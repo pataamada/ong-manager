@@ -14,3 +14,5 @@ type ValueOf<T, K = keyof T> = K extends keyof T & (string | number)
   : never;
 
 type ValuesOf<T extends unknown[]> = [...T][number];
+
+type AtLeast<T, K extends keyof T> = Partial<T> & Pick<T, K>

@@ -25,9 +25,13 @@ const userSchema = z.object({
 	password: z.string().trim().min(8).max(100),
 	cpf: z.string().trim().length(11),
 	role: z.nativeEnum(UserRoles),
+	tempUid: z.string(),
 })
+
+
 export const useCreateUser = () => {
 	const queryClient = useQueryClient()
+	
 	return useMutation({
 		mutationKey: ["users"],
 		mutationFn: async (values: typeof userSchema._type) => {
@@ -36,7 +40,6 @@ export const useCreateUser = () => {
 		},
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		onMutate: async ({ password, ...values }) => {
-			
 			await queryClient.cancelQueries(getUsersOptions)
 			const previousUsers = queryClient.getQueryData(getUsersOptions.queryKey)
 
@@ -50,45 +53,57 @@ export const useCreateUser = () => {
 					},
 				]
 				queryClient.setQueryData(getUsersOptions.queryKey, newUsers)
-				return { previousUsers }
 			}
 		},
-		onSettled: (data) => {
+		onSettled: (data, _, variables) => {
 			if (!data) {
 				return
 			}
 			const previousUsers = queryClient.getQueryData(getUsersOptions.queryKey)
-			const newUsers = previousUsers?.map(user => ({
-				...user,
-				uid: data.uid,
-			}))
-			queryClient.setQueryData(getUsersOptions.queryKey, newUsers)
-		},
-	})
-}
-export const useUpdateUser = () => {
-	const queryClient = useQueryClient()
-	return useMutation({
-		mutationKey: ["users"],
-		mutationFn: async ({ uid, name }: { uid: string; name: string }) => {
-			await updateUser({ uid, name })
-		},
-		onMutate: async ({ name, uid }) => {
-			await queryClient.cancelQueries(getUsersOptions)
-			const previousUsers = queryClient.getQueryData(getUsersOptions.queryKey)
-
 			if (previousUsers) {
 				const newUsers = previousUsers.map(user => {
-					if (user.uid === uid) {
+					if (user?.tempUid === variables.tempUid) {
 						return {
 							...user,
-							name,
+							...variables,
+							uid: data.uid,
 						}
 					}
 					return user
 				})
 				queryClient.setQueryData(getUsersOptions.queryKey, newUsers)
-				return { previousUsers }
+			}
+		},
+	})
+}
+
+const updateUserSchema = z.object({
+	uid: z.string(),
+	name: z.string().trim().min(4).max(255).optional(),
+	role: z.nativeEnum(UserRoles).optional(),
+	address: z.string().trim().max(512).optional(),
+})
+export const useUpdateUser = () => {
+	const queryClient = useQueryClient()
+	return useMutation({
+		mutationKey: ["users"],
+		mutationFn: async (params: typeof updateUserSchema._type) => {
+			await updateUser(params)
+		},
+		onMutate: async (variables: typeof updateUserSchema._type) => {
+			await queryClient.cancelQueries(getUsersOptions)
+			const previousUsers = queryClient.getQueryData(getUsersOptions.queryKey)
+			if (previousUsers) {
+				const newUsers = previousUsers.map(user => {
+					if (user.uid === variables.uid) {
+						return {
+							...user,
+							...variables,
+						}
+					}
+					return user
+				})
+				queryClient.setQueryData(getUsersOptions.queryKey, newUsers)
 			}
 		},
 	})
