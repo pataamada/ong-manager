@@ -1,7 +1,7 @@
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/custom-ui/drawer"
 import { Button } from "@/components/ui/button"
 import { useAtom } from "jotai"
-import { filterAtom, filterDrawerAtom } from "../filters"
+import { filterAtom, filterDrawerAtom } from "../store"
 import {
 	Select,
 	SelectContent,

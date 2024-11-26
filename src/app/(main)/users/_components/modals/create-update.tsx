@@ -37,29 +37,34 @@ interface CreateUpdateUserModal extends DialogProps {
 	onSubmit?: () => unknown
 	onClose?: () => unknown
 }
-const createUserSchema = z.object({
-	uuid: z.string(),
-	name: z
-		.string()
-		.min(4, "Nome deve ter no mínimo 4 carateres")
-		.trim()
-		.max(256, "Máximo de 256 caracteres"),
-	email: z.string().email("Digite um email válido").trim().max(256, "Máximo de 256 caracteres"),
-	cpf: z
-		.string()
-		.min(11, "O CPF deve ter pelo menos 11 caracteres")
-		.trim()
-		.transform(cpf => cpf.replaceAll(".", "").replace("-", ""))
-		.optional()
-		.or(z.literal("")),
-	password: z
-		.string()
-		.min(8, "A senha deve ter pelo menos 8 caracteres")
-		.trim()
-		.max(256, "Máximo de 256 caracteres")
-		.optional()
-		.or(z.literal("")),
-})
+const createUserSchema = z
+	.object({
+		uuid: z.string(),
+		name: z
+			.string()
+			.min(4, "Nome deve ter no mínimo 4 carateres")
+			.trim()
+			.max(256, "Máximo de 256 caracteres"),
+		email: z.string().email("Digite um email válido").trim().max(256, "Máximo de 256 caracteres"),
+		cpf: z
+			.string()
+			.min(11, "O CPF deve ter pelo menos 11 caracteres")
+			.trim()
+			.transform(cpf => cpf.replaceAll(".", "").replace("-", ""))
+			.optional()
+			.or(z.literal("")),
+		password: z
+			.string()
+			.min(8, "A senha deve ter pelo menos 8 caracteres")
+			.trim()
+			.max(256, "Máximo de 256 caracteres")
+			.optional()
+			.or(z.literal("")),
+	})
+	.refine(data => !data.cpf || validateCpf(data.cpf), {
+		message: "Digite um CPF valido",
+		path: ["cpf"],
+	})
 
 export function CreateUpdateUserModal({
 	children,
@@ -69,6 +74,9 @@ export function CreateUpdateUserModal({
 	onSubmit,
 	...props
 }: CreateUpdateUserModal) {
+	const { toast } = useToast()
+	const { mutateAsync: create, isPending: pendingCreate, error: errorCreate } = useCreateUser()
+	const { mutateAsync: update, isPending: pendingUpdate, error: errorUpdate } = useUpdateUser()
 	const form = useForm<z.infer<typeof createUserSchema>>({
 		resolver: zodResolver(createUserSchema),
 		values: {
@@ -80,10 +88,6 @@ export function CreateUpdateUserModal({
 		},
 	})
 
-	const { toast } = useToast()
-	const { mutateAsync: create, isPending: pendingCreate, error: errorCreate } = useCreateUser()
-	const { mutateAsync: update, isPending: pendingUpdate, error: errorUpdate } = useUpdateUser()
-
 	const handleOnSubmit = async ({
 		uuid,
 		name,
@@ -91,13 +95,12 @@ export function CreateUpdateUserModal({
 		password,
 		cpf,
 	}: z.infer<typeof createUserSchema>) => {
-		if (!password?.length && !data) {
+		if (!password && !data) {
 			form.setError("password", { type: "required", message: "Senha é obrigatória" })
 			return
 		}
-		const isValidCpf = validateCpf(cpf || "")
 
-		if ((!cpf?.length && !data) || (!isValidCpf && !data)) {
+		if (!cpf && !data) {
 			form.setError("cpf", { type: "validate", message: "Digite um cpf válido" })
 			return
 		}

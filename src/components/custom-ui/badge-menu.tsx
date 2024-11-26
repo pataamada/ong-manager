@@ -39,7 +39,15 @@ const BadgeMenu = ({
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild disabled={readonly}>
-				<Badge variant="outline" className={cn("cursor-pointer", className)} {...props}>
+				<Badge
+					variant="outline"
+					tabIndex={0}
+					className={cn(
+						"cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+						className,
+					)}
+					{...props}
+				>
 					{selectedValue?.title || title}
 					{!readonly && <ChevronDown size={16} />}
 				</Badge>

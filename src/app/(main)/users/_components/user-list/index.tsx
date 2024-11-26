@@ -10,14 +10,17 @@ import { useDeleteUser, useGetUsers } from "../../mutations"
 import { FilterDrawer } from "../modals/filter"
 import { useQueryClient } from "@tanstack/react-query"
 import { useAuth } from "@/hooks/use-auth"
+import { useAtom } from "jotai"
+import { confirmDeleteAtom, modalUserAtom } from "../store"
 
 export function UserList() {
-	const { data } = useGetUsers()
+	const { data, isLoading } = useGetUsers()
 	const { user } = useAuth()
-	const queryClient = useQueryClient()
 	const { mutateAsync, isPending } = useDeleteUser()
-	const [updateUser, setUpdateUser] = useState<UserWOutPassword | undefined | null>()
-	const [deleteUser, setDeleteUser] = useState<UserWOutPassword | null>()
+	const queryClient = useQueryClient()
+	const [modalUserData, setModalUserData] = useState<UserWOutPassword | undefined | null>()
+	const [userModal, setUserModal] = useAtom(modalUserAtom)
+	const [confirmDeleteModal, setConfirmDeleteModal] = useAtom(confirmDeleteAtom)
 
 	const handleRoleChange = (row: Row<UserWOutPassword>) => {
 		const rowValue = row.original
@@ -30,17 +33,19 @@ export function UserList() {
 		queryClient.setQueryData<UserWOutPassword[]>(["users"], updatedData)
 	}
 	const handleOpenCreate = () => {
-		setUpdateUser(null)
+		setModalUserData(null)
+		setUserModal(true)
 	}
 	const handleOpenEdit = (row: Row<UserWOutPassword>) => {
-		setUpdateUser(row.original)
+		setModalUserData(row.original)
+		setUserModal(true)
 	}
 	const handleOpenDelete = (row: Row<UserWOutPassword>) => {
-		setDeleteUser(row.original)
+		setModalUserData(row.original)
+		setConfirmDeleteModal(true)
 	}
 	return (
 		<>
-			{/* <DrawerFilter /> */}
 			<UserTable
 				data={data || []}
 				currentUser={user}
@@ -48,24 +53,26 @@ export function UserList() {
 				onEdit={handleOpenEdit}
 				onRoleChange={handleRoleChange}
 				onCreate={handleOpenCreate}
+				loading={isLoading}
 			/>
 			<ConfirmDeleteUserAlert
-				open={!!deleteUser}
-				onOpenChange={() => setDeleteUser(null)}
+				open={confirmDeleteModal}
+				onOpenChange={open => setConfirmDeleteModal(open)}
 				onSubmit={async () => {
-					if (!deleteUser) {
+					if (!modalUserData) {
 						return
 					}
-					await mutateAsync({ uid: deleteUser.uid })
-					setDeleteUser(null)
+					await mutateAsync({ uid: modalUserData.uid })
+					setModalUserData(null)
+					setConfirmDeleteModal(false)
 				}}
 				loading={isPending}
 			/>
 			<CreateUpdateUserModal
-				open={!!(updateUser || updateUser === null)}
-				onOpenChange={() => setUpdateUser(undefined)}
-				data={updateUser}
-				onClose={() => setUpdateUser(undefined)}
+				open={userModal}
+				onOpenChange={open => setUserModal(open)}
+				data={modalUserData}
+				onClose={() => setModalUserData(null)}
 			/>
 			<FilterDrawer />
 		</>
