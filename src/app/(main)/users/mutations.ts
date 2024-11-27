@@ -2,6 +2,7 @@ import { createUser } from "@/actions/auth/user/create"
 import { deleteAction } from "@/actions/auth/user/delete"
 import { getAllUsers } from "@/actions/auth/user/get"
 import { updateUser } from "@/actions/auth/user/update"
+import type { Toast } from "@/hooks/use-toast"
 import { UserRoles, type UserWOutPassword } from "@/models/user.model"
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { z } from "zod"
@@ -28,14 +29,20 @@ const userSchema = z.object({
 	tempUid: z.string(),
 })
 
-
-export const useCreateUser = () => {
+export const useCreateUser = (toast?: (params: Toast) => void) => {
 	const queryClient = useQueryClient()
-	
 	return useMutation({
 		mutationKey: ["users"],
 		mutationFn: async (values: typeof userSchema._type) => {
 			const request = await createUser(values)
+			if (request?.serverError) {
+				toast?.({
+					title: "Erro ao criar usuário",
+					description: request.serverError,
+					variant: "destructive",
+				})
+				return Promise.reject(request.serverError)
+			}
 			return request?.data
 		},
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -74,6 +81,20 @@ export const useCreateUser = () => {
 				queryClient.setQueryData(getUsersOptions.queryKey, newUsers)
 			}
 		},
+		onError: (_, variables) => {
+			const previousUsers = queryClient.getQueryData(getUsersOptions.queryKey)
+			if (previousUsers) {
+				const updatedUsers = previousUsers.filter(user => user?.tempUid !== variables?.tempUid)
+				queryClient.setQueryData(getUsersOptions.queryKey, updatedUsers)
+			}
+		},
+		onSuccess: () => {
+			toast?.({
+				title: "Usuário Criado",
+				description: "com sucesso!",
+				variant: "default",
+			})
+		},
 	})
 }
 
@@ -83,12 +104,21 @@ const updateUserSchema = z.object({
 	role: z.nativeEnum(UserRoles).optional(),
 	address: z.string().trim().max(512).optional(),
 })
-export const useUpdateUser = () => {
+export const useUpdateUser = (toast?: (params: Toast) => void) => {
 	const queryClient = useQueryClient()
 	return useMutation({
 		mutationKey: ["users"],
 		mutationFn: async (params: typeof updateUserSchema._type) => {
-			await updateUser(params)
+			const request = await updateUser(params)
+			if (request?.serverError) {
+				toast?.({
+					title: "Erro ao criar usuário",
+					description: request.serverError,
+					variant: "destructive",
+				})
+				return Promise.reject(request.serverError)
+			}
+			return request?.data
 		},
 		onMutate: async (variables: typeof updateUserSchema._type) => {
 			await queryClient.cancelQueries(getUsersOptions)
@@ -106,16 +136,36 @@ export const useUpdateUser = () => {
 				queryClient.setQueryData(getUsersOptions.queryKey, newUsers)
 			}
 		},
+		onSuccess: () => {
+			toast?.({
+				title: "Usuário Atualizado",
+				description: "com sucesso!",
+				variant: "default",
+			})
+		},
 	})
 }
-export const useDeleteUser = () => {
+export const useDeleteUser = (toast?: (params: Toast) => void) => {
 	const queryClient = useQueryClient()
 	return useMutation({
 		mutationKey: ["users"],
 		mutationFn: async ({ uid }: { uid: string }) => {
-			await deleteAction({ uid })
+			const request = await deleteAction({ uid })
+			if (request?.serverError) {
+				toast?.({
+					title: "Erro ao deletar usuário",
+					description: request.serverError,
+					variant: "destructive",
+				})
+				return Promise.reject(request.serverError)
+			}
 		},
 		onSuccess(_, variables) {
+			toast?.({
+				title: "Usuário apagado!",
+				description:"O usuário foi apagado com sucesso!",
+				variant: "default",
+			})
 			queryClient?.setQueryData<UserWOutPassword[]>(["users"], oldData => {
 				return oldData?.filter(oldUser => oldUser.uid !== variables.uid)
 			})

@@ -11,6 +11,7 @@ import {
 	query,
 	setDoc,
 	updateDoc,
+	where,
 } from "firebase/firestore"
 
 export const createUser = async (userId: string, params: CreateUserPayload) => {
@@ -64,18 +65,23 @@ export const updateUser = async (params: AtLeast<User, "uid">) => {
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		}).filter(([_, value]) => value !== undefined),
 	) as AtLeast<User, "uid">
-
+	if (params.role) {
+		await authAdmin.setCustomUserClaims(params.uid, { role: params.role })
+	}
 	if (Object.entries(values).length === 0) {
 		return
 	}
 	const updatedDocument = await updateDoc(doc(db, `users/${params.uid}`), values)
-	if (params.role) {
-		await authAdmin.setCustomUserClaims(params.uid, { role: params.role })
-	}
-	console.log(updatedDocument)
+	
 	return JSON.stringify(updatedDocument)
 }
 
 export const deleteUser = async (userId: string) => {
 	return await deleteDoc(doc(db, `users/${userId}`))
+}
+
+export const existsCpf = async (cpf: string) => {
+	const q = query(collection(db, "users"), where("cpf", "==", cpf))
+	const querySnapshot = await getDocs(q)
+	return !querySnapshot.empty
 }

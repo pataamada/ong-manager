@@ -119,7 +119,7 @@ export default function FormLogin() {
 					</div>
 				</div>
 				<Button variant="success" className="w-full" type="submit" disabled={isPending}>
-					Entrar
+					{isPending ? "Entrando..." : "Entrar"}
 				</Button>
 
 				<div className="text-center">

@@ -2,7 +2,7 @@
 import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
 import { auth as authAdmin } from "@/lib/firebase/firebase-admin"
-import { createUser as createUserService } from "@/services/user.service"
+import { createUser as createUserService, existsCpf } from "@/services/user.service"
 import { revalidatePath } from "next/cache"
 import { UserRoles } from "@/models/user.model"
 
@@ -16,7 +16,9 @@ const userSchema = z.object({
 export const createUser = actionClient
 	.schema(userSchema)
 	.action(async ({ parsedInput: { name, cpf, email, password } }) => {
-		// TODO: verify if cpf already exists and throw an error
+		if (await existsCpf(cpf)) {
+			throw new Error("CPF já cadastrado")
+		}
 		const user = await authAdmin.createUser({
 			displayName: name,
 			email,

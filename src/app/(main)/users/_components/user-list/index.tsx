@@ -6,31 +6,26 @@ import { useState } from "react"
 import { CreateUpdateUserModal } from "../modals/create-update"
 import { UserTable } from "./table"
 import type { Row } from "@tanstack/react-table"
-import { useDeleteUser, useGetUsers } from "../../mutations"
+import { useDeleteUser, useGetUsers, useUpdateUser } from "../../mutations"
 import { FilterDrawer } from "../modals/filter"
-import { useQueryClient } from "@tanstack/react-query"
 import { useAuth } from "@/hooks/use-auth"
 import { useAtom } from "jotai"
 import { confirmDeleteAtom, modalUserAtom } from "../store"
+import { useToast } from "@/hooks/use-toast"
 
 export function UserList() {
 	const { data, isLoading } = useGetUsers()
+	const { toast } = useToast()
 	const { user } = useAuth()
-	const { mutateAsync, isPending } = useDeleteUser()
-	const queryClient = useQueryClient()
+	const { mutateAsync: deleteUser, isPending: isPendingDelete } = useDeleteUser(toast)
+	const { mutateAsync: updateUser } = useUpdateUser()
 	const [modalUserData, setModalUserData] = useState<UserWOutPassword | undefined | null>()
 	const [userModal, setUserModal] = useAtom(modalUserAtom)
 	const [confirmDeleteModal, setConfirmDeleteModal] = useAtom(confirmDeleteAtom)
 
-	const handleRoleChange = (row: Row<UserWOutPassword>) => {
+	const handleRoleChange = async (row: Row<UserWOutPassword>) => {
 		const rowValue = row.original
-		const updatedData = data?.map(oldRow => {
-			if (oldRow.uid === rowValue.uid) {
-				return rowValue
-			}
-			return oldRow
-		})
-		queryClient.setQueryData<UserWOutPassword[]>(["users"], updatedData)
+		await updateUser({ role: rowValue.role, uid: rowValue.uid })
 	}
 	const handleOpenCreate = () => {
 		setModalUserData(null)
@@ -62,11 +57,11 @@ export function UserList() {
 					if (!modalUserData) {
 						return
 					}
-					await mutateAsync({ uid: modalUserData.uid })
+					await deleteUser({ uid: modalUserData.uid })
 					setConfirmDeleteModal(false)
 					setModalUserData(null)
 				}}
-				loading={isPending}
+				loading={isPendingDelete}
 			/>
 			<CreateUpdateUserModal
 				open={userModal}

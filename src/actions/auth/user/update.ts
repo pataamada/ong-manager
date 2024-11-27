@@ -17,5 +17,6 @@ const schema = z.object({
 export const updateUser = actionClient
 	.schema(schema)
 	.action(async ({ parsedInput: params }) => {
+		console.log(params)
         await updateUserService(params)
 	})

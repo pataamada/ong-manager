@@ -87,8 +87,8 @@ export function CreateUpdateUserModal({
 	...props
 }: CreateUpdateUserModal) {
 	const { toast } = useToast()
-	const { mutateAsync: create, isPending: pendingCreate, error: errorCreate } = useCreateUser()
-	const { mutateAsync: update, isPending: pendingUpdate, error: errorUpdate } = useUpdateUser()
+	const { mutateAsync: create, isPending: pendingCreate } = useCreateUser(toast)
+	const { mutateAsync: update, isPending: pendingUpdate } = useUpdateUser(toast)
 	const form = useForm<z.infer<typeof createUserSchema>>({
 		resolver: zodResolver(createUserSchema),
 		values: {
@@ -123,38 +123,10 @@ export function CreateUpdateUserModal({
 		onClose?.()
 		if (!data && password) {
 			await create({ name, email, password, cpf: cpf!, role: UserRoles.Authenticated, tempUid })
-
-			if (errorCreate) {
-				toast({
-					title: "Erro ao criar usuário",
-					description: errorCreate.message,
-					variant: "destructive",
-				})
-				return
-			}
-
-			toast({
-				title: "Usuário Criado",
-				description: "com sucesso!",
-				variant: "default",
-			})
 			onSubmit?.()
 			return
 		}
 		const result = await update({ uid, name, role })
-		if (errorUpdate) {
-			toast({
-				title: "Erro ao editar usuário",
-				description: errorUpdate.message,
-				variant: "destructive",
-			})
-			return
-		}
-		toast({
-			title: "Usuário editado",
-			description: "com sucesso!",
-			variant: "default",
-		})
 		onSubmit?.()
 		return result
 	}
