@@ -37,6 +37,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select"
+import { useAuth } from "@/hooks/use-auth"
 
 interface CreateUpdateUserModal extends DialogProps {
 	children?: ReactNode
@@ -87,6 +88,7 @@ export function CreateUpdateUserModal({
 	...props
 }: CreateUpdateUserModal) {
 	const { toast } = useToast()
+	const { user } = useAuth()
 	const { mutateAsync: create, isPending: pendingCreate } = useCreateUser(toast)
 	const { mutateAsync: update, isPending: pendingUpdate } = useUpdateUser(toast)
 	const form = useForm<z.infer<typeof createUserSchema>>({
@@ -204,10 +206,11 @@ export function CreateUpdateUserModal({
 							<FormField
 								control={form.control}
 								name="role"
+								
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="font-semibold">Cargo</FormLabel>
-										<Select onValueChange={field.onChange} defaultValue={field.value}>
+										<Select onValueChange={field.onChange} defaultValue={field.value} disabled={user?.user.uid === data?.uid}>
 											<FormControl>
 												<SelectTrigger>
 													<SelectValue placeholder="Selecionar cargo" />

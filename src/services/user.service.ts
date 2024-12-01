@@ -65,14 +65,18 @@ export const updateUser = async (params: AtLeast<User, "uid">) => {
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		}).filter(([_, value]) => value !== undefined),
 	) as AtLeast<User, "uid">
+
 	if (params.role) {
 		await authAdmin.setCustomUserClaims(params.uid, { role: params.role })
 	}
+
 	if (Object.entries(values).length === 0) {
 		return
 	}
 	const updatedDocument = await updateDoc(doc(db, `users/${params.uid}`), values)
-	
+	if (params?.password) {
+		await authAdmin.updateUser(params.uid, { password: params.password })
+	}
 	return JSON.stringify(updatedDocument)
 }
 
