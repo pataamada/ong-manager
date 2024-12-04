@@ -19,4 +19,4 @@ export const accessPageList: Record<UserRoles, string[]> = {
 	ADMIN: ['/dashboard', '/users','/finance'],
 	AUTHENTICATED: ['/animals', '/schedules'],
 }
-export const publicPageList = ["/login", "/register", "/forgot-password"]
+export const publicPageList = ["/landing","/login", "/register", "/forgot-password"]
