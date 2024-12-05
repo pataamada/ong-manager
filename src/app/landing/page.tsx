@@ -20,8 +20,8 @@ export default function LandingPage() {
                     <OurStory />
                     <HowToHelp />
                     <AvailablePets />
-                   {/*  <Volunteers />
-                    <Partners /> */}
+                    <Volunteers />
+                    <Partners />
                 </div>
             </div>
         </div>
