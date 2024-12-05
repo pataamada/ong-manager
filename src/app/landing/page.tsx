@@ -7,20 +7,22 @@ import { Volunteers } from "./-components/Volunteers"
 import { Partners } from "./-components/Partners"
 import './style.css'
 
+/* TODO: Remover todos os icones do Fortawesome e substituir por icones do iconify */
+
 export default function LandingPage() {
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center lg:bg-[url('/Patinhas.png')]">
             <Header />
-            <div className="relative w-full min-h-screen">
-                {/* <div className="absolute inset-0 bg-[url('/Patinhas.png')] bg-no-repeat bg-cover bg-left z-0" />
-                <div className="absolute inset-0 bg-[url('/Patinhas.png')] bg-no-repeat bg-cover bg-right z-0" /> */}
+            <div className="relative w-full min-h-screen ">
                 
-                {/* <HeroSection /> */}
-                {/* <OurStory />
-                <HowToHelp />
-                <AvailablePets />
-                <Volunteers />
-                <Partners /> */}
+                <div className="max-w-[1440px] mx-auto relative">
+                    <HeroSection />
+                    {/* <OurStory />
+                    <HowToHelp />
+                    <AvailablePets />
+                    <Volunteers />
+                    <Partners /> */}
+                </div>
             </div>
         </div>
     )

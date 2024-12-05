@@ -18,3 +18,10 @@
   .navbar-link > a:hover::after {
     width: 100%;
   }
+
+  /* Heading styles */
+.text-h1 {
+    font-style: normal;
+    font-weight: 700;
+    line-height: 112.5%;
+}
