@@ -17,8 +17,8 @@ export default function LandingPage() {
                 
                 <div className="max-w-[1440px] mx-auto relative">
                     <HeroSection />
-                    {/* <OurStory />
-                    <HowToHelp />
+                    <OurStory />
+                    {/* <HowToHelp />
                     <AvailablePets />
                     <Volunteers />
                     <Partners /> */}
