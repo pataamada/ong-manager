@@ -15,11 +15,11 @@ export default function LandingPage() {
             <Header />
             <div className="relative w-full min-h-screen ">
                 
-                <div className="max-w-[1440px] mx-auto relative">
+                <div className="max-w-[1440px] mx-auto relative px-2">
                     <HeroSection />
                     <OurStory />
-                    {/* <HowToHelp />
-                    <AvailablePets />
+                    <HowToHelp />
+                   {/*  <AvailablePets />
                     <Volunteers />
                     <Partners /> */}
                 </div>
