@@ -1,71 +1,76 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPaw, faBars, faXmark } from "@fortawesome/free-solid-svg-icons"
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { Icon } from "@iconify/react"
 import Image from "next/image"
-import { useState } from "react"
+
+const navigationItems = [
+  { href: "#animais", label: "Animais para adoção" },
+  { href: "#doacoes", label: "Doações" },
+  { href: "#agenda", label: "Agenda" },
+]
 
 export function Header() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
+  return (
+    <header className="w-full relative">
+      <div className="h-[60px] max-w-[1280px] mx-auto flex justify-between items-center px-4 sm:h-[50px] md:px-8 mt-[40px]">
+        {/* logo */}
+        <Image
+          src="/landingPage/logo-horizontal.svg"
+          alt="Logo"
+          width={280}
+          height={72}
+          className="w-[200px] md:w-[280px]"
+        />
 
-    return (
-        <header className="w-full relative">
-            <div className="h-[60px] max-w-[1280px] mx-auto flex justify-between items-center px-4 sm:h-[50px] md:px-8 mt-[40px]">
-                {/* logo */}
-                <Image
-                    src="/landingPage/logo-horizontal.svg"
-                    alt="Logo"
-                    width={280}
-                    height={72}
-                    className="w-[200px] md:w-[280px]" // Responsive logo size
-                />
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex w-[350px] h-[24px] justify-between gap-6 text-base text-zinc-800 navbar-link">
+          {navigationItems.map((item) => (
+            <a key={item.href} href={item.href} className="hover:text-emerald-500 transition-colors">
+              {item.label}
+            </a>
+          ))}
+        </nav>
 
-                {/* Desktop Navigation */}
-                <nav className="hidden md:flex w-[350px] h-[24px] justify-between gap-6 text-base text-zinc-800 navbar-link">
-                    <a href="#animais">Animais para adoção</a>
-                    <a href="#doacoes">Doações</a>
-                    <a href="#agenda">Agenda</a>
-                </nav>
+        {/* Desktop Button */}
+        <Button className="hidden md:flex w-[176px] h-[40px] rounded-tl-lg p-2 px-4 items-center gap-2 bg-emerald-500 hover:bg-emerald-600">
+          <Icon icon="fa-solid:paw" className="w-5 h-5" />
+          Quero adotar
+        </Button>
 
-                {/* Desktop Button */}
-                <Button className="hidden md:flex w-[176px] h-[40px] rounded-tl-lg p-2 px-4 items-center gap-2">
-                    <FontAwesomeIcon icon={faPaw} className="w-5 h-5" />
-                    Quero adotar
-                </Button>
-
-                {/* Mobile Menu Button */}
-                <button 
-                    className="md:hidden text-zinc-800 p-2"
-                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+        {/* Mobile Menu Button */}
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" className="md:hidden">
+              <Icon icon="heroicons:bars-3" className="w-6 h-6" />
+              <span className="sr-only">Toggle menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[300px] sm:w-[400px] border-l">
+            <SheetHeader className="mb-6">
+              <SheetTitle className="text-2xl font-bold text-zinc-800">Menu</SheetTitle>
+            </SheetHeader>
+            <nav className="flex flex-col gap-4">
+              {navigationItems.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="text-zinc-800 py-3 px-4 border-b border-gray-100 hover:bg-gray-50 transition-colors rounded-lg"
                 >
-                    <FontAwesomeIcon 
-                        icon={isMenuOpen ? faXmark : faBars} 
-                        className="w-6 h-6"
-                    />
-                </button>
-            </div>
-
-            {/* Mobile Menu */}
-            {isMenuOpen && (
-                <div className="absolute top-[100%] left-0 right-0 bg-white shadow-lg md:hidden z-50">
-                    <nav className="flex flex-col w-full px-4 py-4 gap-4">
-                        <a href="#animais" className="text-zinc-800 py-2 border-b border-gray-100">
-                            Animais para adoção
-                        </a>
-                        <a href="#doacoes" className="text-zinc-800 py-2 border-b border-gray-100">
-                            Doações
-                        </a>
-                        <a href="#agenda" className="text-zinc-800 py-2 border-b border-gray-100">
-                            Agenda
-                        </a>
-                        <Button className="w-full h-[40px] rounded-tl-lg p-2 px-4 flex items-center justify-center gap-2 mt-2">
-                            <FontAwesomeIcon icon={faPaw} className="w-5 h-5" />
-                            Quero adotar
-                        </Button>
-                    </nav>
-                </div>
-            )}
-        </header>
-    )
+                  {item.label}
+                </a>
+              ))}
+              <Button 
+                className="w-full h-[40px] rounded-tl-lg p-2 px-4 flex items-center justify-center gap-2 mt-4 bg-emerald-500 hover:bg-emerald-600"
+              >
+                <Icon icon="fa-solid:paw" className="w-5 h-5" />
+                Quero adotar
+              </Button>
+            </nav>
+          </SheetContent>
+        </Sheet>
+      </div>
+    </header>
+  )
 }
