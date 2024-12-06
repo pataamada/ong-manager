@@ -1,9 +1,12 @@
 "use client"
 
+/* Todo: Pensar em como deixar isso responsivo */
+
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { useState } from "react"
 import { Icon } from "@iconify/react"
+import { motion, AnimatePresence } from "framer-motion"
 
 type Pet = {
 	id: number
@@ -18,25 +21,41 @@ const availablePets: Pet[] = [
 		id: 1,
 		name: "Nina",
 		description:
-			"Nina é uma gata de 2 anos curiosa e carinhosa, que adora explorar a casa e observar o movimento pela janela. Brincalhona, mas também afetuosa, ela gosta de se aconchegar nos momentos tranquilos. Sua mistura de travessura e doçura conquista todos ao redor.",
-		photo: "/adopt-puppies/Card.png",
+			"Nina é uma gata de 3 anos, dócil e brincalhona. Com pelagem macia e olhos expressivos, ela adora se aconchegar no colo e receber carinho. Sua natureza curiosa a faz explorar cada cantinho da casa, mas sempre volta para perto de seus humanos favoritos. Já castrada e vacinada, está pronta para trazer alegria ao seu lar.",
+		photo: "/adopt-puppies/nina.png",
 		tags: ["Gato", "Castrada", "Fêmea"],
 	},
 	{
 		id: 2,
-		name: "Thor",
+		name: "MisterKat",
 		description:
-			"Thor é um cachorro brincalhão e muito carinhoso. Ele adora brincar com bolinhas e fazer novos amigos!",
-		photo: "/adopt-puppies/Card.png",
-		tags: ["Cachorro", "Castrado", "Macho"],
+			"MisterKat é um gato elegante de 4 anos que conquistou a todos com seu charme único. Calmo e independente, ele aprecia momentos tranquilos e tem uma personalidade marcante. Adora brincar com bolinhas e se esticar ao sol. Completamente vacinado e castrado, busca um lar que aprecie sua natureza distinta.",
+		photo: "/adopt-puppies/misterKat.png",
+		tags: ["Gato", "Castrado", "Macho"],
 	},
 	{
 		id: 3,
-		name: "Luna",
+		name: "Alfredo",
 		description:
-			"Luna é uma gatinha tranquila e amorosa. Ela adora carinho e é perfeita para apartamentos!",
-		photo: "/adopt-puppies/Card.png",
-		tags: ["Gato", "Castrada", "Fêmea"],
+			"Alfredo é um cachorro de porte médio com 2 anos de idade. Extremamente carinhoso e sociável, ele se dá bem com outros animais e crianças. Sua energia contagiante e lealdade fazem dele um companheiro perfeito para famílias ativas. Castrado e com todas as vacinas em dia, está ansioso para encontrar seu lar definitivo.",
+		photo: "/adopt-puppies/alfredo.png",
+		tags: ["Cachorro", "Castrado", "Macho"],
+	},
+	{
+		id: 4,
+		name: "Thor",
+		description:
+			"Thor é um cachorro forte e gentil de 3 anos. Com sua personalidade brincalhona e protetora, ele é o companheiro ideal para aventuras ao ar livre. Apesar do seu porte imponente, é extremamente dócil e carinhoso com todos. Treinado, castrado e vacinado, está pronto para ser parte de uma família amorosa.",
+		photo: "/adopt-puppies/thor.png",
+		tags: ["Cachorro", "Castrado", "Macho"],
+	},
+	{
+		id: 5,
+		name: "Valentina",
+		description:
+			"Valentina é uma cachorra meiga de 1 ano e meio que conquista a todos com seu olhar doce. Muito esperta e afetuosa, ela adora aprender truques novos e brincar com seus brinquedos favoritos. Sua energia positiva contagia o ambiente. Já castrada e com todas as vacinas em dia, está pronta para encontrar uma família para chamar de sua.",
+		photo: "/adopt-puppies/valentina.png",
+		tags: ["Cachorro", "Castrada", "Fêmea"],
 	},
 ]
 
@@ -44,75 +63,82 @@ export function AvailablePets() {
 	const [selectedPet, setSelectedPet] = useState<Pet>(availablePets[0])
 
 	return (
-		<div className="text-center">
+		<div className="text-center ">
 			<h3 className="text-4xl font-bold">
 				Conheça nossos
 				<span className="text-[#10B981]"> peludos!</span>
 			</h3>
 			<p className="text-2xl mb-16 text-gray-600">Eles adoram carinho e merecem amor!</p>
 
-			<div className="flex flex-wrap lg:flex-nowrap items-start justify-center gap-8 mt-8">
-				<div className="flex-1 max-w-[400px]">
-					<div className="bg-white p-4 rounded-lg">
+			<div className="flex flex-wrap lg:flex-nowrap gap-8 mt-8 ">
+				<div className="justify-between flex flex-col">
+					<div className="rounded-lg ">
 						<div className="flex flex-wrap gap-2 mb-4">
 							{selectedPet.tags.map(tag => (
 								<span
 									key={tag}
-									className="bg-gray-100 text-black text-sm font-medium px-4 py-2 rounded-full"
+									className="text-paragraph-2 text-zinc-800 bg-zinc-200 px-2 py-0.5 rounded-full"
 								>
-									{tag}
+									<p>{tag}</p>
 								</span>
 							))}
 						</div>
 
-						<h2 className="text-2xl font-semibold text-gray-800 mb-2">{selectedPet.name}</h2>
-						<p className="text-gray-600 mb-4">{selectedPet.description}</p>
+						<h3 className="text-h3 text-zinc-800 mb-2 text-left">{selectedPet.name}</h3>
+						<p className="text-zinc-500 text-subtitle text-left mb-4 h-[180px] overflow-hidden text-ellipsis line-clamp-5">
+							{selectedPet.description}
+						</p>
 
 						<div className="flex flex-row gap-4 mt-2 text-center mx-auto">
-							<Button className="w-44 h-10 bg-[#10B981] text-white rounded-tl-lg px-4 flex items-center gap-2 hover:bg-[#0D9668] transition-colors">
-								<Icon icon="ph:paw-print" width={16} height={16} />
-								Quero adotar!
+							{/* TODO: Adicionar funcionalidades para os botões */}
+							<Button className="px-4 flex items-center gap-2">
+								<Icon icon="fa-solid:paw" width={16} height={16} />
+								Adotar
 							</Button>
-							<Button className="w-44 h-10 bg-white text-[#10B981] border-2 border-[#10B981] rounded-tl-lg px-4 flex items-center gap-2 hover:bg-gray-100 transition-colors">
-								<Icon icon="ph:paw-print" width={16} height={16} />
+							<Button
+								className="border-2 border-primary text-primary font-semibold hover:bg-gray-100 hover:text-primary transition-colors"
+								variant={"outline"}
+							>
 								Apadrinhar
 							</Button>
 						</div>
 					</div>
-					
-					<div className="flex gap-2 mt-4 justify-center">
+
+					<div className="flex gap-2 mt-4">
 						{availablePets.map(pet => (
 							<button
 								key={pet.id}
 								type="button"
 								onClick={() => setSelectedPet(pet)}
-								className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors ${
-									selectedPet.id === pet.id
-										? "border-[#10B981]"
-										: "border-transparent hover:border-gray-200"
-								}`}
-							>
-								<Image
-									src={pet.photo}
-									alt={`Miniatura do ${pet.name}`}
-									width={64}
-									height={64}
-									className="w-full h-full object-cover"
-								/>
-							</button>
+								className={`rounded-lg overflow-hidden border-2 transition-all duration-300 ease-in-out 
+									aspect-square w-[150px] bg-cover bg-center bg-no-repeat border-transparent
+									hover:scale-105
+									${selectedPet.id === pet.id ? "!border-primary" : " hover:border-emerald-400"}`}
+								style={{
+									backgroundImage: `url(${pet.photo})`,
+								}}
+							/>
 						))}
 					</div>
 				</div>
 
-				<div className="w-[350px] h-[450px] rounded-[16px] bg-gray-200 overflow-hidden">
-					<Image
-						src={selectedPet.photo}
-						alt={`Foto do ${selectedPet.name}`}
-						width={350}
-						height={450}
-						className="w-full h-full object-cover"
-					/>
-				</div>
+				<AnimatePresence mode="wait">
+					<motion.div
+						key={selectedPet.id}
+						initial={{ opacity: 0, x: 20 }}
+						animate={{ opacity: 1, x: 0 }}
+						exit={{ opacity: 0, x: -20 }}
+						transition={{ duration: 0.3 }}
+					>
+						<Image
+							src={selectedPet.photo}
+							alt={`Foto do ${selectedPet.name}`}
+							className="max-w-[450px] max-h-[550px] rounded-lg"
+							width={450}
+							height={550}
+						/>
+					</motion.div>
+				</AnimatePresence>
 			</div>
 		</div>
 	)
