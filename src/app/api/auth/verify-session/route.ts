@@ -15,8 +15,8 @@ export async function POST(request: Request) {
 		}
 		const decodedIdToken = await auth.verifyIdToken(session!)
 		const currentUser = await auth.getUser(decodedIdToken.uid)
-		return NextResponse.json({ user: currentUser, role: decodedIdToken.role as UserRoles })
+        return NextResponse.json({ user: currentUser, role: decodedIdToken.role as UserRoles })
 	} catch (error) {
-		return NextResponse.json({ user: null, role: null })
-	}
+        return NextResponse.json({ user: null, role: null })
+    }
 }

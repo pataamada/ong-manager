@@ -1,14 +1,15 @@
 "use server"
 import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
-import { deleteUser, type User } from "firebase/auth"
+
 import { deleteUser as firestoreDeleteUser } from "@/services/user.service"
+import { auth } from "@/lib/firebase/firebase-admin"
 
 const schema = z.object({
-	user: z.custom<User>(),
+	uid: z.string(),
 })
 
-export const login = actionClient.schema(schema).action(async ({ parsedInput: { user } }) => {
-	await deleteUser(user)
-	await firestoreDeleteUser(user.uid)
+export const deleteAction = actionClient.schema(schema).action(async ({ parsedInput: {  uid } }) => {
+	await auth.deleteUser(uid)
+	await firestoreDeleteUser(uid)
 })

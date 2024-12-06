@@ -1,10 +1,12 @@
 import type { Metadata } from "next"
 import "./globals.css"
+import "./paw.scss"
 import { Toaster } from "@/components/ui/toaster"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import { Montserrat } from 'next/font/google'
+import { Montserrat } from "next/font/google"
 import NextTopLoader from "nextjs-toploader"
 import { cn } from "@/lib/utils"
+import QueryProvider from "@/providers/query-provider"
 
 export const metadata: Metadata = {
 	title: "Cãodomínio Satuba",
@@ -12,10 +14,10 @@ export const metadata: Metadata = {
 }
 
 const montserrat = Montserrat({
-	subsets: ['latin'],
-	display: 'swap',
-  })
-   
+	subsets: ["latin"],
+	display: "swap",
+})
+
 export default function RootLayout({
 	children,
 }: Readonly<{
@@ -25,10 +27,12 @@ export default function RootLayout({
 		<html lang="pt">
 			<body className={cn("antialiased h-screen", montserrat.className)}>
 				<Toaster />
-				<TooltipProvider>
-					<NextTopLoader color="#10b981" showSpinner={false} />
-					{children}
-				</TooltipProvider>
+				<QueryProvider>
+					<TooltipProvider>
+						<NextTopLoader color="#10b981" showSpinner={false} />
+						{children}
+					</TooltipProvider>
+				</QueryProvider>
 			</body>
 		</html>
 	)

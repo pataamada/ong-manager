@@ -1,7 +1,6 @@
 import Image from "next/image"
-import type {ReactNode} from "react"
-export default function Layout({children}: Readonly<{children: ReactNode}>) {
-
+import type { ReactNode } from "react"
+export default function Layout({ children }: Readonly<{ children: ReactNode }>) {
 	return (
 		<div className="relative flex flex-col lg:items-center h-screen lg:flex-row">
 			<div className="relative bg-green-500">
