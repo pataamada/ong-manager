@@ -3,10 +3,10 @@
 /* Todo: Pensar em como deixar isso responsivo */
 
 import { Button } from "@/components/ui/button"
-import Image from "next/image"
-import { useState, useEffect } from "react"
 import { Icon } from "@iconify/react"
-import { motion, AnimatePresence } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
+import Image from "next/image"
+import { useEffect, useState } from "react"
 
 type Pet = {
 	id: number
@@ -100,14 +100,14 @@ function TypewriterEffect({ text }: { text: string }) {
 	}, [text])
 
 	return (
-		<motion.div className="flex items-center">
+		<motion.div className="flex lg:justify-start justify-center">
 			<span>{displayText}</span>
 			<motion.span
 				animate={{ opacity: [1, 0] }}
 				transition={{
 					duration: 0.8,
-					repeat: Infinity,
-					repeatType: "reverse"
+					repeat: Number.POSITIVE_INFINITY,
+					repeatType: "reverse",
 				}}
 				className="w-[2px] h-[80%] bg-primary ml-1"
 			/>
@@ -119,18 +119,16 @@ export function AvailablePets() {
 	const [selectedPet, setSelectedPet] = useState<Pet>(availablePets[0])
 
 	return (
-		<div className="text-center lg:text-left">
+		<div className="text-center">
 			<h3 className="text-4xl font-bold">
 				Conheça nossos
-				<span className="text-[#10B981]"> peludos!</span>
+				<span className="text-primary"> peludos!</span>
 			</h3>
 			<p className="text-2xl mb-16 text-gray-600">Eles adoram carinho e merecem amor!</p>
 
 			<div className="flex flex-wrap lg:flex-nowrap gap-8 mt-8 ">
 				<div className="justify-between flex flex-col">
-					<div >
-
-
+					<div>
 						<h3 className="text-h3 text-zinc-800 mb-2 min-h-[3.5rem]">
 							<TypewriterEffect text={selectedPet.name} />
 						</h3>
@@ -145,9 +143,9 @@ export function AvailablePets() {
 							))}
 						</div>
 						<div className="lg:hidden block max-w-[75%] mx-auto py-2">
-							<PetImage pet={selectedPet} className="w-full max-h-[370px]" />
+							<PetImage pet={selectedPet} className="w-full max-h-[370px] max-w-[450px] mx-auto" />
 						</div>
-						<p className="text-zinc-500 text-sm lg:text-[1.75rem] lg:leading-[2.25rem] mb-4 max-h-[90px] lg:h-[180px] lg:max-h-[180px] text-pretty overflow-hidden text-ellipsis line-clamp-4 lg:line-clamp-5">
+						<p className="text-zinc-500 text-sm lg:text-[1.75rem] lg:leading-[2.25rem] mb-4 max-h-[90px] lg:h-[180px] lg:max-h-[180px] text-pretty overflow-hidden text-ellipsis line-clamp-4 lg:line-clamp-5 text-center lg:text-left ">
 							{selectedPet.description}
 						</p>
 
@@ -183,9 +181,9 @@ export function AvailablePets() {
 						))}
 					</div>
 				</div>
-						<div className="hidden lg:block">
-							<PetImage pet={selectedPet} className="max-w-[450px] max-h-[550px]" />
-						</div>
+				<div className="hidden lg:block">
+					<PetImage pet={selectedPet} className="max-w-[450px] max-h-[550px]" />
+				</div>
 			</div>
 		</div>
 	)
