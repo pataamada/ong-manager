@@ -4,7 +4,7 @@
 
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Icon } from "@iconify/react"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -59,11 +59,67 @@ const availablePets: Pet[] = [
 	},
 ]
 
+function PetImage({ pet, className }: { pet: Pet; className?: string }) {
+	return (
+		<AnimatePresence mode="wait">
+			<motion.div
+				key={pet.id}
+				initial={{ opacity: 0, x: 20 }}
+				animate={{ opacity: 1, x: 0 }}
+				exit={{ opacity: 0, x: -20 }}
+				transition={{ duration: 0.3 }}
+			>
+				<Image
+					src={pet.photo}
+					alt={`Foto do ${pet.name}`}
+					className={`rounded-lg ${className}`}
+					width={450}
+					height={550}
+				/>
+			</motion.div>
+		</AnimatePresence>
+	)
+}
+
+function TypewriterEffect({ text }: { text: string }) {
+	const [displayText, setDisplayText] = useState("")
+
+	useEffect(() => {
+		setDisplayText("")
+		let currentIndex = 0
+		const interval = setInterval(() => {
+			if (currentIndex <= text.length) {
+				setDisplayText(text.slice(0, currentIndex))
+				currentIndex++
+			} else {
+				clearInterval(interval)
+			}
+		}, 150)
+
+		return () => clearInterval(interval)
+	}, [text])
+
+	return (
+		<motion.div className="flex items-center">
+			<span>{displayText}</span>
+			<motion.span
+				animate={{ opacity: [1, 0] }}
+				transition={{
+					duration: 0.8,
+					repeat: Infinity,
+					repeatType: "reverse"
+				}}
+				className="w-[2px] h-[80%] bg-primary ml-1"
+			/>
+		</motion.div>
+	)
+}
+
 export function AvailablePets() {
 	const [selectedPet, setSelectedPet] = useState<Pet>(availablePets[0])
 
 	return (
-		<div className="text-center ">
+		<div className="text-center lg:text-left">
 			<h3 className="text-4xl font-bold">
 				Conheça nossos
 				<span className="text-[#10B981]"> peludos!</span>
@@ -72,8 +128,13 @@ export function AvailablePets() {
 
 			<div className="flex flex-wrap lg:flex-nowrap gap-8 mt-8 ">
 				<div className="justify-between flex flex-col">
-					<div className="rounded-lg ">
-						<div className="flex flex-wrap gap-2 mb-4">
+					<div >
+
+
+						<h3 className="text-h3 text-zinc-800 mb-2 min-h-[3.5rem]">
+							<TypewriterEffect text={selectedPet.name} />
+						</h3>
+						<div className="flex flex-wrap gap-2 mb-4 justify-center lg:justify-start">
 							{selectedPet.tags.map(tag => (
 								<span
 									key={tag}
@@ -83,9 +144,10 @@ export function AvailablePets() {
 								</span>
 							))}
 						</div>
-
-						<h3 className="text-h3 text-zinc-800 mb-2 text-left">{selectedPet.name}</h3>
-						<p className="text-zinc-500 text-subtitle text-left mb-4 h-[180px] overflow-hidden text-ellipsis line-clamp-5">
+						<div className="lg:hidden block max-w-[75%] mx-auto py-2">
+							<PetImage pet={selectedPet} className="w-full max-h-[370px]" />
+						</div>
+						<p className="text-zinc-500 text-sm lg:text-[1.75rem] lg:leading-[2.25rem] mb-4 max-h-[90px] lg:h-[180px] lg:max-h-[180px] text-pretty overflow-hidden text-ellipsis line-clamp-4 lg:line-clamp-5">
 							{selectedPet.description}
 						</p>
 
@@ -104,14 +166,14 @@ export function AvailablePets() {
 						</div>
 					</div>
 
-					<div className="flex gap-2 mt-4">
+					<div className="flex gap-1 mt-4 flex-wrap justify-center lg:justify-start">
 						{availablePets.map(pet => (
 							<button
 								key={pet.id}
 								type="button"
 								onClick={() => setSelectedPet(pet)}
 								className={`rounded-lg overflow-hidden border-2 transition-all duration-300 ease-in-out 
-									aspect-square w-[150px] bg-cover bg-center bg-no-repeat border-transparent
+									aspect-square lg:w-[150px] w-[75px] bg-cover bg-center bg-no-repeat border-transparent
 									hover:scale-105
 									${selectedPet.id === pet.id ? "!border-primary" : " hover:border-emerald-400"}`}
 								style={{
@@ -121,24 +183,9 @@ export function AvailablePets() {
 						))}
 					</div>
 				</div>
-
-				<AnimatePresence mode="wait">
-					<motion.div
-						key={selectedPet.id}
-						initial={{ opacity: 0, x: 20 }}
-						animate={{ opacity: 1, x: 0 }}
-						exit={{ opacity: 0, x: -20 }}
-						transition={{ duration: 0.3 }}
-					>
-						<Image
-							src={selectedPet.photo}
-							alt={`Foto do ${selectedPet.name}`}
-							className="max-w-[450px] max-h-[550px] rounded-lg"
-							width={450}
-							height={550}
-						/>
-					</motion.div>
-				</AnimatePresence>
+						<div className="hidden lg:block">
+							<PetImage pet={selectedPet} className="max-w-[450px] max-h-[550px]" />
+						</div>
 			</div>
 		</div>
 	)

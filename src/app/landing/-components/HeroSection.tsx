@@ -43,7 +43,7 @@ export function HeroSection() {
                     priority
                 />
                 {/* TODO: O container deve ser uma div, tendo o QR como imagem */}
-                <div className="absolute z-20 lg:bottom-[-40px] right-[-15px] bottom-[-15px]">
+                <div className="absolute z-20 lg:bottom-[-10px] right-[-15px] bottom-[-15px]">
                     <Image
                         src="/home/Groups.svg"
                         alt="QR Code"
