@@ -1,10 +1,12 @@
 "use server"
 import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
-import { saveExpenseDb } from "@/services/transaction.service"
+import { handleExpenseCreation } from "@/services/transaction.service"
 
 const schema = z.object({
 	userId: z.string(),
+  userName: z.string(),
+  userCpf: z.string(),
 	category: z.string(),
 	value: z.number(),
 	description: z.string(),
@@ -14,7 +16,7 @@ const schema = z.object({
 
 export const saveExpenseAction = actionClient
 	.schema(schema)
-	.action(async ({ parsedInput: { userId, category, value, description, proof, date } }) => {
-		const createdExpense = await saveExpenseDb(userId, category, value, proof, description, date)
+	.action(async ({ parsedInput: { userId, userName, userCpf, category, value, description, proof, date } }) => {
+		const createdExpense = await handleExpenseCreation(userId, userName, userCpf, category, value, proof, description, date)
 		return JSON.stringify(createdExpense)
 	})
