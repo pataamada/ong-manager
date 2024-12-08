@@ -1,27 +1,31 @@
 "use server"
 import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
-import { saveDonationDb } from "@/services/transaction.service"
+import { handleDonationCreation } from "@/services/donation.service"
 
 const schema = z.object({
-	userId: z.string().optional(),
+  userName: z.string().optional(),
+  userCpf: z.string(),
 	animalId: z.string().optional(),
 	category: z.string(),
 	value: z.number(),
 	description: z.string(),
+  proof: z.array(z.string()),
 	date: z.string(),
 })
 
 export const saveDonationAction = actionClient
 	.schema(schema)
-	.action(async ({ parsedInput: { userId, animalId, category, value, description, date } }) => {
-		const createdDonation = await saveDonationDb(
-			userId,
-			animalId,
-			category,
-			value,
-			description,
-			date,
+	.action(async ({ parsedInput: { userName, userCpf, animalId, category, value, description, proof, date } }) => {
+		const createdDonation = await handleDonationCreation(
+      animalId,
+      userName,
+      userCpf,
+      category,
+      value,
+      description,
+      proof,
+      date,
 		)
 		return JSON.stringify(createdDonation)
 	})
