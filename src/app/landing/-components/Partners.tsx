@@ -1,51 +1,158 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faLinkedinIn, faGithub } from "@fortawesome/free-brands-svg-icons"
+"use client"
+
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
+import { Icon } from "@iconify/react"
+import Autoplay from "embla-carousel-autoplay"
+import useEmblaCarousel from "embla-carousel-react"
+import Image from "next/image"
+
+interface Partner {
+	id: number
+	name: string
+	role: string
+	image: string
+	linkedin?: string
+	github?: string
+}
+
+const partners: Partner[] = [
+	{
+		id: 1,
+		name: "Parceiro 1",
+		role: "Front-end UX",
+		image: "/partners/card-parceiro-1.png",
+		linkedin: "#",
+		github: "#",
+	},
+	{
+		id: 2,
+		name: "Parceiro 2",
+		role: "Back-end Developer",
+		image: "/partners/card-parceiro-2.png",
+		linkedin: "#",
+		github: "#",
+	},
+	{
+		id: 3,
+		name: "Parceiro 3",
+		role: "UI/UX Designer",
+		image: "/partners/card-parceiro-3.png",
+		linkedin: "#",
+		github: "#",
+	},
+	{
+		id: 4,
+		name: "Parceiro 4",
+		role: "Full-stack Developer",
+		image: "/partners/card-parceiro-4.png",
+		linkedin: "#",
+		github: "#",
+	},
+	{
+		id: 5,
+		name: "Parceiro 5",
+		role: "Project Manager",
+		image: "/partners/card-parceiro-1.png",
+		linkedin: "#",
+		github: "#",
+	},
+	{
+		id: 6,
+		name: "Parceiro 6",
+		role: "DevOps Engineer",
+		image: "/partners/card-parceiro-2.png",
+		linkedin: "#",
+		github: "#",
+	},
+]
+
+const institutionalPartners = [
+	{
+		id: 1,
+		name: "IFAL",
+		image: "/partners/ifal-icon.png",
+	},
+	{
+		id: 2,
+		name: "Logo",
+		image: "/partners/logo.png",
+	},
+	{
+		id: 3,
+		name: "Qualifica Tech",
+		image: "/partners/qualifica-tech.png",
+	},
+]
+
+const autoplayPlugin = Autoplay({
+	delay: 4000,
+	stopOnInteraction: false,
+	stopOnMouseEnter: true,
+	playOnInit: true,
+})
 
 export function Partners() {
-    return (
-        <div className="text-center py-8">
-            <h3 className="text-2xl font-bold mb-2">Parceiros</h3>
-            <p className="mb-8">Conheça os parceiros da ONG</p>
-            
-            <div className="flex justify-center gap-6">
-                {[1, 2, 3, 4].map((num) => (
-                    <div key={num} className="bg-gray-300 border border-gray-400 rounded-lg p-4 flex flex-col items-center w-48">
-                        <img
-                            src={`/partners/card-parceiro-${num}.png`}
-                            alt={`Parceiro ${num}`}
-                            className="w-32 h-32 rounded-full mb-4"
-                        />
-                        <strong>Parceiro {num}</strong>
-                        <p className="text-sm text-gray-600">Front-end UX</p>
-                        <div className="flex mt-2 gap-2">
-                            <a href="#xx" className="text-blue-500">
-                                <FontAwesomeIcon icon={faLinkedinIn} size="lg" className="w-6 h-6 text-black" />
-                            </a>
-                            <a href="#xx" className="text-gray-800">
-                                <FontAwesomeIcon icon={faGithub} size="lg" className="w-6 h-6 text-black" />
-                            </a>
-                        </div>
-                    </div>
-                ))}
-            </div>
+	const [teamApi] = useEmblaCarousel({ loop: true, align: "start", slidesToScroll: 1 }, [
+		autoplayPlugin,
+	])
 
-            <div className="flex justify-center gap-6 py-6 mx-auto">
-                <img
-                    src="/partners/ifal-icon.png"
-                    alt="Logo Parceiro 1"
-                    className="w-[200.38px] h-[175.83px]"
-                />
-                <img
-                    src="/partners/logo.png"
-                    alt="Logo Parceiro 2"
-                    className="w-[200.38px] h-[175.83px]"
-                />
-                <img
-                    src="/partners/qualifica-tech.png"
-                    alt="Logo Parceiro 3"
-                    className="w-[260.44px] h-[149.4px]"
-                />
-            </div>
-        </div>
-    )
+	return (
+		<div className="text-center py-8">
+			<h2 className="text-h2 text-zinc-800 mb-2">Parceiros</h2>
+			<p className="mb-8 text-subtitle text-zinc-500">Conheça os parceiros da ONG</p>
+
+			<div className="mx-auto px-3">
+				<Carousel
+					opts={{
+						align: "start",
+						loop: true,
+					}}
+					plugins={[autoplayPlugin]}
+					className="w-full"
+				>
+					<CarouselContent>
+						{partners.map(partner => (
+							<CarouselItem key={partner.id} className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
+								<div className="border border-zinc-300 rounded-lg p-4 flex flex-col items-center h-[380px] w-[280px]">
+									<Image
+										src={partner.image}
+										alt={partner.name}
+										width={160}
+										height={160}
+										className="rounded-full mb-4"
+									/>
+									<h4 className="text-h4 text-center text-zinc-900">{partner.name}</h4>
+									<p className="text-subtitle-2 text-centertext-zinc-500">{partner.role}</p>
+									<div className="flex gap-4 bg-zinc-200 px-2 py-3 rounded-lg mt-3 font-bold">
+										{partner.linkedin && (
+											<a
+												href={partner.linkedin}
+												className="text-blue-500 hover:opacity-80 transition-opacity"
+											>
+												<Icon icon="meteor-icons:linkedin" className="w-6 h-6 text-black" />
+											</a>
+										)}
+										{partner.github && (
+											<a
+												href={partner.github}
+												className="text-gray-800 hover:opacity-80 transition-opacity"
+											>
+												<Icon icon="mingcute:github-line" className="w-6 h-6 text-black" />
+											</a>
+										)}
+									</div>
+								</div>
+							</CarouselItem>
+						))}
+					</CarouselContent>
+				</Carousel>
+
+				<div className="flex justify-center gap-16 py-6 mx-auto mt-12">
+					{institutionalPartners.map(partner => (
+						<img key={partner.id} src={partner.image} alt={`Logo ${partner.name}`} />
+					))}
+				</div>
+			</div>
+		</div>
+	)
 }
