@@ -106,3 +106,7 @@ p {
   }
 }
 
+input[type="date"]:not(.has-value):before{
+  color: lightgray;
+  content: attr(placeholder);
+}
