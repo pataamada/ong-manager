@@ -112,8 +112,8 @@ export function Partners() {
 				>
 					<CarouselContent>
 						{partners.map(partner => (
-							<CarouselItem key={partner.id} className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
-								<div className="border border-zinc-300 rounded-lg p-4 flex flex-col items-center h-[380px] w-[280px]">
+							<CarouselItem key={partner.id} className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4 mx-auto">
+								<div className="border border-zinc-300 rounded-lg p-4 flex flex-col items-center h-[380px]">
 									<Image
 										src={partner.image}
 										alt={partner.name}
@@ -147,7 +147,7 @@ export function Partners() {
 					</CarouselContent>
 				</Carousel>
 
-				<div className="flex justify-center gap-16 py-6 mx-auto mt-12">
+				<div className="flex justify-center gap-16 py-6 mx-auto mt-12 flex-wrap">
 					{institutionalPartners.map(partner => (
 						<img key={partner.id} src={partner.image} alt={`Logo ${partner.name}`} />
 					))}
