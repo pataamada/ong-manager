@@ -1,7 +1,7 @@
 "use server"
 import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
-import { handleExpenseCreation } from "@/services/transaction.service"
+import { handleExpenseCreation } from "@/services/expense.service"
 
 const schema = z.object({
 	userId: z.string(),
