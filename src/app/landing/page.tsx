@@ -1,4 +1,5 @@
 import { AvailablePets } from "./-components/AvailablePets"
+import { HelpSection } from "./-components/HelpSection"
 import { HeroSection } from "./-components/HeroSection"
 import { HowToHelp } from "./-components/HowToHelp"
 import { Header } from "./-components/Navbar"
@@ -19,6 +20,7 @@ export default function LandingPage() {
 					<OurStory />
 					<HowToHelp />
 					<AvailablePets />
+					<HelpSection />
 					<Volunteers />
 					<Partners />
 				</div>

@@ -35,7 +35,7 @@ export function HeroSection() {
             
             <div className="flex flex-col items-center gap-4 relative order-2 lg:order-3 max-w-[75%]">
                 <Image
-                    src="/home/Vector.svg"
+                    src="/landingPage/home/Vector.svg"
                     alt="Icon"
                     className="object-contain mb-4 w-full max-w-[700px]"
                     width={700}
@@ -45,7 +45,7 @@ export function HeroSection() {
                 {/* TODO: O container deve ser uma div, tendo o QR como imagem */}
                 <div className="absolute z-20 lg:bottom-[-10px] right-[-15px] bottom-[-15px]">
                     <Image
-                        src="/home/Groups.svg"
+                        src="/landingPage/home/Groups.svg"
                         alt="QR Code"
                         width={257}
                         height={330}
