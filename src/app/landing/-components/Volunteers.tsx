@@ -1,65 +1,37 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faInstagram } from "@fortawesome/free-brands-svg-icons"
+import { Icon } from '@iconify/react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export function Volunteers() {
+    const volunteers = [
+        { name: 'Pedro Santos', role: 'Front-end UX', image: '/volunteers/card-voluntario-1.png' },
+        { name: 'Maria Silva', role: 'Front-end UX', image: '/volunteers/card-voluntario-2.png' },
+        { name: 'João Souza', role: 'Front-end UX', image: '/volunteers/card-voluntario-3.png' },
+        { name: 'Ana Costa', role: 'Front-end UX', image: '/volunteers/card-voluntario-4.png' }
+    ];
+
     return (
         <div className="text-center py-8">
-            <h3 className="text-2xl font-bold mb-2">Nossos voluntários</h3>
-            <p className="mb-8 text-gray-600">Conheça quem nos ajuda pessoalmente</p>
-            
-            <div className="flex justify-center">
-                <div className="flex flex-col items-center m-[80px]">
-                    <img
-                        src="/volunteers/card-voluntario-1.png"
-                        alt="Voluntário 1"
-                        className="w-32 h-32 rounded-full mb-4"
-                    />
-                    <strong>Pedro Santos</strong>
-                    <p className="text-sm text-gray-600">Front-end UX</p>
-                    <a href="#xx" className="text-blue-500 mt-2">
-                        <FontAwesomeIcon icon={faInstagram} size="lg" className="w-6 h-6 text-black" />
-                    </a>
-                </div>
-
-                <div className="flex flex-col items-center m-[80px]">
-                    <img
-                        src="/volunteers/card-voluntario-2.png"
-                        alt="Voluntário 2"
-                        className="w-32 h-32 rounded-full mb-4"
-                    />
-                    <strong>Maria Silva</strong>
-                    <p className="text-sm text-gray-600">Front-end UX</p>
-                    <a href="#xx" className="text-blue-500 mt-2">
-                        <FontAwesomeIcon icon={faInstagram} size="lg" className="w-6 h-6 text-black" />
-                    </a>
-                </div>
-
-                <div className="flex flex-col items-center m-[80px]">
-                    <img
-                        src="/volunteers/card-voluntario-3.png"
-                        alt="Voluntário 3"
-                        className="w-32 h-32 rounded-full mb-4"
-                    />
-                    <strong>João Souza</strong>
-                    <p className="text-sm text-gray-600">Front-end UX</p>
-                    <a href="#xx" className="text-blue-500 mt-2">
-                        <FontAwesomeIcon icon={faInstagram} size="lg" className="w-6 h-6 text-black" />
-                    </a>
-                </div>
-
-                <div className="flex flex-col items-center m-[80px]">
-                    <img
-                        src="/volunteers/card-voluntario-4.png"
-                        alt="Voluntário 4"
-                        className="w-32 h-32 rounded-full mb-4"
-                    />
-                    <strong>Ana Costa</strong>
-                    <p className="text-sm text-gray-600">Front-end UX</p>
-                    <a href="#xx" className="text-blue-500 mt-2">
-                        <FontAwesomeIcon icon={faInstagram} size="lg" className="w-6 h-6 text-black" />
-                    </a>
-                </div>
+            <h2 className="text-h2 text-zinc-800 text-center">Nossos voluntários</h2>
+            <p className="mb-11 text-subtitle text-center text-gray-500">Conheça quem nos ajuda pessoalmente</p>
+            <div className="flex gap-12 mx-auto items-center justify-center flex-wrap">
+                {volunteers.map((volunteer, index) => (
+                    <div key={`${volunteer.name}-${index}`} className="flex flex-col items-center w-[290px] border border-zinc-300 rounded-lg h-[370px] py-6 px-8">
+                        <Image
+                            src={volunteer.image}
+                            alt={volunteer.name}
+                            width={160}
+                            height={160}
+                            className="rounded-full mb-4"
+                        />
+                        <h5 className="text-h5 text-zinc-900">{volunteer.name}</h5>
+                        <p className="text-subtitle-2 text-zinc-500">{volunteer.role}</p>
+                        <Link href="#xx" className="mt-4">
+                            <Icon icon="akar-icons:instagram-fill" width="24" height="24" />
+                        </Link>
+                    </div>
+                ))}
             </div>
         </div>
-    )
+    );
 }
