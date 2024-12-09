@@ -50,6 +50,7 @@ export function HowToHelp() {
                                 alt="como ajudar"
                                 width={110}
                                 height={100}
+                                className="w-auto h-auto"
                             />
                             <div>
                                 <h4 className="font-bold text-lg text-[#27272A]">

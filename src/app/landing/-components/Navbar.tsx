@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Icon } from "@iconify/react"
 import Image from "next/image"
 
@@ -21,7 +21,7 @@ export function Header() {
           alt="Logo"
           width={280}
           height={72}
-          className="w-[200px] md:w-[280px]"
+          className="w-[200px] md:w-[280px] h-auto"
         />
 
         {/* Desktop Navigation */}
