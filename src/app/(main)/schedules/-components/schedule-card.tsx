@@ -13,7 +13,7 @@ import Image from "next/image"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { Calendar, Pen, Trash2 } from "lucide-react"
-import { Button } from "../ui/button"
+import { Button } from "../../../../components/ui/button"
 
 interface AgendaCardProps {
   title: string
@@ -39,7 +39,7 @@ export function AgendaCard({
       <CardHeader className="p-0 relative">
       <Image 
           src={imageUrl} 
-          alt={title}  // usando o título como alt text
+          alt={title}
           className="rounded-t-lg"
         />
         <div className="absolute gap-2 flex top-4 right-4">

@@ -1,46 +1,35 @@
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
-
 import { CalendarIcon } from "lucide-react"
-
-import { Input } from "../ui/input"
-
+import { Input } from "@/components/ui/input"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
-import Image from "next/image"
-
-import { Calendar } from "../ui/calendar"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
-import { Label } from "../ui/label"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
-
-import { type EventFormValues, eventSchema } from "@/app/(main)/schedules/eventFormSchema"
+import { Calendar } from "@/components/ui/calendar"
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { type EventFormValues, eventSchema } from "@/app/(main)/schedules/-components/modals/create-event/event-form-schema"
 import { zodResolver } from "@hookform/resolvers/zod"
-
 import { useForm } from "react-hook-form"
-import { Button } from "../ui/button"
+import { Button } from "@/components/ui/button"
+import { ImageUpload } from "@/components/custom-ui/image-upload"
+import { When } from "@/components/when"
 
 export function EventForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 	const form = useForm<EventFormValues>({
 		resolver: zodResolver(eventSchema),
 		defaultValues: {
 			title: "",
-			date: "",
 			description: "",
 			image: "",
 		},
 	})
-
-	const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const file = event.target.files?.[0]
-		if (file) {
-			const reader = new FileReader()
-			reader.onloadend = () => {
-				form.setValue("image", reader.result as string)
-			}
-			reader.readAsDataURL(file)
-		}
-	}
 
 	const onSubmit = (data: EventFormValues) => {
 		console.log(data)
@@ -56,34 +45,7 @@ export function EventForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<div className="relative">
-									<Input
-										type="file"
-										accept="image/*"
-										onChange={handleImageUpload}
-										className="hidden"
-										id="image-upload"
-									/>
-									<Label
-										htmlFor="image-upload"
-										className={cn(
-											"flex h-[200px] cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-200 transition-colors hover:border-gray-300",
-											field.value && "border-none",
-										)}
-									>
-										{field.value ? (
-											<Image
-												src={field.value}
-												alt="Preview"
-												layout="fill"
-												objectFit="contain"
-												className="rounded-lg bg-black"
-											/>
-										) : (
-											<span className="text-3xl text-gray-400">+</span>
-										)}
-									</Label>
-								</div>
+								<ImageUpload value={field.value} onChange={field.onChange} />
 							</FormControl>
 						</FormItem>
 					)}
@@ -119,18 +81,23 @@ export function EventForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 										<Button
 											variant={"outline"}
 											className={cn(
-												"w-[240px] pl-3 text-left font-normal",
+												"w-full pl-3 text-left font-normal",
 												!field.value && "text-muted-foreground",
 											)}
 										>
-											<CalendarIcon className="mr-2 h-4 w-4 opacity-50" />
-											{field.value ? (
-												format(field.value, "PPP", {
-													locale: ptBR,
-												})
-											) : (
-												<span className="mr-auto">Selecionar Data</span>
-											)}
+											<span className="flex w-full justify-start items-center">
+												<When
+													condition={field.value}
+													fallback={<span className="mr-auto">Selecionar Data</span>}
+												>
+													<span className="mr-auto">
+														{format(field.value || new Date(), "PPP", {
+															locale: ptBR,
+														})}
+													</span>
+												</When>
+												<CalendarIcon className="h-4 w-4 opacity-50" />
+											</span>
 										</Button>
 									</FormControl>
 								</PopoverTrigger>
@@ -139,7 +106,11 @@ export function EventForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 										mode="single"
 										selected={new Date(field.value)}
 										onSelect={date => field.onChange(date?.toISOString() ?? "")}
-										disabled={date => date > new Date() || date < new Date("1900-01-01")}
+										disabled={date => {
+											const today = new Date()
+											today.setHours(0, 0, 0, 0)
+											return date < today
+										}}
 										initialFocus
 									/>
 								</PopoverContent>
@@ -166,7 +137,7 @@ export function EventForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 						</FormItem>
 					)}
 				/>
-				<div className="flex justify-end gap-4">
+				<div className="flex justify-end gap-2">
 					<Button
 						type="button"
 						variant="outline"
@@ -177,9 +148,7 @@ export function EventForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 					>
 						Cancelar
 					</Button>
-					<Button className="bg-black" type="submit">
-						Criar
-					</Button>
+					<Button type="submit">Criar</Button>
 				</div>
 			</form>
 		</Form>

@@ -8,14 +8,13 @@ import {
 	SelectValue,
 } from "@/components/ui/select"
 
-// ... imports remain the same ...
 
 interface Option {
 	value: string
 	label: string
 }
 
-interface DynamicSelectProps {
+interface CustomSelectProps {
 	options: Option[]
 	placeholder?: string
 	label?: string
@@ -23,15 +22,15 @@ interface DynamicSelectProps {
 	onChange?: (value: string) => void
 }
 
-export function DynamicSelect({
+export function CustomSelect({
 	options,
 	placeholder = "Select an option",
 	label,
 	className = "w-[180px]",
 	onChange,
-}: DynamicSelectProps) {
+}: CustomSelectProps) {
 	return (
-		<Select defaultValue={options[0].value} onValueChange={onChange}>
+		<Select defaultValue={options?.[0]?.value} onValueChange={onChange}>
 			<SelectTrigger className={className}>
 				<SelectValue placeholder={placeholder} />
 			</SelectTrigger>

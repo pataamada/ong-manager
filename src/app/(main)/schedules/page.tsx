@@ -1,30 +1,31 @@
-import { AgendaCard } from "@/components/agenda/AgendaCard"
-import { EventsList } from "./mockData"
-
+import { AgendaCard } from "@/app/(main)/schedules/-components/schedule-card"
+import { EventsList } from "./mock-data"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
-import { Filters } from "@/components/agenda/Filters"
 import { Card } from "@/components/ui/card"
+import { Filters } from "./-components/filters"
+import { CreateEventModal } from "./-components/modals/create-event"
 
-export default function Agenda() {
+export default function Schedules() {
 	return (
 		<Card className="p-6">
-			<Tabs defaultValue="account">
+			<Tabs defaultValue="events">
 				<div className="flex gap-2 justify-between">
 					<TabsList className="mb-6">
-						<TabsTrigger value="account">Eventos</TabsTrigger>
-						<TabsTrigger value="password">Notícias</TabsTrigger>
+						<TabsTrigger value="events">Eventos</TabsTrigger>
+						<TabsTrigger value="news">Notícias</TabsTrigger>
 					</TabsList>
 					<Filters />
+					<CreateEventModal />
 				</div>
-				<TabsContent value="account" className="flex flex-1">
-					<div className="grid grid-cols-1 min-[850px]:grid-cols-2 min-[1200px]:grid-cols-3 2xl:grid-cols-4 gap-6 w-fit">
+				<TabsContent value="events" className="flex flex-1">
+					{/* <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-4 place-items-center"> */}
+					<div className="flex flex-wrap gap-6">
 						{EventsList.map(event => (
 							<AgendaCard key={event.title} {...event} />
 						))}
 					</div>
 				</TabsContent>
-				<TabsContent value="password">Change your password here.</TabsContent>
+				<TabsContent value="news">Notícias</TabsContent>
 			</Tabs>
 		</Card>
 	)
