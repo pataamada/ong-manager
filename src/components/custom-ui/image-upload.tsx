@@ -44,7 +44,7 @@ export function ImageUpload({
 				id="image-upload"
 			/>
 			<Label
-				htmlFor={value ? undefined : "image-upload"}
+				htmlFor={"image-upload"}
 				className={cn(
 					"group flex cursor-pointer items-center justify-center rounded-lg border-2 border-dashed bg-gray-100 border-gray-200 transition-colors hover:border-gray-300",
 					height,

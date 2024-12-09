@@ -15,7 +15,7 @@ import { ptBR } from "date-fns/locale"
 import { Calendar, Pen, Trash2 } from "lucide-react"
 import { Button } from "../../../../components/ui/button"
 
-interface AgendaCardProps {
+interface ScheduleCardProps {
   title: string
   date: Date
   description: string
@@ -28,12 +28,12 @@ const formatEventDate = (date: Date): string => {
   })
 }
 
-export function AgendaCard({ 
+export function ScheduleCard({ 
   title, 
   date, 
   description, 
   imageUrl 
-}: AgendaCardProps) {
+}: ScheduleCardProps) {
   return (
     <Card className="w-[350px] rounded-lg">
       <CardHeader className="p-0 relative">
