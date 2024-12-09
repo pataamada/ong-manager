@@ -1,0 +1,77 @@
+"use client"
+
+import { useState } from "react"
+
+type Campaign = {
+	id: number
+	title: string
+	description: string
+	image: string
+	video?: string
+}
+
+const availableCampaigns: Campaign[] = [
+	{
+		id: 1,
+		title: "Ajude no tratamento da Aurora!",
+		description:
+			"Aurora tem TVT e estamos fazendo tratamento dela semanalmente, porém estamos SEM DINHEIRO.",
+		image: "/landingPage/campaigns/image3.png",
+	},
+	{
+		id: 2,
+		title: "Ajude a alimentar os cães de rua!",
+		description:
+			"Estamos arrecadando fundos para alimentar cães de rua que precisam de nossa ajuda. Cada doação faz a diferença!",
+		image: "/landingPage/campaigns/image2.png",
+	},
+	{
+		id: 3,
+		title: "Construção de um abrigo para animais! Construção de um abrigo para animais!",
+		description:
+			"Precisamos de sua ajuda para construir um abrigo seguro e confortável para animais abandonados. Contribua para essa causa!",
+		image: "/landingPage/campaigns/image1.png",
+	},
+]
+
+export function CampaignSection() {
+	const [selectedCampaign, setSelectedCampaign] = useState<Campaign>(availableCampaigns[0])
+	return (
+		<div>
+			<h2 className="text-h2 text-zinc-800 text-center">
+				Precisamos da sua <span className="text-primary">Ajuda!</span>
+			</h2>
+			<p className="text-subtitle text-center text-zinc-500 mb-12">
+				Ajude a salvar nossos amiguinhos
+			</p>
+			<div className="flex gap-8 sm:flex-row flex-col">
+				<div
+					className="flex-1 flex justify-center items-center relative sm:w-[1100px] h-[600px] min-h-[300px] rounded-lg bg-no-repeat bg-contain bg-center bg-black"
+					style={{
+						backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.70) 29.75%, rgba(0, 0, 0, 0.00) 93.01%), url(${selectedCampaign.image})`,
+					}}
+				>
+					<div className="absolute bottom-0 left-0  text-white sm:p-12 p-2  w-full">
+						<h3 className="sm:text-h3 text-subtitle-2 font-bold text-ellipsis line-clamp-1">{selectedCampaign.title}</h3>
+						<p className="sm:text-subtitle text-paragraph-3 text-ellipsis line-clamp-3">{selectedCampaign.description}</p>
+					</div>
+				</div>
+				<div className="flex justify-between sm:flex-col flex-row">
+					{availableCampaigns.map(campaign => (
+						<button
+							key={campaign.id}
+							type="button"
+							onClick={() => setSelectedCampaign(campaign)}
+							className={`rounded-lg overflow-hidden transition-all duration-300 ease-in-out 
+                                sm:w-[300px] w-[100px] h-[100px] sm:h-[180px] bg-no-repeat bg-contain bg-center bg-black hover:scale-105 outline-transparent outline
+                                ${selectedCampaign.id === campaign.id ? "!outline-primary" : "hover:!outline-emerald-400 "}`}
+							style={{
+								backgroundImage: `url(${campaign.image})`,
+							}}
+						/>
+					))}
+				</div>
+			</div>
+		</div>
+	)
+}

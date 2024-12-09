@@ -1,5 +1,5 @@
 import { AvailablePets } from "./-components/AvailablePets"
-import { HelpSection } from "./-components/HelpSection"
+import { CampaignSection } from "./-components/Campaigns"
 import { HeroSection } from "./-components/HeroSection"
 import { HowToHelp } from "./-components/HowToHelp"
 import { Header } from "./-components/Navbar"
@@ -20,7 +20,7 @@ export default function LandingPage() {
 					<OurStory />
 					<HowToHelp />
 					<AvailablePets />
-					<HelpSection />
+					<CampaignSection />
 					<Volunteers />
 					<Partners />
 				</div>
