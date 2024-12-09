@@ -4,6 +4,7 @@ import { HowToHelp } from "./-components/HowToHelp"
 import { Header } from "./-components/Navbar"
 import { OurStory } from "./-components/OurStory"
 import { Partners } from "./-components/Partners"
+import { Volunteers } from "./-components/Volunteers"
 import "./style.css"
 
 /* TODO: Remover todos os icones do Fortawesome e substituir por icones do iconify */
@@ -18,7 +19,7 @@ export default function LandingPage() {
 					<OurStory />
 					<HowToHelp />
 					<AvailablePets />
-					{/* <Volunteers /> */}
+					<Volunteers />
 					<Partners />
 				</div>
 			</div>

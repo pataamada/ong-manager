@@ -37,7 +37,7 @@ const availablePets: Pet[] = [
 		id: 3,
 		name: "Alfredo",
 		description:
-			"Alfredo é um cachorro de porte médio com 2 anos de idade. Extremamente carinhoso e sociável, ele se dá bem com outros animais e crianças. Sua energia contagiante e lealdade fazem dele um companheiro perfeito para famílias ativas. Castrado e com todas as vacinas em dia, está ansioso para encontrar seu lar definitivo.",
+			"Alfredo é um cachorro de porte médio com 2 anos de idade. Extremamente carinhoso e sociável, ele se dá bem com outros animais e crianças. Sua energia contagiante e lealdade fazem dele um companheiro perfeito para famílias ativas. Castrado e com todas as vacinas em dia, está ansioso para encontrar seu lar definitivo. Alfredo é um cachorro de porte médio com 2 anos de idade. Extremamente carinhoso e sociável, ele se dá bem com outros animais e crianças. Sua energia contagiante e lealdade fazem dele um companheiro perfeito para famílias ativas. Castrado e com todas as vacinas em dia, está ansioso para encontrar seu lar definitivo.",
 		photo: "/adopt-puppies/alfredo.png",
 		tags: ["Cachorro", "Castrado", "Macho"],
 	},
@@ -68,7 +68,9 @@ function PetImage({ pet, className }: { pet: Pet; className?: string }) {
 				animate={{ opacity: 1, x: 0 }}
 				exit={{ opacity: 0, x: -20 }}
 				transition={{ duration: 0.3 }}
+				className="relative"
 			>
+				{/* <div style={{ height: '480px', width: '450px' }}>  */}
 				<Image
 					src={pet.photo}
 					alt={`Foto do ${pet.name}`}
@@ -76,6 +78,21 @@ function PetImage({ pet, className }: { pet: Pet; className?: string }) {
 					width={450}
 					height={550}
 				/>
+				{/* </div> */}
+				<div className="flex flex-row gap-2 mt-2 absolute bottom-4 w-full px-4 [&>*]:text-paragraph-3">
+					{/* TODO: Adicionar funcionalidades para os botões */}
+					<Button
+						className="text-black w-[50%] gap-2 font-bold"
+						variant={"outline"}
+					>
+						<Icon icon="fa-solid:heart" width={16} height={16} />
+						Apadrinhar
+					</Button>
+					<Button className="gap-2 w-[50%] font-bold">
+						<Icon icon="fa-solid:paw" width={16} height={16} />
+						Adotar
+					</Button>
+				</div>
 			</motion.div>
 		</AnimatePresence>
 	)
@@ -126,7 +143,7 @@ export function AvailablePets() {
 			</h3>
 			<p className="text-2xl mb-16 text-gray-600">Eles adoram carinho e merecem amor!</p>
 
-			<div className="flex flex-wrap lg:flex-nowrap gap-8 mt-8 ">
+			<div className="flex flex-wrap lg:flex-nowrap gap-8 mt-8 max-w-[450px] lg:max-w-[100vw] mx-auto">
 				<div className="justify-between flex flex-col">
 					<div>
 						<h3 className="text-h3 text-zinc-800 mb-2 min-h-[3.5rem]">
@@ -142,26 +159,12 @@ export function AvailablePets() {
 								</span>
 							))}
 						</div>
-						<div className="lg:hidden block max-w-[75%] mx-auto py-2">
+						<div className="lg:hidden block mx-auto py-2 bg-blue-50">
 							<PetImage pet={selectedPet} className="w-full max-h-[370px] max-w-[450px] mx-auto" />
 						</div>
-						<p className="text-zinc-500 text-sm lg:text-[1.75rem] lg:leading-[2.25rem] mb-4 max-h-[90px] lg:h-[180px] lg:max-h-[180px] text-pretty overflow-hidden text-ellipsis line-clamp-4 lg:line-clamp-5 text-center lg:text-left ">
+						<p className="text-zinc-500 text-sm lg:text-[1.75rem] lg:leading-[2.25rem] mb-4 max-h-[90px] lg:h-[220px] lg:max-h-[220px] text-pretty overflow-hidden text-ellipsis line-clamp-4 lg:line-clamp-6 text-center lg:text-left ">
 							{selectedPet.description}
 						</p>
-
-						<div className="flex flex-row gap-4 mt-2 text-center mx-auto">
-							{/* TODO: Adicionar funcionalidades para os botões */}
-							<Button className="px-4 flex items-center gap-2">
-								<Icon icon="fa-solid:paw" width={16} height={16} />
-								Adotar
-							</Button>
-							<Button
-								className="border-2 border-primary text-primary font-semibold hover:bg-gray-100 hover:text-primary transition-colors"
-								variant={"outline"}
-							>
-								Apadrinhar
-							</Button>
-						</div>
 					</div>
 
 					<div className="flex gap-1 mt-4 flex-wrap justify-center lg:justify-start">
