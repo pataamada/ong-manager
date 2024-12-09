@@ -1,5 +1,6 @@
 import { AvailablePets } from "./-components/AvailablePets"
 import { CampaignSection } from "./-components/Campaigns"
+import { Footer } from "./-components/Footer"
 import { HeroSection } from "./-components/HeroSection"
 import { HowToHelp } from "./-components/HowToHelp"
 import { Header } from "./-components/Navbar"
@@ -24,6 +25,7 @@ export default function LandingPage() {
 					<Volunteers />
 					<Partners />
 				</div>
+				<Footer />
 			</div>
 		</div>
 	)

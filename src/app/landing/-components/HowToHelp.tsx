@@ -22,7 +22,7 @@ const helpItems = [
     {
         image: "/landingPage/how-to-help/como-ajudar-4.svg",
         title: "Voluntarie-se",
-        titleComplement: "e ajude o Cãodomínio",
+        titleComplement: "e ajude o CãoDomínio",
         description: "Doe seu tempo e faça a diferença diretamente no nosso abrigo!"
     }
 ]
@@ -31,7 +31,7 @@ export function HowToHelp() {
     return (
         <div className="py-8 w-full">
           <p className="text-3xl text-[#27272A] mb-8 text-center">
-                Como <span className="font-bold">ajudar o Cãodomínio?</span>
+                Como <span className="font-bold">ajudar o CãoDomínio?</span>
             </p>
             <div className="flex items-start justify-between flex-wrap gap-4">
                     <Image
@@ -49,12 +49,11 @@ export function HowToHelp() {
                                 src={item.image}
                                 alt="como ajudar"
                                 width={110}
-                                height={100}
-                                className="w-auto h-auto"
+                                height={110}
                             />
                             <div>
                                 <h4 className="font-bold text-lg text-[#27272A]">
-                                    <span className="text-[#10B981] font-bold">{item.title}</span> {item.titleComplement}
+                                    <span className="text-primary font-bold">{item.title}</span> {item.titleComplement}
                                 </h4>
                                 <p className="text-gray-600 text-sm text-pretty">
                                     {item.description}

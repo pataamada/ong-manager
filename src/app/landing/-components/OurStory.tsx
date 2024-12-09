@@ -16,7 +16,7 @@ export function OurStory() {
                     Um pouco da nossa <span className="text-[#10B981] font-bold">história</span>
                 </h2>
                 <p className="text-lg text-zinc-500 leading-relaxed text-center text-balance">
-                    A Cão Domínio começou há mais de 30 anos, quando um grupo de apaixonados por animais
+                    O CãoDomínio começou há mais de 30 anos, quando um grupo de apaixonados por animais
                     se uniu para cuidar de cães abandonados, sem condições de sobreviver nas ruas. Em um
                     terreno cedido pela prefeitura, a missão de resgatar e proteger esses animais se
                     tornou o propósito de nossas vidas.
