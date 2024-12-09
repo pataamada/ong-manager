@@ -1,6 +1,6 @@
 import type { IconName } from "../icon"
 
-export interface Link  {
+export interface Link {
 	href: string
 	icon: IconName
 	title: string
