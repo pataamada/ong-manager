@@ -2,7 +2,7 @@
 
 import { Icon } from "@iconify/react"
 import { AnimatePresence, motion } from "framer-motion"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 type Campaign = {
     id: number
@@ -37,13 +37,41 @@ const availableCampaigns: Campaign[] = [
 export function CampaignSection() {
     const [selectedCampaign, setSelectedCampaign] = useState<Campaign>(availableCampaigns[0])
     const [isPlaying, setIsPlaying] = useState(false)
+    const sectionRef = useRef<HTMLDivElement>(null)
+    const iframeRef = useRef<HTMLIFrameElement>(null)
 
     const handlePlay = () => {
         setIsPlaying(true)
     }
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting && iframeRef.current) {
+                        iframeRef.current.contentWindow?.postMessage(
+                            '{"event":"command","func":"pauseVideo","args":""}',
+                            '*'
+                        )
+          }
+                })
+            },
+            { threshold: 0.5 }
+        )
+
+        if (sectionRef.current) {
+            observer.observe(sectionRef.current)
+        }
+
+        return () => {
+            if (sectionRef.current) {
+                observer.unobserve(sectionRef.current)
+            }
+        }
+    }, [])
+
     return (
-        <div>
+        <div ref={sectionRef}>
             <h2 className="text-h2 text-zinc-800 text-center">Precisamos da sua <span className="text-primary">Ajuda!</span></h2>
             <p className="text-subtitle text-center text-zinc-500 mb-12">Ajude a salvar nossos amiguinhos</p>
             <div className="flex gap-8 sm:flex-row flex-col">
@@ -58,8 +86,9 @@ export function CampaignSection() {
                     >
                         {isPlaying && selectedCampaign.video ? (
                             <iframe
+                                ref={iframeRef}
                                 className="absolute inset-0 w-full h-full object-cover rounded-lg"
-                                src={`${selectedCampaign.video}?autoplay=1`}
+                                src={`${selectedCampaign.video}?enablejsapi=1&autoplay=1`}
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
                                 title={selectedCampaign.title}
