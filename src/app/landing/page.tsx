@@ -14,7 +14,7 @@ export default function LandingPage() {
 		<div className="flex flex-col items-center lg:bg-[url('/Patinhas.png')]">
 			<Header />
 			<div className="relative w-full min-h-screen ">
-				<div className="max-w-[1440px] mx-auto relative px-2 [&>div]:pb-[128px]">
+				<div className="max-w-[1440px] mx-auto relative px-2 [&>div]:lg:pb-[128px] [&>div]:pb-[64px]">
 					<HeroSection />
 					<OurStory />
 					<HowToHelp />

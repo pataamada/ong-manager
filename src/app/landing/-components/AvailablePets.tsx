@@ -68,9 +68,9 @@ function PetImage({ pet, className }: { pet: Pet; className?: string }) {
 				animate={{ opacity: 1, x: 0 }}
 				exit={{ opacity: 0, x: -20 }}
 				transition={{ duration: 0.3 }}
-				className="relative"
+				className={`relative ${className}`}
+
 			>
-				{/* <div style={{ height: '480px', width: '450px' }}>  */}
 				<Image
 					src={pet.photo}
 					alt={`Foto do ${pet.name}`}
@@ -78,8 +78,7 @@ function PetImage({ pet, className }: { pet: Pet; className?: string }) {
 					width={450}
 					height={550}
 				/>
-				{/* </div> */}
-				<div className="flex flex-row gap-2 mt-2 absolute bottom-4 w-full px-4 [&>*]:text-paragraph-3">
+				<div className="flex flex-row gap-2 mt-2 absolute bottom-4 w-full px-4 [&>*]:text-paragraph-3 ">
 					{/* TODO: Adicionar funcionalidades para os botões */}
 					<Button
 						className="text-black w-[50%] gap-2 font-bold"
@@ -159,8 +158,8 @@ export function AvailablePets() {
 								</span>
 							))}
 						</div>
-						<div className="lg:hidden block mx-auto py-2 bg-blue-50">
-							<PetImage pet={selectedPet} className="w-full max-h-[370px] max-w-[450px] mx-auto" />
+						<div className="lg:hidden block mx-auto py-2 ">
+							<PetImage pet={selectedPet} className="w-full max-h-[350px] max-w-[350px] mx-auto" />
 						</div>
 						<p className="text-zinc-500 text-sm lg:text-[1.75rem] lg:leading-[2.25rem] mb-4 max-h-[90px] lg:h-[220px] lg:max-h-[220px] text-pretty overflow-hidden text-ellipsis line-clamp-4 lg:line-clamp-6 text-center lg:text-left ">
 							{selectedPet.description}

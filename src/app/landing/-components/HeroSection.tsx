@@ -25,8 +25,8 @@ export function HeroSection() {
                 <p className="text-base sm:text-lg md:text-xl text-gray-600 text-center mx-auto mb-4">
                     Transforme a vida de um animal.
                 </p>
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-h1 text-center sm:mb-8 text-pretty">
-                    Adote ou ajude um peludo <br /> em busca de um novo lar!
+                <h1 className="text-h3 sm:text-4xl md:text-5xl lg:text-6xl text-h1 text-center sm:mb-8 text-pretty">
+                    Adote ou ajude um peludo <br /> <span className="hidden md:block">em busca de um novo lar!</span>
                 </h1>
                 <div className="order-3 lg:order-2  hidden lg:block">
                 <ActionButtons />
@@ -59,7 +59,7 @@ export function HeroSection() {
             </div>
         </div>
             <div className="text-[28px] text-[#27272A] mt-6 leading-relaxed text-center mx-auto px-4 lg:px-16">
-            <p>A Cão Domínio é uma ONG dedicada a resgatar, cuidar e encontrar lares</p>
+            <p>A CãoDomínio é uma ONG dedicada a resgatar, cuidar e encontrar lares</p>
             <p>
                 amorosos para cães abandonados.
                 <span className="text-[#10B981] font-bold"> Junte-se a nós nessa missão!</span>
