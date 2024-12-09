@@ -7,7 +7,6 @@ import { CustomerService } from "@/services/Asaas/customer.service"
 
 export const handleExpenseCreation = async (
 	userId: string,
-	userName: string,
 	userCpfCnpj: string,
 	category: string,
 	value: number,
@@ -23,25 +22,10 @@ export const handleExpenseCreation = async (
 		return
 	}
 
-	let customerId: string
+	const customerId = customer.data[0].id
 
-	if (customer.data[0]) {
-		customerId = customer.data[0].id
-	} else {
-		const customerData: IClientCreate = {
-			name: userName,
-			cpfCnpj: userCpfCnpj,
-		}
-		const createdCustomer = await CustomerService.create(customerData)
-		if (createdCustomer instanceof Error) {
-			alert("Erro ao criar cliente")
-			console.log(createdCustomer)
-			return
-		}
-		customerId = createdCustomer.id
-
-		return await saveExpenseDb(value, customerId, date, userId, category, description, proof)
-	}
+	return await saveExpenseDb(value, customerId, date, userId, category, description, proof)
+	
 }
 
 const saveExpenseDb = async (
