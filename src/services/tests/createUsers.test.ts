@@ -1,6 +1,6 @@
-import { createUser } from "@/actions/auth/createUser"
+import { createUser } from "@/actions/auth/user/create"
 import { db } from "@/lib/firebase/firebase-admin"
-import type { User } from "@/types/user"
+import { UserRoles, type User } from "@/models/user.model"
 
 jest.mock("@/lib/firebase/firebase-admin", () => ({
 	db: {
@@ -22,10 +22,12 @@ describe("createUser", () => {
 
 	it("should create a user successfully", async () => {
 		const testUser: User = {
-			id: "mockedId",
+			uid: "mockedId",
 			name: "Maria da Silva",
 			email: "maria@example.com",
-			age: 25,
+			cpf: "",
+			role: UserRoles.Admin,
+			password: "",
 		}
 
 		await createUser(testUser)
@@ -39,10 +41,12 @@ describe("createUser", () => {
 		;(db.collection("users").add as jest.Mock).mockRejectedValue(new Error("Test error"))
 
 		const testUser: User = {
-			id: "mockedId",
+			uid: "mockedId",
 			name: "Carlos da Silva",
 			email: "carlos@example.com",
-			age: 28,
+			cpf: "",
+			role: UserRoles.Admin,
+			password: "",
 		}
 
 		await createUser(testUser)

@@ -16,7 +16,6 @@ export function FilterDrawer() {
 	const [roleFilter, setRoleFilter] = useState<UserRoles | null>(null)
 	const [filters, setFilters] = useAtom(filterAtom)
 	const handleFilterRole = () => {
-		console.log(filters)
 		if (!roleFilter) {
 			return
 		}
