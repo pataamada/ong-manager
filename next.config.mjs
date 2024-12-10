@@ -13,6 +13,9 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+  images: {
+    domains: ['firebasestorage.googleapis.com']
+  },
 };
 
 export default nextConfig;
