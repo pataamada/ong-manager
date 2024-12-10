@@ -35,7 +35,7 @@ export function ScheduleCard({
   imageUrl 
 }: ScheduleCardProps) {
   return (
-    <Card className="w-[350px] rounded-lg">
+    <Card className="w-full max-w-[350px] min-w-[250px] rounded-lg">
       <CardHeader className="p-0 relative">
       <Image 
           src={imageUrl} 

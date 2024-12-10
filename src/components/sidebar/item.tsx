@@ -6,7 +6,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { useSelectedLayoutSegment } from "next/navigation"
 import { type IconName, Icon } from "../icon"
 const sidebarItemVariants = cva(
-	"inline-flex items-center gap-2 rounded-md w-fit px-2 py-2 text-base/6 font-semibold transition-colors",
+	"inline-flex items-center gap-4 rounded-md w-fit px-2 py-2 text-base/6 font-medium transition-colors",
 	{
 		variants: {
 			variant: {

@@ -17,8 +17,9 @@ export function CreateEventModal() {
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
-				<Button>
-					<Plus className="mr-2 size-4" /> Novo evento
+				<Button className="px-3 md:px-4">
+					<Plus size={16} />
+					<span className="ml-2 hidden md:inline"> Novo evento</span>
 				</Button>
 			</AlertDialogTrigger>
 			<AlertDialogContent>

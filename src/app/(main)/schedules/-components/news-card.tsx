@@ -25,11 +25,11 @@ export function NewsCard({
 	className,
 }: NewsCardProps) {
 	return (
-		<Card className={cn("grid grid-cols-[minmax(350px,1fr)_3fr] grid-rows-1 rounded-lg relative", className)}>
+		<Card className={cn("grid grid-cols-1 grid-rows-[auto_1fr] md:grid-cols-[minmax(350px,1fr)_3fr] md:grid-rows-1 place-items-center rounded-lg relative", className)}>
 			<CardHeader className="p-4 relative w-full">
 				<Image src={image} alt={title} className="rounded-lg w-full" objectFit="contain"/>
 			</CardHeader>
-			<CardContent className="flex flex-col p-4 gap-2">
+			<CardContent className="flex flex-col h-full p-4 gap-2">
 				<div className="flex gap-2">
 					{tags.map(tag => (
 						<Badge key={tag} variant="secondary">
@@ -46,12 +46,12 @@ export function NewsCard({
 					})}
 				</p>
 
-				<div className="absolute gap-2 flex top-4 right-4">
+				<div className="absolute gap-2 flex top-6 right-6 md:top-4 md:right-4">
 					<Button className="size-fit p-2" variant={"secondary"}>
-						<Pen className="size-5" />
+						<Pen className="size-4" />
 					</Button>
 					<Button className="size-fit p-2" variant={"secondary"}>
-						<Trash2 className="size-5 text-red-500" />
+						<Trash2 className="size-4 text-red-500" />
 					</Button>
 				</div>
 			</CardContent>

@@ -1,8 +1,9 @@
 "use client"
 import { CustomSelect } from "@/components/custom-ui/select"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-
-import { useLayoutEffect, useMemo } from "react"
+import { Filter } from "lucide-react"
+import { useMemo } from "react"
 
 export function Filters() {
 	const sorts = useMemo(
@@ -12,33 +13,19 @@ export function Filters() {
 		],
 		[],
 	)
-	useLayoutEffect(() => {
-		const handleResize = () => {
-			const width = window.innerWidth
-			if (width < 768) {
-				return
-			}
-			const inputs = document.querySelectorAll("input")
-			inputs.forEach(input => {
-				input.classList.remove("!w-[200px]")
-			})
-		}
-		handleResize()
-		window.addEventListener("resize", handleResize)
-		return () => {
-			window.removeEventListener("resize", handleResize)
-		}
-	})
 	return (
 		<div className="flex gap-2 w-full h-fit justify-end">
-			<Input placeholder="Pesquisar..." className="!w-[200px]"/>
+			<Input placeholder="Pesquisar..." className="!w-[200px] hidden lg:block" />
 			<CustomSelect
 				options={sorts}
 				placeholder="Ordernar por..."
 				label="Ordernar por"
-				className="!w-[200px]"
+				className="!w-[200px] hidden lg:flex"
 				onChange={() => {}}
 			/>
+			<Button size="icon" variant="outline" className="lg:hidden">
+				<Filter size={16} />
+			</Button>
 		</div>
 	)
 }
