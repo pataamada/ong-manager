@@ -12,7 +12,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 		return (
 			<div
 				className={cn(
-					"flex items-center h-10 w-full rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 group container-input",
+					"flex items-center h-10 w-full rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 group container-input gap-2",
 					className,
 				)}
 			>
