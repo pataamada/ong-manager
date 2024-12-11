@@ -14,7 +14,10 @@ import {
 	FormMessage,
 } from "@/components/ui/form"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { type EventFormValues, eventSchema } from "@/app/(main)/schedules/-components/modals/create-event/event-form-schema"
+import {
+	type EventFormValues,
+	eventSchema,
+} from "@/app/(main)/schedules/_components/modals/create-event/event-form-schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
@@ -33,7 +36,6 @@ export function EventForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 
 	const onSubmit = (data: EventFormValues) => {
 		console.log(data)
-		// Aqui você pode adicionar a lógica para enviar os dados para o servidor
 		setOpen(false)
 	}
 	return (

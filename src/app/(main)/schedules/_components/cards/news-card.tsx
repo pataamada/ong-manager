@@ -25,9 +25,14 @@ export function NewsCard({
 	className,
 }: NewsCardProps) {
 	return (
-		<Card className={cn("grid grid-cols-1 grid-rows-[auto_1fr] md:grid-cols-[minmax(350px,1fr)_3fr] md:grid-rows-1 place-items-center rounded-lg relative", className)}>
+		<Card
+			className={cn(
+				"grid grid-cols-1 grid-rows-[auto_1fr] md:grid-cols-[minmax(350px,1fr)_3fr] md:grid-rows-1 place-items-center rounded-lg relative",
+				className,
+			)}
+		>
 			<CardHeader className="p-4 relative w-full">
-				<Image src={image} alt={title} className="rounded-lg w-full" objectFit="contain"/>
+				<Image src={image} alt={title} className="rounded-lg w-full" objectFit="contain" />
 			</CardHeader>
 			<CardContent className="flex flex-col h-full p-4 gap-2">
 				<div className="flex gap-2">

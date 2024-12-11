@@ -21,7 +21,7 @@ export function LeftDrawer() {
 		}, 100)
 	}
 	return (
-		<div className="sm:hidden px-6 py-2 flex items-center bg-white min-h-[64px] drop-shadow-md sticky top-0">
+		<div className="sm:hidden px-6 py-2 flex items-center bg-white min-h-[64px] drop-shadow-md sticky top-0 z-50">
 			<Drawer direction="left">
 				<div className="flex justify-between w-full items-center">
 					<DrawerTrigger>
