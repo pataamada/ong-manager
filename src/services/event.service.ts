@@ -1,7 +1,7 @@
 import { collection, getDocs, doc, addDoc, updateDoc, deleteDoc, getDoc } from "firebase/firestore"
 import { db, storage } from "@/lib/firebase/firebase-secret"
 import { deleteObject, getDownloadURL, ref, uploadString } from "firebase/storage"
-import type { EventFormValues } from "@/app/(main)/schedules/-components/modals/create-event/event-form-schema"
+import type { EventFormValues } from "@/app/(main)/schedules/_components/modals/create-event/event-form-schema"
 
 export const createEventService = async (data: EventFormValues) => {
 	const imageUrl = data.image ? await uploadImageToStorage(data.image) : ""
