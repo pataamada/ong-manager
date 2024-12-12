@@ -3,7 +3,11 @@ import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
 import { updateAnimal } from "@/services/animal.service"
 import { AnimalSex, AnimalType } from "@/models/animal.model"
-import type { FieldValue } from "firebase/firestore"
+import { zfd } from "zod-form-data"
+
+const fileSchema = zfd.formData({
+	photos: z.array(zfd.file()),
+})
 
 const schema = z.object({
 	id: z.string(),
@@ -14,13 +18,16 @@ const schema = z.object({
 	observations: z.string(),
 	avaliable: z.boolean(),
 	castration: z.boolean(),
-	photos: z.instanceof(Array<File>),
-	createdAt: z.custom<FieldValue>(),
-	updatedAt: z.custom<FieldValue>(),
 	updatedBy: z.string(),
 })
 
-export const updateAnimalAction = actionClient.schema(schema).action(async ({ parsedInput }) => {
-	const updateDocument = await updateAnimal(parsedInput)
-	return JSON.stringify(updateDocument)
-})
+export const updateAnimalAction = actionClient
+	.schema(fileSchema)
+	.bindArgsSchemas([schema])
+	.action(async ({ parsedInput: { photos }, bindArgsParsedInputs: [rest] }) => {
+		const updateDocument = await updateAnimal({
+			photos,
+			...rest,
+		})
+		return JSON.stringify(updateDocument)
+	})

@@ -2,7 +2,7 @@ import type { Timestamp } from "firebase/firestore"
 
 export interface News {
 	id: string
-	photo: string
+	photo: File
 	title: string
 	tags?: string[]
 	description: string

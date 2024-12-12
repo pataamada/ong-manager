@@ -1,4 +1,4 @@
-import type { FieldValue } from "firebase/firestore"
+import type { Timestamp } from "firebase/firestore"
 
 export enum AnimalType {
 	Dog = "cachorro",
@@ -15,13 +15,17 @@ export interface Animal {
 	age?: number
 	type: AnimalType
 	sex: AnimalSex
+	photos: File[]
 	observations?: string
 	avaliable: boolean
 	castration: boolean
-	photos: File[]
-	createdAt: FieldValue
-	updatedAt: FieldValue
+	createdAt: Timestamp
+	updatedAt: Timestamp
 	updatedBy: string // uuid do adm
 }
 
-export type CreateAnimal = Omit<Animal, "id">
+export type CreateAnimal = Omit<Animal, "id" | "createdAt" | "updatedAt">
+
+export type UpdateAnimal = Omit<Animal, "createdAt" | "updatedAt"> & {
+	photos: File[]
+}

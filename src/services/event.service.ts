@@ -34,8 +34,9 @@ export const createEvent = async (params: CreateEvent) => {
 export const findAllEvents = async () => {
 	const q = query(collection(db, "eventos"))
 	const querySnapshot = await getDocs(q)
-	const events = querySnapshot.docs.map(doc => doc.data())
-	return events as Event[]
+	const events = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Event[]
+	const eventWithImages = await getEventImages(events)
+	return eventWithImages
 }
 
 export const updateEvent = async (params: Event) => {
@@ -70,24 +71,20 @@ export const deleteEvent = async (eventId: string) => {
 	await deleteDoc(doc(db, "eventos", eventId))
 }
 
-export async function fetchEvents() {
-	const querySnap = await getDocs(collection(db, "eventos"))
-	const allEvents = querySnap.docs.map(doc => ({
-		id: doc.id,
-		title: doc.data().title,
-		date: doc.data().date,
-		description: doc.data().description,
-	}))
-
-	return allEvents
-}
-
 export const uploadEventlImage = async (image: File[], id: string) => {
 	return await uploadImages(image, `eventos/${id}`)
 }
 
 export const getEventImage = async (id: string) => {
 	return await getImages(`eventos/${id}`)
+}
+
+const getEventImages = (events: Event[]) => {
+	const eventWithImages = events.map(async event => {
+		const storageImages = await getEventImage(event.id)
+		return { ...event, photo: storageImages[0][0] }
+	})
+	return eventWithImages
 }
 
 export const deleteEventImage = async (id: string) => {

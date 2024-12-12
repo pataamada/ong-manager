@@ -37,18 +37,16 @@ export const findNews = async () => {
 	const q = query(collection(db, "noticias"))
 	const querySnapshot = await getDocs(q)
 	const news = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as News[]
-	const newsWithImages = news.map(async news => {
-		const storageImages = await getNewsImage(news.id)
-		return { ...news, photo: storageImages[0][0] }
-	})
-	return Promise.all(newsWithImages)
+	const newsWithImages = await getNewsImages(news)
+	return newsWithImages
 }
 
 export const findRecentNews = async () => {
 	const q = query(collection(db, "noticias"), orderBy("createdAt"), limit(3))
 	const querySnapshot = await getDocs(q)
-	const news = querySnapshot.docs.map(doc => doc.data())
-	return news as News[]
+	const news = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as News[]
+	const newsWithImages = await getNewsImages(news)
+	return newsWithImages
 }
 
 export const findOneNews = async (id: string) => {
@@ -93,8 +91,15 @@ const uploadNewsImage = async (image: File[], newsId: string) => {
 }
 
 const getNewsImage = async (id: string) => {
-	console.log("get news image")
 	return await getImages(`noticias/${id}`)
+}
+
+const getNewsImages = (news: News[]) => {
+	const newsWithImages = news.map(async news => {
+		const storageImages = await getNewsImage(news.id)
+		return { ...news, photo: storageImages[0][0] }
+	})
+	return newsWithImages
 }
 
 const deleteNewsImage = async (id: string) => {

@@ -12,7 +12,7 @@ import {
 	limit,
 } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebase-secret"
-import type { Animal, CreateAnimal } from "@/models/animal.model"
+import type { Animal, CreateAnimal, UpdateAnimal } from "@/models/animal.model"
 import {
 	compareAndUploadImages,
 	deleteManyImages,
@@ -22,7 +22,6 @@ import {
 
 export const saveAnimal = async (params: CreateAnimal) => {
 	const document = await addDoc(collection(db, "animais"), {
-		animalId: crypto.randomUUID(),
 		name: params.name,
 		age: params.age,
 		type: params.type,
@@ -41,15 +40,17 @@ export const saveAnimal = async (params: CreateAnimal) => {
 export const findAnimals = async () => {
 	const q = query(collection(db, "animais"))
 	const querySnapshot = await getDocs(q)
-	const animals = querySnapshot.docs.map(doc => doc.data())
-	return animals as Animal[]
+	const animals = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Animal[]
+	const animalsWithImages = await getAnimalImages(animals)
+	return animalsWithImages
 }
 
 export const findRecentAnimals = async () => {
 	const q = query(collection(db, "animais"), orderBy("createdAt"), limit(6))
 	const querySnapshot = await getDocs(q)
-	const animals = querySnapshot.docs.map(doc => doc.data())
-	return animals as Animal[]
+	const animals = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Animal[]
+	const animalsWithImages = await getAnimalImages(animals)
+	return animalsWithImages
 }
 
 export const findAnimalById = async (animalId: string) => {
@@ -57,7 +58,7 @@ export const findAnimalById = async (animalId: string) => {
 	return document.data() as Animal
 }
 
-export const updateAnimal = async (params: Animal) => {
+export const updateAnimal = async (params: UpdateAnimal) => {
 	const storageImages = await getAnimalImage(params.id)
 	const differentImages = compareAndUploadImages(
 		"animais",
@@ -99,6 +100,14 @@ const uploadAnimalImage = async (image: File[], animalId: string) => {
 
 const getAnimalImage = async (id: string) => {
 	return await getImages(`animais/${id}`)
+}
+
+const getAnimalImages = (animals: Animal[]) => {
+	const animalsWithImages = animals.map(async animal => {
+		const storageImages = await getAnimalImage(animal.id)
+		return { ...animal, photo: storageImages[0][0] }
+	})
+	return animalsWithImages
 }
 
 const deleteAnimalImage = async (id: string) => {
