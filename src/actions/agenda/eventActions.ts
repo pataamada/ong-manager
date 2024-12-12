@@ -1,48 +1,44 @@
 "use server"
-
 import { z } from "zod"
 import { actionClient } from "../safe-action"
-import {
-	deleteEventService,
-	createEventService,
-	updateEventService,
-} from "@/services/event.service"
+import { createEvent, deleteEvent, findAllEvents, updateEvent } from "@/services/event.service"
 import { revalidatePath } from "next/cache"
 
-const formSchema = z.object({
+const eventSchema = z.object({
 	id: z.string(),
 	title: z.string(),
 	date: z.string(),
-	description: z.string().optional(),
-	image: z.any().optional(),
+	description: z.string(),
+	images: z.instanceof(Array<File>),
+	updatedBy: z.string(),
 })
 
-const createFormSchema = formSchema.omit({ id: true })
-const deleteFormSchema = formSchema.omit({
-	title: true,
-	date: true,
-	description: true,
-	image: true,
+const createSchema = eventSchema.omit({ id: true })
+
+const idSchema = z.object({
+	id: z.string(),
 })
 
-export const createEvent = actionClient
-	.schema(createFormSchema)
-	.action(async ({ parsedInput: { title, date, description, image } }) => {
-		const data = { title, date, description, image }
-		await createEventService(data)
+export const createEventAction = actionClient
+	.schema(createSchema)
+	.action(async ({ parsedInput }) => {
+		await createEvent(parsedInput)
 		revalidatePath("/schedules")
 	})
 
-export const updateEvent = actionClient
-	.schema(formSchema)
-	.action(async ({ parsedInput: { id, title, date, description, image } }) => {
-		const data = { title, date, description, image }
-		await updateEventService(id, data)
+export const findAllEventsAction = actionClient.action(async () => {
+	return await findAllEvents()
+})
+
+export const updateEventAction = actionClient
+	.schema(eventSchema)
+	.action(async ({ parsedInput }) => {
+		await updateEvent(parsedInput)
 	})
 
-export const deleteEvent = actionClient
-	.schema(deleteFormSchema)
+export const deleteEventAction = actionClient
+	.schema(idSchema)
 	.action(async ({ parsedInput: { id } }) => {
-		await deleteEventService(id)
+		await deleteEvent(id)
 		revalidatePath("/schedules")
 	})
