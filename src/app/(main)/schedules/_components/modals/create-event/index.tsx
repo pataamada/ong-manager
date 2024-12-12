@@ -12,7 +12,6 @@ import { createEventModal } from "../../store"
 
 export function CreateEventModal() {
 	const [open, setOpen] = useAtom(createEventModal)
-	console.log('renderizou create event')
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogContent>

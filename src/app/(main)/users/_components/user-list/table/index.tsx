@@ -100,7 +100,6 @@ export function UserTable({
 			</div>
 
 			<ListFilters columnFilters={columnFilters} onRemoveFilter={onRemoveFilter} />
-
 			<When
 				condition={!loading}
 				fallback={

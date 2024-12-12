@@ -22,6 +22,7 @@ import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "nextjs-toploader/app"
 import { UserRoles } from "@/models/user.model"
 import { PasswordInput } from "@/components/custom-ui/password-input"
+import { useSearchParams } from "next/navigation"
 
 // zod schema validation
 const formLoginSchema = z.object({
@@ -32,6 +33,7 @@ const formLoginSchema = z.object({
 
 export default function FormLogin() {
 	const router = useRouter()
+	const params = useSearchParams()
 	const form = useForm<z.infer<typeof formLoginSchema>>({
 		resolver: zodResolver(formLoginSchema),
 		defaultValues: {
@@ -57,14 +59,19 @@ export default function FormLogin() {
 			description: "Acompanhe/gerencia a ong",
 			variant: "default",
 		})
+		const urlToRedirect = params.get("from")
+		if (urlToRedirect) {
+			router.replace(urlToRedirect)
+			return
+		}
 		router.replace(result?.data?.role === UserRoles.Admin ? "/dashboard" : "animals")
 	}
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="gap-6 w-full flex flex-col md:max-w-[400px] my-auto mx-auto">
 				<div className="flex flex-col items-center gap-2 mx-auto">
-					<h2 className="text-center">Entre em sua conta</h2>
-					<h3 className="text-center">Bem-vindo de volta</h3>
+					<h5 className="text-center text-h5">Entre em sua conta</h5>
+					<p className="text-center text-subtitle-2">Bem-vindo de volta</p>
 				</div>
 
 				<FormField

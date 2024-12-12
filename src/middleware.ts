@@ -8,19 +8,32 @@ export async function middleware(request: NextRequest) {
 	const isPublicRoute = publicPageList.includes(path)
 	const response = NextResponse.next()
 	const session = cookies().get("__session")?.value
-    const isAdmRoutes = accessPageList[UserRoles.Admin].includes(path)
-	if (!session && !isPublicRoute) return redirectTo(request, "/login")
+	const isAdmRoutes = accessPageList[UserRoles.Admin].some(route => path.includes(route))
+	const paramsFromRoute = request.nextUrl.searchParams.get("from")
+	const isParamsFromRouteAdmin = accessPageList[UserRoles.Admin].some(route =>
+		paramsFromRoute?.includes(route),
+	)
+	if (!session && !isPublicRoute) return redirectTo(request, "/login", path)
 	const { user, role } = await verifySession(request, session!)
 
 	if (!user && !isPublicRoute) {
-        return redirectTo(request, `/login?from=${path}`)
-    }
-	if (user && isPublicRoute) {
-	    return redirectTo(request, role === UserRoles.Admin ? '/dashboard' : '/animals')
+		return redirectTo(request, "/login", path)
 	}
-    if (user && role === UserRoles.Authenticated && !isPublicRoute && isAdmRoutes) {
-        return redirectTo(request, "/animals")
-    }
+
+	if (user) {
+		if (paramsFromRoute && isParamsFromRouteAdmin && role === UserRoles.Admin) {
+			return redirectTo(request, paramsFromRoute)
+		}
+		if (paramsFromRoute) {
+			return redirectTo(request, paramsFromRoute)
+		}
+		if (isPublicRoute) {
+			return redirectTo(request, role === UserRoles.Admin ? "/dashboard" : "/animals")
+		}
+		if (role === UserRoles.Authenticated && isAdmRoutes) {
+			return redirectTo(request, "/animals")
+		}
+	}
 	return response
 }
 

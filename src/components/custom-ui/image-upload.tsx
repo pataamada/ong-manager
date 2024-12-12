@@ -31,8 +31,8 @@ export function ImageUpload({
 		}
 	}
 	const handleRemoveImage = (e: MouseEvent<HTMLButtonElement>) => {
-		e.stopPropagation()
 		onChange?.()
+		e.stopPropagation()
 	}
 	return (
 		<div className={cn("relative", className)}>
@@ -63,17 +63,19 @@ export function ImageUpload({
 							objectFit="contain"
 							className="rounded-lg"
 						/>
-						<Button
-							size="icon"
-							className="w-8 h-8 absolute top-2 right-2"
-							variant="destructive"
-							onClick={e => handleRemoveImage(e)}
-						>
-							<Trash size={16} />
-						</Button>
 					</div>
 				</When>
 			</Label>
+			<When condition={value?.length}>
+				<Button
+					size="icon"
+					className="w-8 h-8 absolute top-2 right-2"
+					variant="destructive"
+					onClick={e => handleRemoveImage(e)}
+				>
+					<Trash size={16} />
+				</Button>
+			</When>
 		</div>
 	)
 }

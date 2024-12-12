@@ -1,7 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server"
 
-export const redirectTo = (request: NextRequest, to: string) =>
-	NextResponse.redirect(new URL(to, request.nextUrl))
+export const redirectTo = (request: NextRequest, to: string, from: string | undefined = undefined) => {
+	const newUrl = new URL(to, request.nextUrl)
+	if (from) newUrl.searchParams.set("from", from)
+	return NextResponse.redirect(newUrl)
+}
 
 export const initialLetters = (fullname: string): string => {
 	const [firstName = " ", secondName = " "] = fullname

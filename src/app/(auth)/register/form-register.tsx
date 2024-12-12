@@ -90,8 +90,8 @@ export default function FormRegister() {
 		<FormProvider {...methods}>
 			<form onSubmit={handleSubmit(onSubmit)} className="gap-4 w-full flex flex-col md:max-w-[400px] my-auto mx-auto">
 				<div className="flex flex-col items-center gap-2">
-					<h2 className="text-center">Apadrinhe seu animal</h2>
-					<h3 className="text-center">Cadastre-se na plataforma</h3>
+					<h2 className="text-center text-h5">Apadrinhe seu animal</h2>
+					<h3 className="text-center text-subtitle-2">Cadastre-se na plataforma</h3>
 				</div>
 
 				<FormField
