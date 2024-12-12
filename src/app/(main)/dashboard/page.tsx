@@ -1,5 +1,4 @@
 import { getCurrentUser } from "@/lib/firebase/firebase-admin"
-
 import { AreaLegendChart } from "@/components/dashboard/AreaLegendChart"
 import { DonationsTable } from "@/components/dashboard/DonationsTable"
 import { DonutChart } from "@/components/dashboard/DonutChart"
@@ -27,7 +26,7 @@ export default async function Dashboard() {
 			>
 				<div className="w-full overflow-hidden relative rounded-md bg-primary">
 					<img
-						src="/dashboard/banner-dashboard.svg"	
+						src="/dashboard/banner-dashboard.svg"
 						className={"w-full object-cover min-w-[800px]"}
 						alt="banner"
 					/>
@@ -48,7 +47,10 @@ export default async function Dashboard() {
 				</Card>
 			))}
 
-			<Card title="Entrada e Saída" subtitle="Comparativo de receita" className="sm:col-span-2 lg:col-span-3 2xl:col-span-2"
+			<Card
+				title="Entrada e Saída"
+				subtitle="Comparativo de receita"
+				className="sm:col-span-2 lg:col-span-3 2xl:col-span-2"
 			>
 				<AreaLegendChart />
 			</Card>

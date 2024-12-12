@@ -1,81 +1,85 @@
-import { collection, getDocs, doc, addDoc, updateDoc, deleteDoc, getDoc } from "firebase/firestore"
-import { db, storage } from "@/lib/firebase/firebase-secret"
-import { deleteObject, getDownloadURL, ref, uploadString } from "firebase/storage"
-import type { EventFormValues } from "@/app/(main)/schedules/-components/modals/create-event/event-form-schema"
+import {
+	collection,
+	getDocs,
+	doc,
+	addDoc,
+	updateDoc,
+	deleteDoc,
+	serverTimestamp,
+} from "firebase/firestore"
+import { db } from "@/lib/firebase/firebase-secret"
+import type { CreateEvent, Event } from "@/models/event.model"
+import {
+	compareAndUploadImages,
+	deleteManyImages,
+	getImages,
+	uploadImages,
+} from "./storage/storage.service"
 
-export const createEventService = async (data: EventFormValues) => {
-	const imageUrl = data.image ? await uploadImageToStorage(data.image) : ""
-
-	const eventCollectionRef = collection(db, "eventos")
-	await addDoc(eventCollectionRef, {
-		title: data.title,
-		description: data.description,
-		image: imageUrl,
-		date: new Date(data.date).toISOString(),
+export const createEvent = async (params: CreateEvent) => {
+	const document = await addDoc(collection(db, "eventos"), {
+		title: params.title,
+		description: params.description,
+		date: new Date(params.date).toISOString(),
+		createdAt: serverTimestamp(),
+		updatedAt: serverTimestamp(),
+		updatedBy: params.updatedBy,
 	})
+	await uploadEventlImage(params.images, document.id)
+
+	return JSON.stringify(document)
 }
 
-export const updateEventService = async (eventId: string, data: EventFormValues) => {
-	const eventDocRef = doc(db, "eventos", eventId)
-	const docSnap = await getDoc(eventDocRef)
+export const updateEvent = async (params: Event) => {
+	const storageImages = await getEventImage(params.id)
+	const differentImages = compareAndUploadImages(
+		"eventos",
+		params.id,
+		params.images,
+		storageImages[1],
+	)
 
-	const eventCurrentData = docSnap.data()
-	const currentImageUrl = eventCurrentData?.image
-
-	if (currentImageUrl) {
-		const oldImageRef = ref(storage, currentImageUrl)
-		await deleteObject(oldImageRef)
+	if (differentImages) {
+		await deleteEventImage(params.id)
+		await uploadEventlImage(params.images, params.id)
 	}
 
-	const newImageUrl = data.image ? await uploadImageToStorage(data.image) : ""
-
-	const document = await updateDoc(eventDocRef, {
-		title: data.title,
-		date: data.date,
-		description: data.description,
-		image: newImageUrl,
+	const document = await updateDoc(doc(db, `eventos/${params.id}`), {
+		title: params.title,
+		date: params.date,
+		description: params.description,
 	})
 
 	return JSON.stringify(document)
 }
 
-export const deleteEventService = async (eventId: string) => {
-	const eventDocRef = doc(db, "eventos", eventId)
-	const docSnap = await getDoc(eventDocRef)
+export const deleteEvent = async (eventId: string) => {
+	const storageImages = await getEventImage(eventId)
+	if (storageImages.length > 0) await deleteEventImage(eventId)
 
-	const eventData = docSnap.data()
-	const imageUrl = eventData?.image
-
-	await deleteDoc(eventDocRef)
-
-	if (imageUrl) {
-		const imageRef = ref(storage, imageUrl)
-		await deleteObject(imageRef)
-	}
-}
-
-export const uploadImageToStorage = async (base64Image: string) => {
-	const storageRef = ref(storage, `eventImages/${Date.now()}`)
-	await uploadString(storageRef, base64Image, "data_url")
-	const downloadUrl = await getDownloadURL(storageRef)
-
-	return downloadUrl
+	await deleteDoc(doc(db, "eventos", eventId))
 }
 
 export async function fetchEvents() {
-	const eventCollectionRef = collection(db, "eventos")
-	const querySnap = await getDocs(eventCollectionRef)
+	const querySnap = await getDocs(collection(db, "eventos"))
 	const allEvents = querySnap.docs.map(doc => ({
 		id: doc.id,
 		title: doc.data().title,
 		date: doc.data().date,
 		description: doc.data().description,
-		imageUrl: doc.data().image,
 	}))
 
 	return allEvents
 }
 
-export async function fetchEventById(id: string) {}
+export const uploadEventlImage = async (image: File[], id: string) => {
+	return await uploadImages(image, `eventos/${id}`)
+}
 
-export async function fetchFilteredEvents(searchString: string) {}
+export const getEventImage = async (id: string) => {
+	return await getImages(`eventos/${id}`)
+}
+
+export const deleteEventImage = async (id: string) => {
+	return await deleteManyImages(`eventos/${id}`)
+}

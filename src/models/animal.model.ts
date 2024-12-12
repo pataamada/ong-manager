@@ -1,13 +1,27 @@
-export interface Animal {
-	animalId: string
-	name: string
-	age: number
-	type: string
-	sex: string
-	size: string
-	photos: string[]
-	observations: string
-	castration: boolean
-	vaccines: string[]
-	available: boolean
+import type { FieldValue } from "firebase/firestore"
+
+export enum AnimalType {
+	Dog = "cachorro",
+	Cat = "gato",
 }
+
+export enum Sex {
+	M = "macho",
+	F = "femea",
+}
+export interface Animal {
+	id: string
+	name: string
+	age?: number
+	type: AnimalType
+	sex: Sex
+	observations?: string
+	avaliable: boolean
+	castration: boolean
+	photos: File[]
+	createdAt: FieldValue
+	updatedAt: FieldValue
+	updatedBy: string // uuid do adm
+}
+
+export type CreateAnimal = Omit<Animal, "id">

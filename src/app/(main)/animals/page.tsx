@@ -1,6 +1,5 @@
-import AnimalsCard from "./animals-card";
-
+import AnimalsCard from "./animals-card"
 
 export default function Animals() {
-  return <AnimalsCard />
+	return <AnimalsCard />
 }
