@@ -56,6 +56,8 @@ export const updateEvent = async (params: Event) => {
 		title: params.title,
 		date: params.date,
 		description: params.description,
+		updatedAt: serverTimestamp(),
+		updatedBy: params.updatedBy,
 	})
 
 	return JSON.stringify(document)
