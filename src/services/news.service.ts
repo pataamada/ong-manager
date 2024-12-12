@@ -18,7 +18,7 @@ import {
 	getImages,
 	uploadImages,
 } from "./storage/storage.service"
-import type { CreateNews, News } from "@/models/news.model"
+import type { CreateNews, News, UpdateNews } from "@/models/news.model"
 
 export const saveNews = async (params: CreateNews) => {
 	const document = await addDoc(collection(db, "noticias"), {
@@ -36,8 +36,12 @@ export const saveNews = async (params: CreateNews) => {
 export const findNews = async () => {
 	const q = query(collection(db, "noticias"))
 	const querySnapshot = await getDocs(q)
-	const news = querySnapshot.docs.map(doc => doc.data())
-	return news as News[]
+	const news = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as News[]
+	const newsWithImages = news.map(async news => {
+		const storageImages = await getNewsImage(news.id)
+		return { ...news, photo: storageImages[0][0] }
+	})
+	return Promise.all(newsWithImages)
 }
 
 export const findRecentNews = async () => {
@@ -52,7 +56,7 @@ export const findOneNews = async (id: string) => {
 	return document.data() as News
 }
 
-export const updateNews = async (params: News) => {
+export const updateNews = async (params: UpdateNews) => {
 	const storageImages = await getNewsImage(params.id)
 	const differentImages = compareAndUploadImages(
 		"noticias",
@@ -89,6 +93,7 @@ const uploadNewsImage = async (image: File[], newsId: string) => {
 }
 
 const getNewsImage = async (id: string) => {
+	console.log("get news image")
 	return await getImages(`noticias/${id}`)
 }
 

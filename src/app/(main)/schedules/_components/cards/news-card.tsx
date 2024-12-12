@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils"
 type NewsCardProps = {
 	title: string
 	description: string
-	publishedAt: string
+	createdAt: string | number
 	image: string
 	tags?: string[]
 	className?: string
@@ -21,13 +21,14 @@ type NewsCardProps = {
 export function NewsCard({
 	description,
 	image,
-	publishedAt,
+	createdAt,
 	tags = [],
 	title,
 	className,
 	onDelete,
 	onEdit
 }: NewsCardProps) {
+	console.log(createdAt)
 	return (
 		<Card
 			className={cn(
@@ -35,10 +36,10 @@ export function NewsCard({
 				className,
 			)}
 		>
-			<CardHeader className="p-4 relative w-full">
-				<Image src={image} alt={title} className="rounded-lg w-full" objectFit="contain" />
+			<CardHeader className="p-4 relative w-full h-full">
+				<Image fill src={image} alt={title} className="rounded-lg w-full" objectFit="contain" />
 			</CardHeader>
-			<CardContent className="flex flex-col h-full p-4 gap-2">
+			<CardContent className="w-full flex flex-col h-full p-4 gap-2">
 				<div className="flex gap-2">
 					{tags.map(tag => (
 						<Badge key={tag} variant="secondary">
@@ -48,9 +49,9 @@ export function NewsCard({
 				</div>
 
 				<CardTitle className="text-xl m-0 font-bold">{title}</CardTitle>
-				<CardDescription className="line-clamp-5 mb-auto">{description}</CardDescription>
+				<CardDescription className="line-clamp-5 mb-auto min-h-[200px]">{description}</CardDescription>
 				<p className="text-sm text-gray-400">
-					{format(publishedAt, "dd 'de' MMMM 'às' HH:mm", {
+					{format(createdAt, "dd 'de' MMMM 'às' HH:mm", {
 						locale: ptBR,
 					})}
 				</p>

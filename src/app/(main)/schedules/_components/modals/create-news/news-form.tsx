@@ -13,34 +13,37 @@ import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { ImageUpload } from "@/components/custom-ui/image-upload"
 import { MultiSelect } from "@/components/custom-ui/multiple-select"
-import {  type NewsFormValues, newsSchema } from "./news-form-schema"
+import { type NewsFormValues, newsSchema } from "./news-form-schema"
+import { useCreateNews } from "../../mutations/useNews"
+import { useAuth } from "@/hooks/use-auth"
 
 export function NewsForm({ setOpen }: { setOpen: (value: boolean) => void }) {
+	const { isPending, mutateAsync } = useCreateNews()
+	const { user } = useAuth()
 	const form = useForm<NewsFormValues>({
 		resolver: zodResolver(newsSchema),
 		defaultValues: {
 			title: "",
 			description: "",
-			image: "",
-			categories: [],
+			tags: [],
 		},
 	})
 
-	const onSubmit = (data: NewsFormValues) => {
-		console.log(data)
-		setOpen(false)
+	const onSubmit = async (data: NewsFormValues) => {
+		await mutateAsync({...data, file: data.photo,updatedBy: user?.user.displayName || ""})
 	}
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 pt-4">
 				<FormField
 					control={form.control}
-					name="image"
+					name="photo"
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<ImageUpload value={field.value} onChange={field.onChange} />
+								<ImageUpload {...field} />
 							</FormControl>
+							<FormMessage />
 						</FormItem>
 					)}
 				/>
@@ -60,39 +63,15 @@ export function NewsForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 						</FormItem>
 					)}
 				/>
-				<FormField
-					control={form.control}
-					name="categories"
-					render={({ field }) => (
-						<FormItem className="flex flex-col">
-							<FormLabel className="flex gap-1">
-								<span className="text-red-500">*</span>
-								Categorias
-							</FormLabel>
-							<MultiSelect
-								options={[
-									{ value: "dog", label: "Cachorro" },
-									{ value: "cat", label: "Gato" },
-									{ value: "imediate", label: "Urgência" },
-								]}
-								placeholder="selecionar categorias"
-								variant="secondary"
-								maxCount={4}
-								onValueChange={field.onChange}
-								{...field}
-							/>
-
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
 
 				<FormField
 					control={form.control}
 					name="description"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Descrição</FormLabel>
+							<FormLabel>
+								<span className="text-red-500">*</span> Descrição
+							</FormLabel>
 							<FormControl>
 								<Textarea
 									placeholder="Descreva do que se trata a despesa.."
@@ -104,6 +83,33 @@ export function NewsForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 						</FormItem>
 					)}
 				/>
+
+				<FormField
+					control={form.control}
+					name="tags"
+					render={({ field }) => (
+						<FormItem className="flex flex-col">
+							<FormLabel className="flex gap-1">Categorias</FormLabel>
+							<FormControl>
+								<MultiSelect
+									options={[
+										{ value: "dog", label: "Cachorro" },
+										{ value: "cat", label: "Gato" },
+										{ value: "imediate", label: "Urgência" },
+									]}
+									placeholder="selecionar categorias"
+									variant="secondary"
+									maxCount={4}
+									onValueChange={field.onChange}
+									{...field}
+								/>
+							</FormControl>
+
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
 				<div className="flex justify-end gap-2">
 					<Button
 						type="button"
@@ -115,7 +121,7 @@ export function NewsForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 					>
 						Cancelar
 					</Button>
-					<Button type="submit">Criar</Button>
+					<Button type="submit">{isPending ? "Criando..." : "Criar Noticia"}</Button>
 				</div>
 			</form>
 		</Form>

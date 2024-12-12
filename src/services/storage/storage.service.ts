@@ -11,7 +11,7 @@ const uploadImage = async (image: File, path: string) => {
 }
 
 export const uploadImages = async (images: File[], path: string) => {
-	let urls: string[] = []
+	const urls: string[] = []
 	for (let i = 0; i < images.length; i++) {
 		const fileName = images[i].name.split(".")[0]
 		const url = await uploadImage(images[i], `${path}/${fileName}`)

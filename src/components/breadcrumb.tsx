@@ -29,14 +29,14 @@ export default function BreadCrumb() {
 					const isLast = index === pathSegments.length - 1
 
 					return (
-						<>
-							<BreadcrumbItem key={href}>
+						<div key={href}>
+							<BreadcrumbItem >
 								<BreadcrumbLink href={`${href}-index`}>
 									{routesAliasesList.find(route => route.href === href)?.alias}
 								</BreadcrumbLink>
 							</BreadcrumbItem>
-							{!isLast && <BreadcrumbSeparator key={`${href}-separator-index`}/>}
-						</>
+							{!isLast && <BreadcrumbSeparator />}
+						</div>
 					)
 				})}
 			</BreadcrumbList>

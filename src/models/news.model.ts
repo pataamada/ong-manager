@@ -1,14 +1,19 @@
-import type { FieldValue } from "firebase-admin/firestore"
+import type { Timestamp } from "firebase/firestore"
 
 export interface News {
 	id: string
-	photo: File
+	photo: string
 	title: string
 	tags?: string[]
 	description: string
-	createdAt: FieldValue
-	updatedAt: FieldValue
+	createdAt: Timestamp
+	updatedAt: Timestamp
 	updatedBy: string
 }
 
-export type CreateNews = Omit<News, "id">
+export type CreateNews = Omit<News, "id" | "createdAt" | "updatedAt" | "photo"> & {
+	photo: File
+}
+export type UpdateNews = News & {
+	photo: File
+}
