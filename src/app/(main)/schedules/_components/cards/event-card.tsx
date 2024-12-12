@@ -8,29 +8,25 @@ import { ptBR } from "date-fns/locale"
 import { Calendar, Pen, Trash2 } from "lucide-react"
 import { Button } from "../../../../../components/ui/button"
 
-interface ScheduleCardProps {
+interface EventCardProps {
 	title: string
 	date: Date
 	description: string
 	imageUrl: string
+	onDelete?: () => void
+	onEdit?: () => void
 }
 
-const formatEventDate = (date: Date): string => {
-	return format(date, "dd 'de' MMMM 'às' HH:mm", {
-		locale: ptBR,
-	})
-}
-
-export function ScheduleCard({ title, date, description, imageUrl }: ScheduleCardProps) {
+export function EventCard({ title, date, description, imageUrl, onDelete, onEdit }: EventCardProps) {
 	return (
-		<Card className="w-full max-w-[350px] min-w-[250px] rounded-lg">
+		<Card className="w-full max-w-[350px] min-w-[250px] rounded-lg h-fit">
 			<CardHeader className="p-0 relative">
 				<Image src={imageUrl} alt={title} className="rounded-t-lg" />
 				<div className="absolute gap-2 flex top-4 right-4">
-					<Button className="size-fit p-2" variant={"secondary"}>
+					<Button className="size-fit p-2" variant={"secondary"} onClick={onEdit}>
 						<Pen className="size-5" />
 					</Button>
-					<Button className="size-fit p-2" variant={"secondary"}>
+					<Button className="size-fit p-2" variant={"secondary"} onClick={onDelete}>
 						<Trash2 className="size-5 text-red-500" />
 					</Button>
 				</div>
@@ -38,7 +34,11 @@ export function ScheduleCard({ title, date, description, imageUrl }: ScheduleCar
 			<CardContent>
 				<div className="flex gap-2 items-center text-zinc-600">
 					<Calendar className="size-5" />
-					<p className="text-base my-4">{formatEventDate(date)}</p>
+					<p className="text-base my-4">
+						{format(date, "dd 'de' MMMM 'às' HH:mm", {
+							locale: ptBR,
+						})}
+					</p>
 				</div>
 				<CardTitle className="text-xl m-0 font-bold">{title}</CardTitle>
 				<CardDescription className="line-clamp-5 mt-2">{description}</CardDescription>

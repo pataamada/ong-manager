@@ -15,6 +15,8 @@ type NewsCardProps = {
 	image: string
 	tags?: string[]
 	className?: string
+	onDelete?: () => void
+	onEdit?: () => void
 }
 export function NewsCard({
 	description,
@@ -23,6 +25,8 @@ export function NewsCard({
 	tags = [],
 	title,
 	className,
+	onDelete,
+	onEdit
 }: NewsCardProps) {
 	return (
 		<Card
@@ -45,17 +49,17 @@ export function NewsCard({
 
 				<CardTitle className="text-xl m-0 font-bold">{title}</CardTitle>
 				<CardDescription className="line-clamp-5 mb-auto">{description}</CardDescription>
-				<p className="text-sm">
+				<p className="text-sm text-gray-400">
 					{format(publishedAt, "dd 'de' MMMM 'às' HH:mm", {
 						locale: ptBR,
 					})}
 				</p>
 
 				<div className="absolute gap-2 flex top-6 right-6 md:top-4 md:right-4">
-					<Button className="size-fit p-2" variant={"secondary"}>
+					<Button className="size-fit p-2" variant={"secondary"} onClick={onEdit}>
 						<Pen className="size-4" />
 					</Button>
-					<Button className="size-fit p-2" variant={"secondary"}>
+					<Button className="size-fit p-2" variant={"secondary"} onClick={onDelete}>
 						<Trash2 className="size-4 text-red-500" />
 					</Button>
 				</div>

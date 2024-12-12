@@ -82,7 +82,7 @@ export function UserTable({
 	}
 	const hasContent = !!table.getRowModel().rows?.length
 	return (
-		<div className="w-full flex flex-col bg-white rounded-lg p-6 gap-6 min-h-full">
+		<div className="w-full flex flex-col bg-white rounded-lg p-6 gap-6 flex-1">
 			<div className="flex items-center gap-2">
 				<Input
 					placeholder="Pesquise por nome, email..."

@@ -45,6 +45,7 @@ export const useCreateUser = (toast?: (params: Toast) => void) => {
 			}
 			return request?.data
 		},
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		onMutate: async ({ password, ...values }) => {
 			await queryClient.cancelQueries(getUsersOptions)
 			const previousUsers = queryClient.getQueryData(getUsersOptions.queryKey)

@@ -8,27 +8,25 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form"
-import {
-	type EventFormValues,
-	eventSchema,
-} from "@/app/(main)/schedules/_components/modals/create-event/event-form-schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { ImageUpload } from "@/components/custom-ui/image-upload"
-import { CustomSelect } from "@/components/custom-ui/select"
+import { MultiSelect } from "@/components/custom-ui/multiple-select"
+import {  type NewsFormValues, newsSchema } from "./news-form-schema"
 
 export function NewsForm({ setOpen }: { setOpen: (value: boolean) => void }) {
-	const form = useForm<EventFormValues>({
-		resolver: zodResolver(eventSchema),
+	const form = useForm<NewsFormValues>({
+		resolver: zodResolver(newsSchema),
 		defaultValues: {
 			title: "",
 			description: "",
 			image: "",
+			categories: [],
 		},
 	})
 
-	const onSubmit = (data: EventFormValues) => {
+	const onSubmit = (data: NewsFormValues) => {
 		console.log(data)
 		setOpen(false)
 	}
@@ -64,24 +62,26 @@ export function NewsForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 				/>
 				<FormField
 					control={form.control}
-					name="date"
+					name="categories"
 					render={({ field }) => (
 						<FormItem className="flex flex-col">
 							<FormLabel className="flex gap-1">
 								<span className="text-red-500">*</span>
 								Categorias
 							</FormLabel>
-							<CustomSelect
+							<MultiSelect
 								options={[
 									{ value: "dog", label: "Cachorro" },
 									{ value: "cat", label: "Gato" },
 									{ value: "imediate", label: "Urgência" },
 								]}
-								placeholder="Ordernar por..."
-								label="Ordernar por"
-								className="w-full"
+								placeholder="selecionar categorias"
+								variant="secondary"
+								maxCount={4}
+								onValueChange={field.onChange}
 								{...field}
 							/>
+
 							<FormMessage />
 						</FormItem>
 					)}

@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
 	const { user, role } = await verifySession(request, session!)
 
 	if (!user && !isPublicRoute) {
-        return redirectTo(request, "/login")
+        return redirectTo(request, `/login?from=${path}`)
     }
 	if (user && isPublicRoute) {
 	    return redirectTo(request, role === UserRoles.Admin ? '/dashboard' : '/animals')
