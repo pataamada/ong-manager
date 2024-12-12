@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* styles matine datatable */
+@layer mantine, mantine-datatable;
 
 @layer base {
   :root {
@@ -106,3 +108,78 @@ p {
   }
 }
 
+/* styles matine datatable */
+.mantine-datatable {
+  background-color: #FFF;
+}
+.mantine-Text-root {
+  color: var(--Gray-900, #5E6777);
+}
+.mantine-ScrollArea-viewport {
+  min-height: 450px;
+}
+.mantine-datatable-pagination{
+  padding-top: 20px !important;
+  padding-bottom: 0px !important;
+}
+.mantine-datatable-pagination .m_4081bf90.mantine-Group-root{
+  margin-right: auto;
+  @media (max-width: 767px) {
+      margin-right: 0px;
+  }
+}
+/* button pagination */
+.mantine-Pagination-control {
+  border-radius: 8px;
+  background-color: #E8EAEC;
+      color: #000;   
+  &[data-active = true] {
+      background-color: #09090B;
+      color: #fff;    
+  }
+  &[data-disabled] {
+      background-color: #C2C5CB;
+      color: black;  
+  }
+}
+/* button pagination dots */
+.mantine-Pagination-dots {
+  border-radius: 8px;
+  background: var(--General-Neutral-White, #FFF);
+  background-color: #E8EAEC;
+  color: black;  
+}
+/* button select per page */
+.mantine-focus-auto.mantine-active.m_77c9d27d.mantine-Button-root.m_87cf2631.mantine-UnstyledButton-root {
+  color: #000;
+  border-radius: 8px;
+  border: 1px solid var(--Gray-400, #C2C5CB);
+  background: var(--General-Neutral-White, #FFF);
+  .m_811560b9.mantine-Button-label {
+      margin-right: 8px;
+  }
+}
+/* dropdown select per page */
+.m_38a85659.mantine-Menu-dropdown.m_dc9b7c9f {
+  background-color: #fff;
+  border: 1px solid var(--Gray-400, #C2C5CB);
+  padding: 8px;
+  button {
+      padding: 4px
+  }
+  button[data-disabled = true] {
+      background-color: #09090B;
+      color: #fff;   
+      
+      .mantine-Text-root {
+          color: #fff;
+      }
+  }
+  button:hover {
+      background-color: #09090B;
+      
+      .mantine-Text-root {
+          color: #fff;
+      }
+  }
+}

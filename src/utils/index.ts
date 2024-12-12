@@ -1,5 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 
+export const PAGE_SIZES_TABLE = [10, 20, 30, 40, 50];
+
 export const redirectTo = (request: NextRequest, to: string) =>
 	NextResponse.redirect(new URL(to, request.nextUrl))
 
