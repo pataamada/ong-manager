@@ -8,6 +8,8 @@ import {
 	updateDoc,
 	serverTimestamp,
 	deleteDoc,
+	orderBy,
+	limit,
 } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebase-secret"
 import type { Animal, CreateAnimal } from "@/models/animal.model"
@@ -18,7 +20,7 @@ import {
 	uploadImages,
 } from "./storage/storage.service"
 
-export const saveAnimalDb = async (params: CreateAnimal) => {
+export const saveAnimal = async (params: CreateAnimal) => {
 	const document = await addDoc(collection(db, "animais"), {
 		animalId: crypto.randomUUID(),
 		name: params.name,
@@ -38,6 +40,13 @@ export const saveAnimalDb = async (params: CreateAnimal) => {
 
 export const findAnimals = async () => {
 	const q = query(collection(db, "animais"))
+	const querySnapshot = await getDocs(q)
+	const animals = querySnapshot.docs.map(doc => doc.data())
+	return animals as Animal[]
+}
+
+export const findRecentAnimals = async () => {
+	const q = query(collection(db, "animais"), orderBy("createdAt"), limit(6))
 	const querySnapshot = await getDocs(q)
 	const animals = querySnapshot.docs.map(doc => doc.data())
 	return animals as Animal[]
@@ -84,14 +93,14 @@ export const deleteAnimal = async (id: string) => {
 	return true
 }
 
-export const uploadAnimalImage = async (image: File[], animalId: string) => {
+const uploadAnimalImage = async (image: File[], animalId: string) => {
 	return await uploadImages(image, `animais/${animalId}`)
 }
 
-export const getAnimalImage = async (id: string) => {
+const getAnimalImage = async (id: string) => {
 	return await getImages(`animais/${id}`)
 }
 
-export const deleteAnimalImage = async (id: string) => {
+const deleteAnimalImage = async (id: string) => {
 	return await deleteManyImages(`animais/${id}`)
 }

@@ -5,7 +5,7 @@ export enum AnimalType {
 	Cat = "gato",
 }
 
-export enum Sex {
+export enum AnimalSex {
 	M = "macho",
 	F = "femea",
 }
@@ -14,7 +14,7 @@ export interface Animal {
 	name: string
 	age?: number
 	type: AnimalType
-	sex: Sex
+	sex: AnimalSex
 	observations?: string
 	avaliable: boolean
 	castration: boolean
