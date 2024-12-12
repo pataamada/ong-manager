@@ -6,6 +6,7 @@ import {
 	updateDoc,
 	deleteDoc,
 	serverTimestamp,
+	query,
 } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebase-secret"
 import type { CreateEvent, Event } from "@/models/event.model"
@@ -28,6 +29,13 @@ export const createEvent = async (params: CreateEvent) => {
 	await uploadEventlImage(params.images, document.id)
 
 	return JSON.stringify(document)
+}
+
+export const findAllEvents = async () => {
+	const q = query(collection(db, "eventos"))
+	const querySnapshot = await getDocs(q)
+	const events = querySnapshot.docs.map(doc => doc.data())
+	return events as Event[]
 }
 
 export const updateEvent = async (params: Event) => {

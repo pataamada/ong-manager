@@ -1,8 +1,7 @@
 "use server"
-
 import { z } from "zod"
 import { actionClient } from "../safe-action"
-import { createEvent, deleteEvent, updateEvent } from "@/services/event.service"
+import { createEvent, deleteEvent, findAllEvents, updateEvent } from "@/services/event.service"
 import { revalidatePath } from "next/cache"
 
 const eventSchema = z.object({
@@ -26,6 +25,10 @@ export const createEventAction = actionClient
 		await createEvent(parsedInput)
 		revalidatePath("/schedules")
 	})
+
+export const findAllEventsAction = actionClient.action(async () => {
+	return await findAllEvents()
+})
 
 export const updateEventAction = actionClient
 	.schema(eventSchema)
