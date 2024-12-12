@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Steps } from "../Steps";
+import { Select, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface UploadedImage {
   file: File;
@@ -234,188 +235,96 @@ export const NewRegister = ({
   if (type === 'donation' && step === 3) {
     content = (
       <>
-      <Form {...formDonationStepThree}>
-        <form
-          onSubmit={formDonationStepThree.handleSubmit(handleOnSubmitStepTwo)}
-          className="flex flex-col gap-6"
-        >
-          <div className="grid gap-2">
-            <FormField
-              control={formDonationStepThree.control}
-              name="value"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-semibold">Qual o valor da doação?</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="value"
-                      placeholder="ex: 230,00"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={formDonationStepThree.control}
-              name="cause"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-semibold">Qual a causa da doação??</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="cause"
-                      placeholder="Selecionar causa"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={formDonationStepThree.control}
-              name="animalId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-semibold">Qual animal recebeu a doação?</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="animalId"
-                      placeholder="Selecionar animal"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={formDonationStepThree.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-semibold">Descrição</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="description"
-                      placeholder="Descreva do que se trata a despesa..."
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormItem>
-                <FormLabel className="font-semibold">Comprovantes</FormLabel>
-                <FormControl>
-                  <div className="space-y-4">
-                    <div className="flex flex-wrap gap-4">
-                      <label className="cursor-pointer">
-                        <div className="w-[100px] h-[100px] flex items-center justify-center gap-1 p-3 border border-dashed border-[#A1A1AA] rounded bg-[#FAFAFA]">
-                          <div className="text-normal text-3xl text-[#71717A]">+</div>
-                          <div className="text-normal text-sm text-[#71717A]">Novo</div>
-                        </div>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          multiple
-                          className="hidden"
-                          onChange={e => handleImageUpload(e, setDonationsFiles)}
+        <Form {...formDonationStepThree}>
+          <form
+            onSubmit={formDonationStepThree.handleSubmit(handleOnSubmitStepTwo)}
+            className="flex flex-col gap-6"
+          >
+            <div className="grid gap-2">
+              <FormField
+                control={formDonationStepThree.control}
+                name="value"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">
+                      Qual o valor da doação?
+                    </FormLabel>
+                    <FormControl>
+                      <Input id="value" placeholder="ex: 230,00" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={formDonationStepThree.control}
+                name="cause"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">
+                      Qual a causa da doação??
+                    </FormLabel>
+                    <FormControl>
+                      <FormControl>
+                        <Select
+                        // onValueChange={}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Selecionar causa" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {/* <SelectItem value={}>Administrador</SelectItem> */}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={formDonationStepThree.control}
+                name="animalId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">
+                      Qual animal recebeu a doação?
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                      // onValueChange={}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Selecionar animal" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {/* <SelectItem value={}>Administrador</SelectItem> */}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={formDonationStepThree.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Descrição</FormLabel>
+                    <FormControl>
+                      <div className="flex items-center w-full rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 group container-input gap-2">
+                        <textarea
+                          id="description"
+                          placeholder="Descreva do que se trata a despesa..."
+                          className="w-full h-[100px] py-2 resize-none bg-transparent focus:outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground group-[.container-input]:focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                         />
-                      </label>
-
-                      {donationsFiles.map((image, index) => (
-                        <div key={index} className="relative w-[100px] h-[100px]">
-                          <Image
-                            src={image.preview}
-                            alt={`preview-${index}`}
-                            layout="fill"
-                            objectFit="cover"
-                            className="rounded-md"
-                          />
-                          <button
-                            onClick={() => removeImage(index, setDonationsFiles)}
-                            className="absolute top-2 right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center  hover:bg-red-600"
-                          >
-                            X
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-          </div>
-        </form>
-      </Form>
-    </>
-    )
-  }
-
-  if (type === 'expensive' && step === 2) {
-    content = (
-      <>
-      <Form {...formExpensiveStepTwo}>
-        <form
-          onSubmit={formExpensiveStepTwo.handleSubmit(handleOnSubmitStepTwo)}
-          className="flex flex-col gap-6"
-        >
-          <div className="grid gap-2">
-            <FormField
-              control={formExpensiveStepTwo.control}
-              name="value"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-semibold">Qual o valor da despesa?</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="value"
-                      placeholder="ex: 230,00"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={formExpensiveStepTwo.control}
-              name="categoryId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-semibold">Categoria</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="categoryId"
-                      placeholder="Selecionar categoria"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={formExpensiveStepTwo.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-semibold">Descrição</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="description"
-                      placeholder="Descreva do que se trata a despesa..."
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormItem>
                 <FormLabel className="font-semibold">Comprovantes</FormLabel>
                 <FormControl>
@@ -423,20 +332,29 @@ export const NewRegister = ({
                     <div className="flex flex-wrap gap-4">
                       <label className="cursor-pointer">
                         <div className="w-[100px] h-[100px] flex items-center justify-center gap-1 p-3 border border-dashed border-[#A1A1AA] rounded bg-[#FAFAFA]">
-                          <div className="text-normal text-3xl text-[#71717A]">+</div>
-                          <div className="text-normal text-sm text-[#71717A]">Novo</div>
+                          <div className="text-normal text-3xl text-[#71717A]">
+                            +
+                          </div>
+                          <div className="text-normal text-sm text-[#71717A]">
+                            Novo
+                          </div>
                         </div>
                         <input
                           type="file"
                           accept="image/*"
                           multiple
                           className="hidden"
-                          onChange={e => handleImageUpload(e, setExpensivesFiles)}
+                          onChange={(e) =>
+                            handleImageUpload(e, setDonationsFiles)
+                          }
                         />
                       </label>
 
-                      {expensivesFiles.map((image, index) => (
-                        <div key={index} className="relative w-[100px] h-[100px]">
+                      {donationsFiles.map((image, index) => (
+                        <div
+                          key={index}
+                          className="relative w-[100px] h-[100px]"
+                        >
                           <Image
                             src={image.preview}
                             alt={`preview-${index}`}
@@ -445,7 +363,9 @@ export const NewRegister = ({
                             className="rounded-md"
                           />
                           <button
-                            onClick={() => removeImage(index, setExpensivesFiles)}
+                            onClick={() =>
+                              removeImage(index, setDonationsFiles)
+                            }
                             className="absolute top-2 right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center  hover:bg-red-600"
                           >
                             X
@@ -457,11 +377,135 @@ export const NewRegister = ({
                 </FormControl>
                 <FormMessage />
               </FormItem>
-          </div>
-        </form>
-      </Form>
-    </>
-    )
+            </div>
+          </form>
+        </Form>
+      </>
+    );
+  }
+
+  if (type === 'expensive' && step === 2) {
+    content = (
+      <>
+        <Form {...formExpensiveStepTwo}>
+          <form
+            onSubmit={formExpensiveStepTwo.handleSubmit(handleOnSubmitStepTwo)}
+            className="flex flex-col gap-6"
+          >
+            <div className="grid gap-2">
+              <FormField
+                control={formExpensiveStepTwo.control}
+                name="value"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">
+                      Qual o valor da despesa?
+                    </FormLabel>
+                    <FormControl>
+                      <Input id="value" placeholder="ex: 230,00" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={formExpensiveStepTwo.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Categoria</FormLabel>
+                    <FormControl>
+                      <Select
+                      // onValueChange={}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Selecionar categoria" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {/* <SelectItem value={}>Administrador</SelectItem> */}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={formExpensiveStepTwo.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Descrição</FormLabel>
+                    <FormControl>
+                      <div className="flex items-center w-full rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 group container-input gap-2">
+                        <textarea
+                          id="description"
+                          placeholder="Descreva do que se trata a despesa..."
+                          className="w-full h-[100px] py-2 resize-none bg-transparent focus:outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground group-[.container-input]:focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormItem>
+                <FormLabel className="font-semibold">Comprovantes</FormLabel>
+                <FormControl>
+                  <div className="space-y-4">
+                    <div className="flex flex-wrap gap-4">
+                      <label className="cursor-pointer">
+                        <div className="w-[100px] h-[100px] flex items-center justify-center gap-1 p-3 border border-dashed border-[#A1A1AA] rounded bg-[#FAFAFA]">
+                          <div className="text-normal text-3xl text-[#71717A]">
+                            +
+                          </div>
+                          <div className="text-normal text-sm text-[#71717A]">
+                            Novo
+                          </div>
+                        </div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          className="hidden"
+                          onChange={(e) =>
+                            handleImageUpload(e, setExpensivesFiles)
+                          }
+                        />
+                      </label>
+
+                      {expensivesFiles.map((image, index) => (
+                        <div
+                          key={index}
+                          className="relative w-[100px] h-[100px]"
+                        >
+                          <Image
+                            src={image.preview}
+                            alt={`preview-${index}`}
+                            layout="fill"
+                            objectFit="cover"
+                            className="rounded-md"
+                          />
+                          <button
+                            onClick={() =>
+                              removeImage(index, setExpensivesFiles)
+                            }
+                            className="absolute top-2 right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center  hover:bg-red-600"
+                          >
+                            X
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </div>
+          </form>
+        </Form>
+      </>
+    );
   }
 
   return (
