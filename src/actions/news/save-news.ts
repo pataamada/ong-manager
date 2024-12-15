@@ -19,5 +19,5 @@ export const saveNewsAction = actionClient
 	.bindArgsSchemas([schema])
 	.action(async ({ parsedInput: { photo }, bindArgsParsedInputs: [rest] }) => {
 		const createdNews = await saveNews({ photo, ...rest })
-		return JSON.stringify(createdNews)
+		return createdNews
 	})

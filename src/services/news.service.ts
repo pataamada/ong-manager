@@ -10,6 +10,7 @@ import {
 	deleteDoc,
 	orderBy,
 	limit,
+	Timestamp,
 } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebase-secret"
 import {
@@ -21,16 +22,27 @@ import {
 import type { CreateNews, News, UpdateNews } from "@/models/news.model"
 
 export const saveNews = async (params: CreateNews) => {
+	const createdAt = serverTimestamp()
 	const document = await addDoc(collection(db, "noticias"), {
 		title: params.title,
 		tags: params.tags,
 		description: params.description,
-		createdAt: serverTimestamp(),
-		updatedAt: serverTimestamp(),
+		createdAt: createdAt,
+		updatedAt: createdAt,
 		updatedBy: params.updatedBy,
 	})
-	await uploadNewsImage([params.photo], document.id)
-	return JSON.stringify(document)
+	try {
+		await uploadNewsImage([params.photo], document.id)
+	} catch (error) {
+		console.log(error)
+	}
+	return {
+		path: document.path,
+		id: document.id,
+		createdAt: Timestamp.now().toJSON(),
+		updatedAt: Timestamp.now().toJSON(),
+		updatedBy: params.updatedBy,
+	}
 }
 
 export const findNews = async () => {
@@ -38,7 +50,7 @@ export const findNews = async () => {
 	const querySnapshot = await getDocs(q)
 	const news = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as News[]
 	const newsWithImages = await getNewsImages(news)
-	return newsWithImages
+	return newsWithImages.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
 }
 
 export const findRecentNews = async () => {
@@ -90,7 +102,7 @@ const uploadNewsImage = async (image: File[], newsId: string) => {
 	return await uploadImages(image, `noticias/${newsId}`)
 }
 
-const getNewsImage = async (id: string) => {
+export const getNewsImage = async (id: string) => {
 	return await getImages(`noticias/${id}`)
 }
 
@@ -99,7 +111,7 @@ const getNewsImages = (news: News[]) => {
 		const storageImages = await getNewsImage(news.id)
 		return { ...news, photo: storageImages[0][0] }
 	})
-	return newsWithImages
+	return Promise.all(newsWithImages)
 }
 
 const deleteNewsImage = async (id: string) => {

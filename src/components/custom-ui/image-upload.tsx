@@ -53,9 +53,8 @@ const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(
 							<Image
 								src={value instanceof File ? URL.createObjectURL(value) : value as string}
 								alt="Preview"
-								layout="fill"
-								objectFit="contain"
-								className="rounded-lg"
+								fill
+								className="rounded-lg object-contain"
 							/>
 						</div>
 					</When>

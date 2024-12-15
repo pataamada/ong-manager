@@ -5,6 +5,7 @@ import { useGetNews } from "./mutations/useNews"
 import { PawLoader } from "@/components/paw-loader"
 import { When } from "@/components/when"
 import Image from "next/image"
+import { Timestamp } from "firebase/firestore"
 
 export function News() {
 	const { data, isLoading } = useGetNews()
@@ -18,7 +19,6 @@ export function News() {
 		})
 		setDeleteModal(true)
 	}
-	console.log(data)
 	return (
 		<div className="flex flex-1 flex-col gap-6">
 			<When
@@ -45,7 +45,10 @@ export function News() {
 							description={news.description}
 							title={news.title}
 							tags={news.tags}
-							createdAt={news.createdAt.seconds}
+							createdAt={new Timestamp(
+								news.updatedAt.seconds,
+								news.updatedAt.nanoseconds,
+							).toMillis()}
 							className="w-full"
 							onDelete={() => handleDelete(news.id, news.title)}
 						/>

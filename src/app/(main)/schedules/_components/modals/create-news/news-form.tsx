@@ -30,7 +30,9 @@ export function NewsForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 	})
 
 	const onSubmit = async (data: NewsFormValues) => {
-		await mutateAsync({...data, file: data.photo,updatedBy: user?.user.displayName || ""})
+		await mutateAsync({ ...data, updatedBy: user?.user.displayName || "" })
+		form.reset()
+		setOpen(false)
 	}
 	return (
 		<Form {...form}>
@@ -121,7 +123,9 @@ export function NewsForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 					>
 						Cancelar
 					</Button>
-					<Button type="submit">{isPending ? "Criando..." : "Criar Noticia"}</Button>
+					<Button type="submit" disabled={isPending}>
+						{isPending ? "Criando..." : "Criar Noticia"}
+					</Button>
 				</div>
 			</form>
 		</Form>

@@ -28,7 +28,6 @@ export function NewsCard({
 	onDelete,
 	onEdit
 }: NewsCardProps) {
-	console.log(createdAt)
 	return (
 		<Card
 			className={cn(
@@ -36,8 +35,8 @@ export function NewsCard({
 				className,
 			)}
 		>
-			<CardHeader className="p-4 relative w-full h-full">
-				<Image fill src={image} alt={title} className="rounded-lg w-full" objectFit="contain" />
+			<CardHeader className="p-4 bg-zinc-100 relative w-full h-full min-h-[200px] md:min-h-0">
+				<Image priority fill src={image} alt={title} className="rounded-lg w-full object-contain"  sizes="350px" />
 			</CardHeader>
 			<CardContent className="w-full flex flex-col h-full p-4 gap-2">
 				<div className="flex gap-2">
