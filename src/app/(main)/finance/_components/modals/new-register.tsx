@@ -13,7 +13,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Steps } from "../Steps";
-import { Select, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { saveDonationAction } from "@/actions/transaction/saveDonation";
+import { formatDateToISO } from "@/utils/formatData";
 
 interface UploadedImage {
   file: File;
@@ -24,6 +26,9 @@ interface INewRegisterModal extends DialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void
 }
+
+const mockedCauses = ['Água', 'Cirurgia', 'Limpeza', 'Energia', 'Ração', 'Aluguel']
+const mockedAnimal = ['Nina', 'Cabeça de Pastel', 'Caramelo Amarelo', 'Pretinho', 'Lua', 'Batata quente']
 
 const mockedSteps = {
     donation: [
@@ -40,10 +45,7 @@ const mockedSteps = {
 const DonationStepTwoSchema = z
 .object({
   name: z
-    .string()
-    .min(4, "Nome deve ter no mínimo 4 carateres")
-    .trim()
-    .max(256, "Máximo de 256 caracteres").optional(),
+    .string().optional(),
   cpf: z
     .string()
     .min(11, "O CPF deve ter pelo menos 11 caracteres")
@@ -62,7 +64,7 @@ const DonationStepThreeSchema = z.object({
   cause: z.string(),
   animalId: z.string(),
   description: z.string().trim(),
-  proof: z.instanceof(File),
+  proof: z.array(z.instanceof(File)), 
 });
 
 const ExpensiveStepTwoSchema = z
@@ -70,7 +72,7 @@ const ExpensiveStepTwoSchema = z
   value: z.string(),
   categoryId: z.string(),
   description: z.string().trim(),
-  proof: z.instanceof(File),
+  proof: z.array(z.instanceof(File)),
 })
 
 export const NewRegister = ({
@@ -80,7 +82,7 @@ export const NewRegister = ({
 }: INewRegisterModal) => {
   const [type, setType] = useState<'donation' | 'expensive'>('donation')
   const [step, setStep] = useState(1)
-  const [donationsFiles, setDonationsFiles] = useState<UploadedImage[] | []>([]);
+  const [donationsFiles, setDonationsFiles] = useState<{ file: File; preview: string }[]>([]);
   const [expensivesFiles, setExpensivesFiles] = useState<UploadedImage[] | []>([]);
 
   const handleImageUpload = (event: any, setValue: any) => {
@@ -112,13 +114,52 @@ export const NewRegister = ({
     resolver: zodResolver(ExpensiveStepTwoSchema),
   })
   
-  const handleOnSubmitStepTwo = () => {
+  const handleOnSubmitStepTwo = (data) => {
+    console.log(data, 'data StepTwo')
 
+    setStep(step + 1)
   }  
+
+  const handleOnSubmitStepThree = (e) => {
+    e.preventDefault();
+    console.log({...formDonationStepThree.control._formValues}, 'data')
+    const formData = {
+      ...formDonationStepThree.control._formValues,
+      proof: donationsFiles.map((item) => item.file),
+    };
+  
+    try {
+      const validatedData = DonationStepThreeSchema.parse(formData);
+      const allData = {
+        userName: 'Anya Forger',
+        userCpf: '81552346064',
+        animalId: validatedData.animalId,
+        category: validatedData.cause,
+        value: Number(500),
+        description: validatedData.description,
+        proof: ['validatedData.proof'],
+        date: formatDateToISO(new Date())
+      }
+      const response = saveDonationAction(allData)
+      console.log(response, 'reponse')
+    } catch (error) {
+      console.error("Erro de validação:", error.errors);
+    }
+  };
+
+  const handleOnSubmitStepTwoExpensive = (data) => {
+    console.log(data, 'data StepTwoExpensive')
+  }  
+
   const handleCancel = () => {
     setStep(step === 1 ? 1 : step -1)
   }  
+
   const handleNext = () => {
+
+    if (type === 'donation' && step === 2) {
+      formDonationStepTwo.handleSubmit(handleOnSubmitStepTwo)
+    }
     setStep(step + 1)
   }  
 
@@ -226,6 +267,14 @@ export const NewRegister = ({
               )}
             />
           </div>
+          <div className="flex justify-end gap-2 mt-6">
+              <Button variant='outline' className="flex items-center gap-2" onClick={handleCancel}>
+                Cancelar
+              </Button>
+              <Button type="submit" variant='default' className="flex items-center gap-2 bg-[#09090B] hover:bg-[#3A3A3B]">
+                {step === steps.length ? 'Criar' : 'Avançar'}
+              </Button>
+            </div>
         </form>
       </Form>
     </>
@@ -237,7 +286,7 @@ export const NewRegister = ({
       <>
         <Form {...formDonationStepThree}>
           <form
-            onSubmit={formDonationStepThree.handleSubmit(handleOnSubmitStepTwo)}
+            onSubmit={handleOnSubmitStepThree}
             className="flex flex-col gap-6"
           >
             <div className="grid gap-2">
@@ -265,18 +314,19 @@ export const NewRegister = ({
                       Qual a causa da doação??
                     </FormLabel>
                     <FormControl>
-                      <FormControl>
-                        <Select
-                        // onValueChange={}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Selecionar causa" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {/* <SelectItem value={}>Administrador</SelectItem> */}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
+                      <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Selecionar causa" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {mockedCauses.map(i => (
+                            <SelectItem key={i} value={i}>{i}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -292,13 +342,16 @@ export const NewRegister = ({
                     </FormLabel>
                     <FormControl>
                       <Select
-                      // onValueChange={}
+                      onValueChange={field.onChange}
+                      value={field.value}
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Selecionar animal" />
                         </SelectTrigger>
                         <SelectContent>
-                          {/* <SelectItem value={}>Administrador</SelectItem> */}
+                          {mockedAnimal.map(i => (
+                            <SelectItem key={i} value={i}>{i}</SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -318,6 +371,8 @@ export const NewRegister = ({
                           id="description"
                           placeholder="Descreva do que se trata a despesa..."
                           className="w-full h-[100px] py-2 resize-none bg-transparent focus:outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground group-[.container-input]:focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                          onChange={field.onChange}
+                          value={field.value}
                         />
                       </div>
                     </FormControl>
@@ -378,6 +433,14 @@ export const NewRegister = ({
                 <FormMessage />
               </FormItem>
             </div>
+            <div className="flex justify-end gap-2 mt-6">
+              <Button variant='outline' className="flex items-center gap-2" onClick={handleCancel}>
+                Cancelar
+              </Button>
+              <Button type="submit" variant='default' className="flex items-center gap-2 bg-[#09090B] hover:bg-[#3A3A3B]">
+                {step === steps.length ? 'Criar' : 'Avançar'}
+              </Button>
+            </div>
           </form>
         </Form>
       </>
@@ -389,7 +452,7 @@ export const NewRegister = ({
       <>
         <Form {...formExpensiveStepTwo}>
           <form
-            onSubmit={formExpensiveStepTwo.handleSubmit(handleOnSubmitStepTwo)}
+            onSubmit={formExpensiveStepTwo.handleSubmit(handleOnSubmitStepTwoExpensive)}
             className="flex flex-col gap-6"
           >
             <div className="grid gap-2">
@@ -524,14 +587,16 @@ export const NewRegister = ({
 
             {content}
 
-            <div className="flex justify-end gap-2 mt-6">
-              <Button variant='outline' className="flex items-center gap-2" onClick={handleCancel}>
-                Cancelar
-              </Button>
-              <Button variant='default' className="flex items-center gap-2 bg-[#09090B] hover:bg-[#3A3A3B]" onClick={handleNext}>
-                {step === steps.length ? 'Criar' : 'Avançar'}
-              </Button>
-            </div>
+            {step === 1 && (
+              <div className="flex justify-end gap-2 mt-6">
+                <Button variant='outline' className="flex items-center gap-2" onClick={handleCancel}>
+                  Cancelar
+                </Button>
+                <Button variant='default' className="flex items-center gap-2 bg-[#09090B] hover:bg-[#3A3A3B]" onClick={handleNext}>
+                  {step === steps.length ? 'Criar' : 'Avançar'}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </DialogContent>

@@ -10,7 +10,7 @@ const schema = z.object({
 	category: z.string(),
 	value: z.number(),
 	description: z.string(),
-  proof: z.array(z.string()),
+  proof: z.array(z.string()), 
 	date: z.string(),
 })
 

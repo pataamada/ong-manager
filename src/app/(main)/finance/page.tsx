@@ -6,10 +6,11 @@ import { Plus } from "lucide-react";
 import Image from "next/image";
 import { IPropsTotalizer, Totalizer } from "./_components/Totalizer";
 import { NewRegister } from "./_components/modals/new-register";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TableAll } from "./_components/tables/TableAll";
 import { TableExpense } from "./_components/tables/TableExpense";
 import { TableDonation } from "./_components/tables/TableDonation";
+import { findDonationsAction } from "@/actions/transaction/findFinance";
 
 const mockedTotalizers: IPropsTotalizer[] = [
   {
@@ -46,7 +47,7 @@ const mockedFinance = {
   expense: [
     {type: 'expense', cause: 'Ração', date: '2020-05-06 11:24:08', value: 'R$230,00'},
     {type: 'expense', cause: 'Limpeza', date: '2020-05-06 11:24:08', value: 'R$230,00'},
-    {type: 'expense', cause: 'água', date: '2020-05-06 11:24:08', value: 'R$230,00'},
+    {type: 'expense', cause: 'Água', date: '2020-05-06 11:24:08', value: 'R$230,00'},
   ]
 }
 
@@ -56,6 +57,19 @@ export default function Finance() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalData, setTotalData] = useState(mockedFinance.all.length);
+
+  const getAllDonations = async () => {
+    try {
+      const response = findDonationsAction()
+      console.log(response, 'reponse')
+    } catch (error) {
+      console.log(error, 'error')
+    }
+  }
+
+  useEffect(() => {
+    getAllDonations()
+  }, [])
 
   return (
     <div>
