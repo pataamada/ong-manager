@@ -21,7 +21,7 @@ export interface Animal {
 	castration: boolean
 	createdAt: Timestamp
 	updatedAt: Timestamp
-	updatedBy: string // uuid do adm
+	updatedBy: string
 }
 
 export type CreateAnimal = Omit<Animal, "id" | "createdAt" | "updatedAt">
