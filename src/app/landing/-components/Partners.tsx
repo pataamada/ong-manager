@@ -114,7 +114,7 @@ export function Partners() {
 				>
 					<CarouselContent>
 						{partners.map(partner => (
-							<CarouselItem key={partner.id} className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4 mx-auto">
+							<CarouselItem key={partner.id} className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4 mx-auto bg-white">
 								<div className="border border-zinc-300 rounded-lg p-4 flex flex-col items-center h-[380px]">
 									<Image
 										src={partner.image}

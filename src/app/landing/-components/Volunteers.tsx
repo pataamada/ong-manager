@@ -18,7 +18,7 @@ export function Volunteers() {
             <p className="mb-11 text-subtitle text-center text-gray-500">Conheça quem nos ajuda pessoalmente</p>
             <div className="flex gap-12 mx-auto items-center justify-center flex-wrap">
                 {volunteers.map((volunteer, index) => (
-                    <div key={`${volunteer.name}-${index}`} className="flex flex-col items-center w-[290px] border border-zinc-300 rounded-lg h-[370px] py-6 px-8">
+                    <div key={`${volunteer.name}-${index}`} className="flex flex-col items-center w-[290px] border border-zinc-300 rounded-lg h-[370px] py-6 px-8 bg-white">
                         <Image
                             src={volunteer.image}
                             alt={volunteer.name}
