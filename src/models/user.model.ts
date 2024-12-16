@@ -10,12 +10,12 @@ export interface User {
 	password: string
 	uid: string
 	photo?: string
-	phone?: string | null // todo: adicionar
+	phone: string | null // todo: adicionar
 }
 
 export type UserWTempUid = User & { tempUid?: string | null }
 export type UserWOutPassword = Omit<UserWTempUid, "password">
-export type CreateUserPayload = Pick<User, "cpf">
+export type CreateUserPayload = Partial<User>
 export const accessPageList: Record<UserRoles, string[]> = {
 	ADMIN: ["/dashboard", "/users", "/finance"],
 	AUTHENTICATED: ["/animals", "/schedules"],

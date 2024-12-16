@@ -17,6 +17,7 @@ import {
 export const createUser = async (userId: string, params: CreateUserPayload) => {
 	const document = await setDoc(doc(db, "users", userId), {
 		cpf: params.cpf,
+		phone: params.phone,
 	})
 	return document
 }
