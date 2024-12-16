@@ -10,6 +10,7 @@ export const envSchema = z.object({
     firebaseAdminClientEmail: z.string(),
     firebaseAdminProjectId: z.string(),
     firebaseAdminPrivateKey: z.string(),
+    asaasKey: z.string(),
 });
 
 export const envServer = envSchema.safeParse({
@@ -22,6 +23,7 @@ export const envServer = envSchema.safeParse({
     firebaseAdminClientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
     firebaseAdminProjectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
     firebaseAdminPrivateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY,
+    asaasKey: process.env.ASAAS_KEY
 });
 
 if (!envServer.success) {

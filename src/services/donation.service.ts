@@ -15,14 +15,13 @@ export const handleDonationCreation = async (
 	date: string,
 ) => {
 	const customer = await checkIfCustomerExists(userCpfCnpj)
-
+	let customerId = ''
+	
 	if (customer instanceof Error) {
-		alert("Erro ao buscar cliente")
-		console.log(customer)
-		return
+		customerId = ''
+	} else {
+		customerId = customer.data[0].id
 	}
-
-	const customerId = customer.data[0].id
 
 	return await saveDonationDb(
 		userName,
@@ -56,8 +55,7 @@ const saveDonationDb = async (
 	}
 	const createdDonation = await PaymentService.createPayment(donationData)
 	if (createdDonation instanceof Error) {
-		alert("Erro ao criar doação")
-		console.log(createdDonation)
+		console.log(createdDonation, 'PaymentService.createPayment')
 		return
 	}
 

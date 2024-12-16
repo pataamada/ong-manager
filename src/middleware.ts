@@ -8,18 +8,19 @@ export async function middleware(request: NextRequest) {
 	const isPublicRoute = publicPageList.includes(path)
 	const response = NextResponse.next()
 	const session = cookies().get("__session")?.value
-	const isAdmRoutes = accessPageList[UserRoles.Admin].includes(path)
+    const isAdmRoutes = accessPageList[UserRoles.Admin].includes(path)
 	if (!session && !isPublicRoute) return redirectTo(request, "/login")
 	const { user, role } = await verifySession(request, session!)
+
 	if (!user && !isPublicRoute) {
-		return redirectTo(request, "/login")
-	}
+        return redirectTo(request, "/login")
+    }
 	if (user && isPublicRoute) {
-		return redirectTo(request, role === UserRoles.Admin ? "/dashboard" : "/animals")
+	    return redirectTo(request, role === UserRoles.Admin ? '/dashboard' : '/animals')
 	}
-	if (user && role === UserRoles.Authenticated && isAdmRoutes) {
-		return redirectTo(request, "/animals")
-	}
+    if (user && role === UserRoles.Authenticated && !isPublicRoute && isAdmRoutes) {
+        return redirectTo(request, "/animals")
+    }
 	return response
 }
 

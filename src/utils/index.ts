@@ -1,7 +1,15 @@
-import { type NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server"
+
+export const PAGE_SIZES_TABLE = [10, 20, 30, 40, 50];
 
 export const redirectTo = (request: NextRequest, to: string) =>
-    NextResponse.redirect(new URL(to, request.nextUrl));
+	NextResponse.redirect(new URL(to, request.nextUrl))
+
+export const initialLetters = (fullname: string): string => {
+	const [firstName = " ", secondName = " "] = fullname
+		.split(/\s+/)
+	return `${firstName[0]}${secondName[0]}`
+}
 
 export function validateCpf(cpf: string) {
 	let sum = 0

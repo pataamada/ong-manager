@@ -30,7 +30,7 @@ const getCustomerByCpfCnpj = async (
   cpfCnpj: string
 ): Promise<IPagination<IClient> | Error> => {
   try {
-    const urlRelative = `/customers?cpfCnpj=${cpfCnpj}`;
+    const urlRelative = `/customers?cpf=${cpfCnpj}`;
     const { data } = await Api.get<IPaginationAsaas<IClient>>(urlRelative);
     if (data)
     return {

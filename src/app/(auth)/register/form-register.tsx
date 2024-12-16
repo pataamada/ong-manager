@@ -88,7 +88,7 @@ export default function FormRegister() {
 
 	return (
 		<FormProvider {...methods}>
-			<form onSubmit={handleSubmit(onSubmit)} className="gap-6 max-w-[90%] md:max-w-[400px] w-full flex flex-col mt-8 mx-auto">
+			<form onSubmit={handleSubmit(onSubmit)} className="gap-4 w-full flex flex-col md:max-w-[400px] my-auto mx-auto">
 				<div className="flex flex-col items-center gap-2">
 					<h2 className="text-center">Apadrinhe seu animal</h2>
 					<h3 className="text-center">Cadastre-se na plataforma</h3>
@@ -171,13 +171,13 @@ export default function FormRegister() {
 					)}
 				/>
 
-				<Button className="w-full" type="submit" disabled={isPending}>
+				<Button className="w-full" variant="success" type="submit" disabled={isPending}>
 					Cadastrar
 				</Button>
 
 				<div className="text-center mt-4">
 					<span className="text-sm font-normal">Já tem uma conta? </span>
-					<Link href="/login" className="text-sm font-semibold text-emerald-600 hover:text-emerald-500">
+					<Link href="/login" className="text-sm font-semibold text-primary hover:text-primary/80">
 						Entrar
 					</Link>
 				</div>

@@ -26,7 +26,7 @@ import { PasswordInput } from "@/components/custom-ui/password-input"
 // zod schema validation
 const formLoginSchema = z.object({
 	email: z.string().email("Digite um email válido"),
-	password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
+	password: z.string().min(8, "A senha deve ter pelo menos 8 caracteres"),
 	rememberMe: z.boolean().optional(),
 })
 
@@ -53,7 +53,7 @@ export default function FormLogin() {
 			return
 		}
 		toast({
-			title: "Bem vindo ao Cão domínio",
+			title: "Bem vindo ao Cãodomínio",
 			description: "Acompanhe/gerencia a ong",
 			variant: "default",
 		})
@@ -61,7 +61,7 @@ export default function FormLogin() {
 	}
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-[340px] w-full">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="gap-6 w-full flex flex-col md:max-w-[400px] my-auto mx-auto">
 				<div className="flex flex-col items-center gap-2 mx-auto">
 					<h2 className="text-center">Entre em sua conta</h2>
 					<h3 className="text-center">Bem-vindo de volta</h3>
@@ -118,8 +118,8 @@ export default function FormLogin() {
 						</Link>
 					</div>
 				</div>
-				<Button className="w-full" type="submit" disabled={isPending}>
-					Entrar
+				<Button variant="success" className="w-full" type="submit" disabled={isPending}>
+					{isPending ? "Entrando..." : "Entrar"}
 				</Button>
 
 				<div className="text-center">
