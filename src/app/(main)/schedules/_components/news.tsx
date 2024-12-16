@@ -29,7 +29,7 @@ export function News() {
 			setDeleteInfo({
 				id,
 				description: "Certeza que deseja excluir essa Notícia?",
-				title: `Excluir Notícia:  ${title}`,
+				title: `Excluir Notícia: ${title}`,
 			})
 			setDeleteModal(true)
 		},
