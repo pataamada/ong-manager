@@ -1,21 +1,55 @@
 "use server"
 import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
-import { handleExpenseCreation } from "@/services/expense.service"
+import { handleSaveTransaction } from "@/services/transaction.service"
+import type { IExpense } from "@/models/transaction.model"
 
 const schema = z.object({
+  transactionType: z.literal("expense"),
 	userId: z.string(),
-  userCpfCnpj: z.string(),
-	category: z.string(),
+	category: z.enum([
+		"Aluguel",
+		"Energia Elétrica",
+		"Água",
+		"Produtos de Limpeza",
+		"Ração/Suplementos",
+		"Brinquedos",
+		"Vacinas/Vermífugos",
+		"Castração",
+		"Exames/Tratamento Medico",
+		"Remédios",
+		"Salario",
+		"Gás",
+		"Internet",
+		"Manutenção do espaço",
+	]),
 	value: z.number(),
 	description: z.string(),
 	proof: z.array(z.string()),
-	date: z.string(),
 })
 
 export const saveExpenseAction = actionClient
 	.schema(schema)
-	.action(async ({ parsedInput: { userId, userCpfCnpj, category, value, description, proof, date } }) => {
-		const createdExpense = await handleExpenseCreation(userId, userCpfCnpj, category, value, proof, description, date)
-		return JSON.stringify(createdExpense)
+	.action(
+    async ({ 
+      parsedInput: {
+        transactionType,
+        userId,
+        category, 
+        value, 
+        description, 
+        proof,
+      } 
+    }) => {
+      const expenseObject: IExpense = {
+        transactionType,
+        userId,
+        category,
+        value,
+        description,
+        proof,
+        date: new Date().toISOString(),
+      }
+      const savedExpense = await handleSaveTransaction(expenseObject)
+		return JSON.stringify(savedExpense)
 	})

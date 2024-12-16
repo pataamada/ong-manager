@@ -1,31 +1,62 @@
 "use server"
 import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
-import { handleDonationCreation } from "@/services/donation.service"
+import type { IDonation } from "@/models/transaction.model"
+import { handleSaveTransaction } from "@/services/transaction.service"
 
 const schema = z.object({
-  userName: z.string().optional(),
-  userCpf: z.string(),
+	transactionType: z.literal("donation"),
+	userName: z.string().optional(),
+	userCpfCnpj: z.string().optional(),
 	animalId: z.string().optional(),
-	category: z.string(),
+	category: z.enum([
+		"Aluguel",
+		"Energia Elétrica",
+		"Água",
+		"Produtos de Limpeza",
+		"Ração/Suplementos",
+		"Brinquedos",
+		"Vacinas/Vermífugos",
+		"Castração",
+		"Exames/Tratamento Medico",
+		"Remédios",
+		"Salario",
+		"Gás",
+		"Internet",
+		"Manutenção do espaço",
+	]),
 	value: z.number(),
 	description: z.string(),
-  proof: z.array(z.string()), 
-	date: z.string(),
+	proof: z.array(z.string()),
 })
 
 export const saveDonationAction = actionClient
 	.schema(schema)
-	.action(async ({ parsedInput: { userName, userCpf, animalId, category, value, description, proof, date } }) => {
-		const createdDonation = await handleDonationCreation(
-      animalId,
-      userName,
-      userCpf,
-      category,
-      value,
-      description,
-      proof,
-      date,
-		)
-		return JSON.stringify(createdDonation)
-	})
+	.action(
+		async ({
+			parsedInput: {
+				transactionType,
+				userName,
+				userCpfCnpj,
+				animalId,
+				category,
+				value,
+				description,
+				proof,
+			},
+		}) => {
+			const donationObject: IDonation = {
+				transactionType,
+				animalId,
+				userName,
+				userCpfCnpj,
+				category,
+				value,
+				description,
+				proof,
+				date: new Date().toISOString(),
+			}
+			const savedDonation = await handleSaveTransaction(donationObject)
+			return JSON.stringify(savedDonation)
+		},
+	)
