@@ -4,10 +4,10 @@ import Link from 'next/link';
 
 export function Volunteers() {
     const volunteers = [
-        { name: 'Pedro Santos', role: 'Front-end UX', image: '/landingPage/volunteers/card-voluntario-1.png' },
-        { name: 'Maria Silva', role: 'Front-end UX', image: '/landingPage/volunteers/card-voluntario-2.png' },
-        { name: 'João Souza', role: 'Front-end UX', image: '/landingPage/volunteers/card-voluntario-3.png' },
-        { name: 'Ana Costa', role: 'Front-end UX', image: '/landingPage/volunteers/card-voluntario-4.png' }
+        { name: 'Pedro Santos', role: 'Front-end UX', image: '/landing-page/volunteers/card-voluntario-1.png' },
+        { name: 'Maria Silva', role: 'Front-end UX', image: '/landing-page/volunteers/card-voluntario-2.png' },
+        { name: 'João Souza', role: 'Front-end UX', image: '/landing-page/volunteers/card-voluntario-3.png' },
+        { name: 'Ana Costa', role: 'Front-end UX', image: '/landing-page/volunteers/card-voluntario-4.png' }
     ];
 
     return (

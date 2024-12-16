@@ -75,7 +75,7 @@ export function Events() {
 									<div className="md:p-5 p-2 px-6 ">
 										<div className="w-full rounded-lg h-[180px] relative">
 											<Image
-												src={event.image || "/landingPage/events/card-placeholder.svg"}
+												src={event.image || "/landing-page/events/card-placeholder.svg"}
 												alt={event.title}
 												className="object-cover rounded-lg"
 												fill

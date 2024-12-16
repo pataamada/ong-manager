@@ -2,25 +2,25 @@ import Image from "next/image"
 
 const helpItems = [
     {
-        image: "/landingPage/how-to-help/como-ajudar-1.svg",
+        image: "/landing-page/how-to-help/como-ajudar-1.svg",
         title: "Adote",
         titleComplement: "um animal!",
         description: "Transforme a vida de um peludo e encontre um amigo fiel para sempre com você!"
     },
     {
-        image: "/landingPage/how-to-help/como-ajudar-2.svg",
+        image: "/landing-page/how-to-help/como-ajudar-2.svg",
         title: "Doe",
         titleComplement: "qualquer quantia",
         description: "Toda doação conta! Com sua ajuda, garantimos amor e cuidados aos animais."
     },
     {
-        image: "/landingPage/how-to-help/como-ajudar-3.svg",
+        image: "/landing-page/how-to-help/como-ajudar-3.svg",
         title: "Apadrinhe",
         titleComplement: "um animal!",
         description: "Ajude a cuidar à distância de um bichinho, oferecendo suporte conínuo."
     },
     {
-        image: "/landingPage/how-to-help/como-ajudar-4.svg",
+        image: "/landing-page/how-to-help/como-ajudar-4.svg",
         title: "Voluntarie-se",
         titleComplement: "e ajude o CãoDomínio",
         description: "Doe seu tempo e faça a diferença diretamente no nosso abrigo!"
@@ -37,7 +37,7 @@ export function HowToHelp() {
             </p>
             <div className="flex items-start justify-between flex-wrap gap-4">
                     <Image
-                        src="/landingPage/how-to-help/img-como-ajudar.png"
+                        src="/landing-page/how-to-help/img-como-ajudar.png"
                         alt="Como ajudar o caodomínio"
                         width={700}
                         height={585}

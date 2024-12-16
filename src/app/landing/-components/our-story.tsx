@@ -7,7 +7,7 @@ export function OurStory() {
         className="flex items-center justify-between gap-8 flex-wrap">
                 {/* TODO: procurar uma imagem com melhor qualidade */}
                 <Image
-                    src="/landingPage/our-story/img-nossa-historia.png"
+                    src="/landing-page/our-story/img-nossa-historia.png"
                     alt="Imagem Nossa Historia"
                     width={750}
                     height={400}

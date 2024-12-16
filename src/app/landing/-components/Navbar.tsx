@@ -17,7 +17,7 @@ export function Header() {
       <div className="h-[60px] max-w-[1280px] mx-auto flex justify-between items-center px-4 sm:h-[50px] md:px-8 mt-[40px]">
         {/* logo */}
         <Image
-          src="/landingPage/logo-horizontal.svg"
+          src="/landing-page/logo-horizontal.svg"
           alt="Logo"
           width={280}
           height={72}

@@ -17,20 +17,20 @@ const availableCampaigns: Campaign[] = [
         id: 1,
         title: "Ajude no tratamento da Aurora!",
         description: "Aurora tem TVT e estamos fazendo tratamento dela semanalmente, porém estamos SEM DINHEIRO.",
-        image: "/landingPage/campaigns/image3.png",
+        image: "/landing-page/campaigns/image3.png",
         video: "https://www.youtube.com/embed/xYblSC5dCQA",
     },
     {
         id: 2,
         title: "Ajude a alimentar os cães de rua!",
         description: "Estamos arrecadando fundos para alimentar cães de rua que precisam de nossa ajuda. Cada doação faz a diferença!",
-        image: "/landingPage/campaigns/image2.png",
+        image: "/landing-page/campaigns/image2.png",
     },
     {
         id: 3,
         title: "Construção de um abrigo para animais!",
         description: "Precisamos de sua ajuda para construir um abrigo seguro e confortável para animais abandonados. Contribua para essa causa!",
-        image: "/landingPage/campaigns/image1.png",
+        image: "/landing-page/campaigns/image1.png",
     },
 ]
 

@@ -44,7 +44,7 @@ export function Footer() {
 			<div className="container mx-auto max-w-screen-2xl flex flex-wrap justify-between items-start gap-12 pl-4 md:pl-20">
 				<div className="w-full md:w-96 h-auto flex-shrink-0 lg:mr-[140px]">
 					<Image
-						src="/landingPage/footer-images/icon.svg"
+						src="/landing-page/footer-images/icon.svg"
 						alt="Logo"
 						width={96}
 						height={67}
