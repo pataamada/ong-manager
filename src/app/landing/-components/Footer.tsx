@@ -23,6 +23,7 @@ const socials = [
 ]
 
 const sections = [
+	{ name: "events", label: "Eventos", link: "#events" },
 	{ name: "about", label: "Sobre nós", link: "#our-story" },
 	{ name: "pets", label: "Conheça nossos peludos", link: "#available-pets" },
 	{ name: "help", label: "Precisamos da sua ajuda", link: "#campaigns" },
@@ -40,7 +41,7 @@ const menu = [
 export function Footer() {
 	return (
 		<footer className="bg-primary text-white py-12 px-2">
-			<div className="container mx-auto max-w-screen-2xl flex flex-wrap justify-between md:items-center items-start gap-12 pl-4 md:pl-20">
+			<div className="container mx-auto max-w-screen-2xl flex flex-wrap justify-between items-start gap-12 pl-4 md:pl-20">
 				<div className="w-full md:w-96 h-auto flex-shrink-0 lg:mr-[140px]">
 					<Image
 						src="/landingPage/footer-images/icon.svg"
@@ -72,7 +73,7 @@ export function Footer() {
 					</div>
 				</div>
 
-				<div className="flex-1 w-full md:w-auto min-h-[186px]">
+				<div className="flex-1 w-full md:w-auto min-h-[186px] md:pt-[83px] pt-0">
 					<h3 className="text-subtitle-2 font-bold mb-2">Sessões</h3>
 					<ul className="space-y-1">
 						{sections.map((section, index) => (
@@ -88,7 +89,7 @@ export function Footer() {
 					</ul>
 				</div>
 
-				<div className="flex-1 w-full md:w-auto min-h-[186px]">
+				<div className="flex-1 w-full md:w-auto min-h-[186px] md:pt-[83px] pt-0">
 					<h3 className="text-subtitle-2 mb-2 font-bold">Menu</h3>
 					<ul className="space-y-1">
 						{menu.map((menuItem, index) => (

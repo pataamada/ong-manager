@@ -1,5 +1,6 @@
 import { AvailablePets } from "./-components/available-pets"
 import { CampaignSection } from "./-components/campaigns"
+import { Events } from "./-components/events"
 import { Footer } from "./-components/footer"
 import { HeroSection } from "./-components/hero-section"
 import { HowToHelp } from "./-components/how-to-help"
@@ -17,6 +18,7 @@ export default function LandingPage() {
 			<div className="relative w-full min-h-screen">
 				<div className="max-w-[1440px] mx-auto relative px-2 [&>div]:lg:pb-[128px] [&>div]:pb-[64px]">
 						<HeroSection />
+						<Events />
 						<OurStory />
 						<HowToHelp />
 						<AvailablePets />
