@@ -124,7 +124,6 @@ export const useUpdateNews = () => {
 			return request?.data
 		},
 		onSuccess: async (data, variables) => {
-			
 			await queryClient.cancelQueries(getNewsOptions)
 			const previousNews = queryClient.getQueryData(getNewsOptions.queryKey)
 			if (previousNews) {

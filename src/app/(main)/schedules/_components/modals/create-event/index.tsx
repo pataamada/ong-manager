@@ -8,10 +8,10 @@ import {
 import { EventForm } from "./event-form"
 import { AlertDialogDescription } from "@radix-ui/react-alert-dialog"
 import { useAtom } from "jotai"
-import { createEventModal } from "../../store"
+import { modalCreateEvent } from "../../store"
 
 export function CreateEventModal() {
-	const [open, setOpen] = useAtom(createEventModal)
+	const [open, setOpen] = useAtom(modalCreateEvent)
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogContent>

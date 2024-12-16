@@ -5,13 +5,13 @@ import { useQueryState } from "nuqs"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useSetAtom } from "jotai"
-import { createEventModal, createNewsModal } from "../store"
+import { modalCreateEvent, modalCreateNews } from "../store"
 import { Events } from "../events"
 import { News } from "../news"
 export default function ScheduleTabs() {
 	const [tab, setTab] = useQueryState("tab", { defaultValue: "events" })
-	const setOpenEventModal = useSetAtom(createEventModal)
-	const setOpenNewsModal = useSetAtom(createNewsModal)
+	const setOpenEventModal = useSetAtom(modalCreateEvent)
+	const setOpenNewsModal = useSetAtom(modalCreateNews)
 	const handleOpenModal = () => {
 		if (tab === "events") {
 			setOpenEventModal(true)
