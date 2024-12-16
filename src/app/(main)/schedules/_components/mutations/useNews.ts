@@ -1,12 +1,13 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { findNewsAction } from "@/actions/news/find-news"
-import type { newsSchema } from "../modals/create-news/news-form-schema"
+import type { newsSchema, updateNewsSchema } from "../modals/create-news/schemas"
 import { saveNewsAction } from "@/actions/news/save-news"
 import { deleteNewsAction } from "@/actions/news/delete-news"
 import type { News } from "@/models/news.model"
 import { getNewsImage } from "@/services/news.service"
 import { Timestamp } from "firebase/firestore"
 import type{ Toast } from "@/hooks/use-toast"
+import { updateNewsAction } from "@/actions/news/update-news"
 
 export const getNewsOptions = queryOptions({
 	queryKey: ["news"],
@@ -38,22 +39,6 @@ export const useCreateNews = () => {
 			}
 			return request?.data || ""
 		},
-		// onMutate: async (values) => {
-		// 	await queryClient.cancelQueries(getNewsOptions)
-		// 	const previousNews = queryClient.getQueryData(getNewsOptions.queryKey)
-
-		// 	if (previousNews) {
-		// 		const newNews: News[] = [
-		// 			...previousNews,
-		// 			{
-		// 				...values,
-		// 				photo: URL.createObjectURL(values.photo),
-		// 			},
-		// 		]
-		// 		queryClient.setQueryData(getNewsOptions.queryKey, newNews)
-		// 	}
-		// 	// queryClient.invalidateQueries({ queryKey: ["news"] })
-		// },
 		onSuccess: async (data, values) => {
 			if(!data) {
 				return;
@@ -116,6 +101,49 @@ export const useDeleteNews = (toast?: (params: Toast) => void) => {
 				description: "Erro ao excluir noticia!",
 				variant: "destructive",
 			})
+		},
+	})
+}
+
+export const useUpdateNews = () => {
+	const queryClient = useQueryClient()
+	return useMutation({
+		mutationKey: ["update-news"],
+		mutationFn: async ({ photo, ...data }: typeof updateNewsSchema._type & {id: string, updatedBy?: string, updatedAt?: Timestamp}) => {
+			const formData = new FormData()
+			if(photo instanceof File) {
+				formData.append("photo", photo)
+			}
+			const request = await updateNewsAction(data, formData)
+			if (request?.serverError) {
+				return Promise.reject(request.serverError)
+			}
+			if (request?.validationErrors) {
+				return Promise.reject(request.validationErrors)
+			}
+			return request?.data
+		},
+		onSuccess: async (data, variables) => {
+			
+			await queryClient.cancelQueries(getNewsOptions)
+			const previousNews = queryClient.getQueryData(getNewsOptions.queryKey)
+			if (previousNews) {
+				const newNews = previousNews.map((news: News) => {
+					if (news.id === variables.id) {
+						return {
+							...news,
+							title: variables?.title || news?.title,
+							description: variables?.description ||  news?.description,
+							tags: variables.tags || news.tags,
+							updatedAt: variables?.updatedAt ? new Timestamp(variables.updatedAt.seconds, variables.updatedAt.nanoseconds) : news.updatedAt,
+							updatedBy: variables?.updatedBy || news.updatedBy,
+							photo: data?.photo || news.photo
+						}
+					}
+					return news	
+				})
+				queryClient.setQueryData(getNewsOptions.queryKey, newNews)
+			}
 		},
 	})
 }

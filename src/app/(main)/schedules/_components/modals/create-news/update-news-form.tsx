@@ -13,26 +13,31 @@ import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { ImageUpload } from "@/components/custom-ui/image-upload"
 import { MultiSelect } from "@/components/custom-ui/multiple-select"
-import { type NewsFormValues, newsSchema } from "./news-form-schema"
-import { useCreateNews } from "../../mutations/useNews"
+import { type UpdateNewsSchema, updateNewsSchema } from "./schemas"
+import { useUpdateNews } from "../../mutations/useNews"
 import { useAuth } from "@/hooks/use-auth"
+import type { News } from "@/models/news.model"
 
-export function NewsForm({ setOpen }: { setOpen: (value: boolean) => void }) {
-	const { isPending, mutateAsync } = useCreateNews()
+export function NewsUpdateForm({
+	data,
+	onSuccess,
+}: { data: AtLeast<News, "id">; onSuccess?: () => void }) {
+	const { isPending, mutateAsync } = useUpdateNews()
 	const { user } = useAuth()
-	const form = useForm<NewsFormValues>({
-		resolver: zodResolver(newsSchema),
+	const form = useForm<UpdateNewsSchema>({
+		resolver: zodResolver(updateNewsSchema),
 		defaultValues: {
-			title: "",
-			description: "",
-			tags: [],
+			title: data.title,
+			description: data.description,
+			tags: data.tags || [],
+			photo: data.photo,
 		},
 	})
 
-	const onSubmit = async (data: NewsFormValues) => {
-		await mutateAsync({ ...data, updatedBy: user?.user.displayName || "" })
+	const onSubmit = async (formData: UpdateNewsSchema) => {
+		await mutateAsync({ id: data.id,...formData, updatedBy: user?.user.displayName || "" })
 		form.reset()
-		setOpen(false)
+		onSuccess?.()
 	}
 	return (
 		<Form {...form}>
@@ -43,7 +48,10 @@ export function NewsForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<ImageUpload {...field} />
+								<ImageUpload
+									{...field}
+									onRemoveImage={() => form.setValue("photo", undefined)}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -103,6 +111,7 @@ export function NewsForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 									variant="secondary"
 									maxCount={4}
 									onValueChange={field.onChange}
+									defaultValue={field.value}
 									{...field}
 								/>
 							</FormControl>
@@ -118,13 +127,13 @@ export function NewsForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 						variant="outline"
 						onClick={() => {
 							form.reset()
-							setOpen(false)
+							onSuccess?.()
 						}}
 					>
 						Cancelar
 					</Button>
 					<Button type="submit" disabled={isPending}>
-						{isPending ? "Criando..." : "Criar Noticia"}
+						{isPending ? "Atualizando..." : "Atualizar"}
 					</Button>
 				</div>
 			</form>

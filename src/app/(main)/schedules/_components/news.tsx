@@ -1,6 +1,6 @@
 import { useSetAtom } from "jotai"
 import { NewsCard } from "./cards/news-card"
-import { confirmDeleteInfo, confirmDeleteModal } from "./store"
+import { confirmDeleteInfo, confirmDeleteModal, createNewsModal, updateNewsData } from "./store"
 import { useGetNews } from "./mutations/useNews"
 import { PawLoader } from "@/components/paw-loader"
 import { When } from "@/components/when"
@@ -9,8 +9,10 @@ import { Timestamp } from "firebase/firestore"
 
 export function News() {
 	const { data, isLoading } = useGetNews()
+	const setNewsModal = useSetAtom(createNewsModal)
 	const setDeleteInfo = useSetAtom(confirmDeleteInfo)
 	const setDeleteModal = useSetAtom(confirmDeleteModal)
+	const setUpdateData = useSetAtom(updateNewsData)
 	const handleDelete = (id: string, title: string) => {
 		setDeleteInfo({
 			id,
@@ -50,6 +52,10 @@ export function News() {
 								news.updatedAt.nanoseconds,
 							).toMillis()}
 							className="w-full"
+							onEdit={() => {
+								setUpdateData({ ...news })
+								setNewsModal(true)
+							}}
 							onDelete={() => handleDelete(news.id, news.title)}
 						/>
 					))}

@@ -66,18 +66,24 @@ export const findOneNews = async (id: string) => {
 	return document.data() as News
 }
 
-export const updateNews = async (params: UpdateNews) => {
+export const updateNews = async (params: AtLeast<UpdateNews, "id">) => {
 	const storageImages = await getNewsImage(params.id)
-	const differentImages = compareAndUploadImages(
-		"noticias",
-		params.id,
-		[params.photo],
-		storageImages[1],
-	)
-
-	if (differentImages) {
-		await deleteNewsImage(params.id)
-		await uploadNewsImage([params.photo], params.id)
+	if(params.photo) {
+		const differentImages = compareAndUploadImages(
+			"noticias",
+			params.id,
+			[params.photo],
+			storageImages[1],
+		)
+	
+		try {
+			if (differentImages) {
+				await deleteNewsImage(params.id)
+				await uploadNewsImage([params.photo], params.id)
+			}
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	await updateDoc(doc(db, `noticias/${params.id}`), {
@@ -87,7 +93,10 @@ export const updateNews = async (params: UpdateNews) => {
 		updatedAt: serverTimestamp(),
 		updatedBy: params.updatedBy,
 	})
-	return true
+	const image = await getNewsImage(params.id)
+	return {
+		photo: image[0][0],
+	}
 }
 
 export const deleteNews = async (id: string) => {

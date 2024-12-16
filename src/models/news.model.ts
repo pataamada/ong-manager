@@ -14,6 +14,6 @@ export interface News {
 export type CreateNews = Omit<News, "id" | "createdAt" | "updatedAt" | "photo"> & {
 	photo: File
 }
-export type UpdateNews = News & {
+export type UpdateNews = Omit<News, "photo"> & {
 	photo: File
 }

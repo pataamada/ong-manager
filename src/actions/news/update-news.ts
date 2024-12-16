@@ -6,17 +6,17 @@ import type { Timestamp } from "firebase/firestore"
 import { zfd } from "zod-form-data"
 
 const fileSchema = zfd.formData({
-	photo: zfd.file(),
+	photo: zfd.file().optional(),
 })
 
 const schema = z.object({
 	id: z.string(),
-	title: z.string(),
-	tags: z.array(z.string()),
-	description: z.string(),
-	createdAt: z.custom<Timestamp>(),
-	updatedAt: z.custom<Timestamp>(),
-	updatedBy: z.string(),
+	title: z.string().optional(),
+	tags: z.array(z.string()).optional(),
+	description: z.string().optional(),
+	createdAt: z.custom<Timestamp>().optional(),
+	updatedAt: z.custom<Timestamp>().optional(),
+	updatedBy: z.string().optional(),
 })
 
 export const updateNewsAction = actionClient

@@ -10,12 +10,13 @@ import { Trash } from "lucide-react"
 interface ImageUploadProps {
 	value?: string | File
 	onChange?: (value?: string | File) => void
+	onRemoveImage?: () => void
 	className?: string
 	height?: string
 }
 
 const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(
-	({ value, onChange, className, height = "h-[200px]" }, ref) => {
+	({ value, onChange, onRemoveImage, className, height = "h-[200px]" }, ref) => {
 		const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
 			const file = e.target.files?.[0]
 			if(file) {
@@ -24,6 +25,7 @@ const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(
 		}
 		const handleRemoveImage = (e: MouseEvent<HTMLButtonElement>) => {
 			onChange?.()
+			onRemoveImage?.()
 			e.stopPropagation()
 		}
 		const hasValue = value || (typeof value === "string" && value?.length > 0)
