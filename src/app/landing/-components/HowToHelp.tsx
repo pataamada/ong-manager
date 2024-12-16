@@ -29,7 +29,9 @@ const helpItems = [
 
 export function HowToHelp() {
     return (
-        <div className="py-8 w-full">
+        <div 
+        id="how-to-help"
+        className="py-8 w-full">
           <p className="text-3xl text-[#27272A] mb-8 text-center">
                 Como <span className="font-bold">ajudar o CãoDomínio?</span>
             </p>

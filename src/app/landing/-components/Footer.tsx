@@ -2,6 +2,7 @@
 
 import { Icon } from "@iconify/react"
 import Image from "next/image"
+import Link from "next/link"
 
 const socials = [
 	{
@@ -22,10 +23,10 @@ const socials = [
 ]
 
 const sections = [
-	{ name: "about", label: "Sobre nós", link: "/#" },
-	{ name: "pets", label: "Conheça nossos peludos", link: "/#" },
-	{ name: "help", label: "Precisamos da sua ajuda", link: "/#" },
-	{ name: "transparency", label: "Transparência", link: "/#" },
+	{ name: "about", label: "Sobre nós", link: "#our-story" },
+	{ name: "pets", label: "Conheça nossos peludos", link: "#available-pets" },
+	{ name: "help", label: "Precisamos da sua ajuda", link: "#campaigns" },
+	{ name: "transparency", label: "Transparência", link: "#transparency" },
 	{ name: "volunteers", label: "Voluntários", link: "#volunteers" },
 	{ name: "partners", label: "Parceiros", link: "#partners" },
 ]
@@ -48,7 +49,7 @@ export function Footer() {
 						height={67}
 						className="mb-4"
 					/>
-					<p className="text-paragraph mb-6">
+					<p className="text</footer>-paragraph mb-6">
 						Somos a organização não governamental CãoDomínio, um abrigo que trabalha há 30 anos para
 						fornecer assistência a cães e gatos necessitados.
 					</p>
@@ -58,7 +59,7 @@ export function Footer() {
 					</p>
 					<div className="flex justify-start md:justify-center gap-4">
 						{socials.map((social, index) => (
-							<a
+							<Link
 								key={`${social.name}-${index}`}
 								href={social.link}
 								target="_blank"
@@ -66,7 +67,7 @@ export function Footer() {
 								className="text-white hover:text-secondary transition-colors"
 							>
 								<Icon icon={social.icon} className="text-[30px]" />
-							</a>
+							</Link>
 						))}
 					</div>
 				</div>
@@ -76,12 +77,12 @@ export function Footer() {
 					<ul className="space-y-1">
 						{sections.map((section, index) => (
 							<li key={`${section.name}-${index}`}>
-								<a
+								<Link
 									href={section.link}
 									className="text-paragraph hover:text-secondary transition-colors no-underline"
 								>
 									{section.label}
-								</a>
+								</Link>
 							</li>
 						))}
 					</ul>
@@ -92,12 +93,12 @@ export function Footer() {
 					<ul className="space-y-1">
 						{menu.map((menuItem, index) => (
 							<li key={`${menuItem.name}-${index}`}>
-								<a
+								<Link
 									href={menuItem.link}
 									className="text-paragraph hover:text-secondary transition-colors no-underline"
 								>
 									{menuItem.label}
-								</a>
+								</Link>
 							</li>
 						))}
 					</ul>

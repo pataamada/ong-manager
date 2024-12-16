@@ -97,7 +97,9 @@ export function Partners() {
 	])
 
 	return (
-		<div className="text-center py-8">
+		<div 
+		id="partners"
+		className="text-center py-8">
 			<h2 className="text-h2 text-zinc-800 mb-2">Parceiros</h2>
 			<p className="mb-11 text-subtitle text-zinc-500">Conheça os parceiros da ONG</p>
 

@@ -71,7 +71,9 @@ export function CampaignSection() {
     }, [])
 
     return (
-        <div ref={sectionRef}>
+        <div 
+        id="campaigns"
+        ref={sectionRef}>
             <h2 className="text-h2 text-zinc-800 text-center">Precisamos da sua <span className="text-primary">Ajuda!</span></h2>
             <p className="text-subtitle text-center text-zinc-500 mb-12">Ajude a salvar nossos amiguinhos</p>
             <div className="flex gap-8 sm:flex-row flex-col">

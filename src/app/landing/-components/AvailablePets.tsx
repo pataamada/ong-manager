@@ -134,7 +134,9 @@ export function AvailablePets() {
 	const [selectedPet, setSelectedPet] = useState<Pet>(availablePets[0])
 
 	return (
-		<div className="text-center">
+		<div 
+		id="available-pets"
+		className="text-center">
 			<h3 className="text-4xl font-bold">
 				Conheça nossos
 				<span className="text-primary"> peludos!</span>

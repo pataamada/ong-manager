@@ -19,7 +19,7 @@ function ActionButtons() {
 
 export function HeroSection() {
     return (
-        <div>
+        <div id="hero">
         <div className="relative flex flex-col lg:flex-row items-center justify-center gap-6 px-4 lg:px-16 md:mt-[128px] mt-10">
             <div className="flex flex-col max-w-xl order-1 lg:order-1">
                 <p className="text-base sm:text-lg md:text-xl text-gray-600 text-center mx-auto mb-4">

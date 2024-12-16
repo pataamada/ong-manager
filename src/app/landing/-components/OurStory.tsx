@@ -2,7 +2,9 @@ import Image from "next/image"
 
 export function OurStory() {
     return (
-        <div className="flex items-center justify-between gap-8 flex-wrap">
+        <div 
+        id="our-story"
+        className="flex items-center justify-between gap-8 flex-wrap">
                 {/* TODO: procurar uma imagem com melhor qualidade */}
                 <Image
                     src="/landingPage/our-story/img-nossa-historia.png"

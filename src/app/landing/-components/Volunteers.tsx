@@ -11,7 +11,9 @@ export function Volunteers() {
     ];
 
     return (
-        <div className="text-center py-8">
+        <div 
+        id="volunteers"
+        className="text-center py-8">
             <h2 className="text-h2 text-zinc-800 text-center">Nossos voluntários</h2>
             <p className="mb-11 text-subtitle text-center text-gray-500">Conheça quem nos ajuda pessoalmente</p>
             <div className="flex gap-12 mx-auto items-center justify-center flex-wrap">
