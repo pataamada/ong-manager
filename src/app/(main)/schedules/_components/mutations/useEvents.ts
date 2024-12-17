@@ -2,7 +2,6 @@ import { findAllEventsAction } from "@/actions/agenda/find-all"
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { eventSchema, updateEventSchema } from "../modals/create-event/schemas"
 import { createEventAction } from "@/actions/agenda/create"
-import { getNewsImage } from "@/services/news.service"
 import type { Event } from "@/models/event.model"
 import { deleteEventAction } from "@/actions/agenda/delete"
 import type { Toast } from "@/hooks/use-toast"
@@ -43,7 +42,6 @@ export const useCreateEvent = () => {
 				return
 			}
 			await queryClient.cancelQueries(getEventsOptions)
-			const photo = await getNewsImage(data.id)
 			const previousEvents = queryClient.getQueryData(getEventsOptions.queryKey)
 			const event: Event = {
 				...variables,
@@ -52,7 +50,7 @@ export const useCreateEvent = () => {
 				id: data.id,
 				title: variables.title,
 				description: variables.description,
-				image: photo[0][0],
+				image: data.image!,
 			}
 			if (previousEvents) {
 				const newEvents: Event[] = [event, ...previousEvents]

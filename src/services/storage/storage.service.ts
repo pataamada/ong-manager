@@ -17,7 +17,6 @@ export const uploadImages = async (images: File[], path: string) => {
 		const url = await uploadImage(images[i], `${path}/${fileName}`)
 		urls.push(url)
 	}
-	console.log(urls)
 	return urls
 }
 

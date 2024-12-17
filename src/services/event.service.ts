@@ -28,13 +28,17 @@ export const createEvent = async (params: CreateEvent) => {
 		updatedAt: serverTimestamp(),
 		updatedBy: params.updatedBy,
 	})
+	let image: string[] | undefined
 	try {
-		await uploadEventImage([params.image], document.id)
+		image = await uploadEventImage([params.image], document.id)
 	} catch (error) {
 		console.log(error)
 	}
 
-	return document
+	return {
+		id: document.id,
+		image: image ? image[0] : undefined,
+	}
 }
 
 export const findAllEvents = async () => {
