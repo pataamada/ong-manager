@@ -3,8 +3,13 @@ export interface Event {
 	title: string
 	description: string
 	date: string
-	images: File[]
+	image: string
 	updatedBy: string
 }
 
-export type CreateEvent = Omit<Event, "id">
+export type CreateEvent = Omit<Event, "id"  | "image"> & {
+	image: File
+}
+export type UpdateEvent = Omit<Event, "image"> & {
+	image: File
+}

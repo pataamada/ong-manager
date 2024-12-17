@@ -27,6 +27,7 @@ export function News() {
 	const handleDelete = useCallback(
 		(id: string, title: string) => {
 			setDeleteInfo({
+				type: "news",
 				id,
 				description: "Certeza que deseja excluir essa Notícia?",
 				title: `Excluir Notícia: ${title}`,

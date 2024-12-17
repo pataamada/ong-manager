@@ -15,28 +15,37 @@ import {
 } from "@/components/ui/form"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import {
-	type EventFormValues,
-	eventSchema,
-} from "@/app/(main)/schedules/_components/modals/create-event/event-form-schema"
+	type UpdateEventFormValues,
+	updateEventSchema,
+} from "@/app/(main)/schedules/_components/modals/create-event/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { ImageUpload } from "@/components/custom-ui/image-upload"
 import { When } from "@/components/when"
+import { useAuth } from "@/hooks/use-auth"
+import { useUpdateEvent } from "../../mutations/useEvents"
+import type { Event } from "@/models/event.model"
 
-export function EventForm({ setOpen }: { setOpen: (value: boolean) => void }) {
-	const form = useForm<EventFormValues>({
-		resolver: zodResolver(eventSchema),
+export function UpdateEventForm({
+	data,
+	onSuccess,
+}: { data: AtLeast<Event, "id">; onSuccess: (value: boolean) => void }) {
+	const { isPending, mutateAsync } = useUpdateEvent()
+	const { user } = useAuth()
+	const form = useForm<UpdateEventFormValues>({
+		resolver: zodResolver(updateEventSchema),
 		defaultValues: {
-			title: "",
-			description: "",
-			image: "",
+			title: data.title,
+			description: data.description,
+			date: data.date,
+			image: data.image,
 		},
 	})
 
-	const onSubmit = (data: EventFormValues) => {
-		console.log(data)
-		setOpen(false)
+	const onSubmit = async (values: UpdateEventFormValues) => {
+		await mutateAsync({ id: data.id, updatedBy: user?.user.displayName || "", ...values })
+		onSuccess(false)
 	}
 	return (
 		<Form {...form}>
@@ -47,7 +56,11 @@ export function EventForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<ImageUpload value={field.value} onChange={field.onChange} />
+								<ImageUpload
+									value={field.value}
+									onChange={field.onChange}
+									onRemoveImage={() => form.setValue("image", undefined)}
+								/>
 							</FormControl>
 						</FormItem>
 					)}
@@ -106,7 +119,7 @@ export function EventForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 								<PopoverContent className="w-auto p-0" align="start">
 									<Calendar
 										mode="single"
-										selected={new Date(field.value)}
+										selected={typeof field.value === "string" ? new Date(field.value) : field.value}
 										onSelect={date => field.onChange(date?.toISOString() ?? "")}
 										disabled={date => {
 											const today = new Date()
@@ -145,12 +158,14 @@ export function EventForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 						variant="outline"
 						onClick={() => {
 							form.reset()
-							setOpen(false)
+							onSuccess(false)
 						}}
 					>
 						Cancelar
 					</Button>
-					<Button type="submit">Criar</Button>
+					<Button type="submit" disabled={isPending}>
+						{isPending ? "Atualizando..." : "Atualizar"}
+					</Button>
 				</div>
 			</form>
 		</Form>

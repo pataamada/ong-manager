@@ -5,21 +5,37 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { EventForm } from "./event-form"
+import { CreateEventForm } from "./create-event-form"
 import { AlertDialogDescription } from "@radix-ui/react-alert-dialog"
 import { useAtom } from "jotai"
-import { modalCreateEvent } from "../../store"
+import { modalCreateEvent, updateEventData } from "../../store"
+import { UpdateEventForm } from "./update-event-form"
 
 export function CreateEventModal() {
 	const [open, setOpen] = useAtom(modalCreateEvent)
+	const [data, setData] = useAtom(updateEventData)
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogContent>
 				<AlertDialogHeader>
-					<AlertDialogTitle className="text-xl font-bold">Novo Evento</AlertDialogTitle>
+					<AlertDialogTitle className="text-xl font-bold">
+						{data ? "Editar Evento" : "Criar Evento"}
+					</AlertDialogTitle>
 				</AlertDialogHeader>
-				<AlertDialogDescription className="sr-only">Criar novo evento</AlertDialogDescription>
-				<EventForm setOpen={setOpen} />
+				<AlertDialogDescription className="sr-only">
+					{data ? "Editar Evento" : "Criar Evento"}
+				</AlertDialogDescription>
+				{data ? (
+					<UpdateEventForm
+						onSuccess={() => {
+							setData(null)
+							setOpen(false)
+						}}
+						data={data}
+					/>
+				) : (
+					<CreateEventForm setOpen={setOpen} />
+				)}
 			</AlertDialogContent>
 		</AlertDialog>
 	)

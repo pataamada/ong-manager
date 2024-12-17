@@ -66,6 +66,7 @@ const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(
 						size="icon"
 						className="w-8 h-8 absolute top-2 right-2"
 						variant="destructive"
+						type="button"
 						onClick={e => handleRemoveImage(e)}
 					>
 						<Trash size={16} />

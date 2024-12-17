@@ -37,7 +37,7 @@ export const useCreateNews = () => {
 			if (request?.validationErrors) {
 				return Promise.reject(request.validationErrors)
 			}
-			return request?.data || ""
+			return request?.data
 		},
 		onSuccess: async (data, values) => {
 			if(!data) {

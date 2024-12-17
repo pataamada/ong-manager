@@ -9,13 +9,14 @@ import {
 	query,
 } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebase-secret"
-import type { CreateEvent, Event } from "@/models/event.model"
+import type { CreateEvent, Event, UpdateEvent } from "@/models/event.model"
 import {
 	compareAndUploadImages,
 	deleteManyImages,
 	getImages,
 	uploadImages,
 } from "./storage/storage.service"
+import { getNewsImage } from "./news.service"
 
 export const createEvent = async (params: CreateEvent) => {
 	const document = await addDoc(collection(db, "eventos"), {
@@ -26,9 +27,13 @@ export const createEvent = async (params: CreateEvent) => {
 		updatedAt: serverTimestamp(),
 		updatedBy: params.updatedBy,
 	})
-	await uploadEventlImage(params.images, document.id)
+	try {
+		await uploadEventImage([params.image], document.id)
+	} catch (error) {
+		console.log(error)
+	}
 
-	return JSON.stringify(document)
+	return document
 }
 
 export const findAllEvents = async () => {
@@ -39,29 +44,33 @@ export const findAllEvents = async () => {
 	return eventWithImages
 }
 
-export const updateEvent = async (params: Event) => {
+export const updateEvent = async (params: AtLeast<UpdateEvent, "id">) => {
 	const storageImages = await getEventImage(params.id)
-	const differentImages = compareAndUploadImages(
-		"eventos",
-		params.id,
-		params.images,
-		storageImages[1],
-	)
+	if (params.image) {
+		const differentImages = compareAndUploadImages(
+			"eventos",
+			params.id,
+			[params.image],
+			storageImages[1],
+		)
 
-	if (differentImages) {
-		await deleteEventImage(params.id)
-		await uploadEventlImage(params.images, params.id)
+		if (differentImages) {
+			await deleteEventImage(params.id)
+			await uploadEventImage([params.image], params.id)
+		}
 	}
 
-	const document = await updateDoc(doc(db, `eventos/${params.id}`), {
+	await updateDoc(doc(db, `eventos/${params.id}`), {
 		title: params.title,
 		date: params.date,
 		description: params.description,
 		updatedAt: serverTimestamp(),
 		updatedBy: params.updatedBy,
 	})
-
-	return JSON.stringify(document)
+	const image = await getNewsImage(params.id)
+	return {
+		photo: image[0][0],
+	}
 }
 
 export const deleteEvent = async (eventId: string) => {
@@ -69,9 +78,10 @@ export const deleteEvent = async (eventId: string) => {
 	if (storageImages.length > 0) await deleteEventImage(eventId)
 
 	await deleteDoc(doc(db, "eventos", eventId))
+	return true
 }
 
-export const uploadEventlImage = async (image: File[], id: string) => {
+export const uploadEventImage = async (image: File[], id: string) => {
 	return await uploadImages(image, `eventos/${id}`)
 }
 
@@ -82,9 +92,9 @@ export const getEventImage = async (id: string) => {
 const getEventImages = (events: Event[]) => {
 	const eventWithImages = events.map(async event => {
 		const storageImages = await getEventImage(event.id)
-		return { ...event, photo: storageImages[0][0] }
+		return { ...event, image: storageImages[0][0] }
 	})
-	return eventWithImages
+	return Promise.all(eventWithImages)
 }
 
 export const deleteEventImage = async (id: string) => {

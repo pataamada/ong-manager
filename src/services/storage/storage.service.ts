@@ -6,7 +6,7 @@ const uploadImage = async (image: File, path: string) => {
 		throw Error("Nenhuma imagem foi selecionada")
 	}
 	const storageRef = ref(storage, path)
-	uploadBytesResumable(storageRef, image)
+	await uploadBytesResumable(storageRef, image)
 	return await getDownloadURL(storageRef)
 }
 
