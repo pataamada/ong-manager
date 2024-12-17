@@ -45,16 +45,10 @@ export const saveNews = async (params: CreateNews) => {
 	}
 }
 
-export const findNews = async () => {
-	const q = query(collection(db, "noticias"))
-	const querySnapshot = await getDocs(q)
-	const news = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as News[]
-	const newsWithImages = await getNewsImages(news)
-	return newsWithImages.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
-}
-
-export const findRecentNews = async () => {
-	const q = query(collection(db, "noticias"), orderBy("createdAt"), limit(3))
+export const findNews = async (recent: boolean) => {
+	let q = null
+	if (recent) q = query(collection(db, "noticias"), orderBy("createdAt", "desc"), limit(3))
+	q = query(collection(db, "noticias"), orderBy("createdAt", "desc"))
 	const querySnapshot = await getDocs(q)
 	const news = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as News[]
 	const newsWithImages = await getNewsImages(news)
@@ -68,14 +62,14 @@ export const findOneNews = async (id: string) => {
 
 export const updateNews = async (params: AtLeast<UpdateNews, "id">) => {
 	const storageImages = await getNewsImage(params.id)
-	if(params.photo) {
+	if (params.photo) {
 		const differentImages = compareAndUploadImages(
 			"noticias",
 			params.id,
 			[params.photo],
 			storageImages[1],
 		)
-	
+
 		try {
 			if (differentImages) {
 				await deleteNewsImage(params.id)

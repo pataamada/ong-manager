@@ -1,6 +1,15 @@
 import { type NextRequest, NextResponse } from "next/server"
 
-export const redirectTo = (request: NextRequest, to: string, from: string | undefined = undefined) => {
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+export const formatReturn = (data: any) => {
+	return JSON.parse(JSON.stringify(data))
+}
+
+export const redirectTo = (
+	request: NextRequest,
+	to: string,
+	from: string | undefined = undefined,
+) => {
 	const newUrl = new URL(to, request.nextUrl)
 	newUrl.searchParams.delete("tab")
 	if (from) newUrl.searchParams.set("from", from)
@@ -8,8 +17,7 @@ export const redirectTo = (request: NextRequest, to: string, from: string | unde
 }
 
 export const initialLetters = (fullname: string): string => {
-	const [firstName = " ", secondName = " "] = fullname
-		.split(/\s+/)
+	const [firstName = " ", secondName = " "] = fullname.split(/\s+/)
 	return `${firstName[0]}${secondName[0]}`
 }
 

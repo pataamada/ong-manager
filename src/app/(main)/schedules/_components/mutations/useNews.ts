@@ -6,13 +6,13 @@ import { deleteNewsAction } from "@/actions/news/delete-news"
 import type { News } from "@/models/news.model"
 import { getNewsImage } from "@/services/news.service"
 import { Timestamp } from "firebase/firestore"
-import type{ Toast } from "@/hooks/use-toast"
+import type { Toast } from "@/hooks/use-toast"
 import { updateNewsAction } from "@/actions/news/update-news"
 
 export const getNewsOptions = queryOptions({
 	queryKey: ["news"],
 	queryFn: async () => {
-		const request = await findNewsAction()
+		const request = await findNewsAction(false)
 		return request?.data ? (JSON.parse(request?.data) as News[]) : []
 	},
 })
@@ -40,8 +40,8 @@ export const useCreateNews = () => {
 			return request?.data
 		},
 		onSuccess: async (data, values) => {
-			if(!data) {
-				return;
+			if (!data) {
+				return
 			}
 			await queryClient.cancelQueries(getNewsOptions)
 			const photo = await getNewsImage(data.id)
@@ -58,10 +58,7 @@ export const useCreateNews = () => {
 				tags: values.tags,
 			}
 			if (previousNews) {
-				const newNews: News[] = [
-					news,
-					...previousNews,
-				]
+				const newNews: News[] = [news, ...previousNews]
 				queryClient.setQueryData(getNewsOptions.queryKey, newNews)
 			}
 		},
@@ -82,13 +79,12 @@ export const useDeleteNews = (toast?: (params: Toast) => void) => {
 			}
 			return request?.data || []
 		},
-		onMutate: async (id) => {
+		onMutate: async id => {
 			await queryClient.cancelQueries(getNewsOptions)
 			const previousNews = queryClient.getQueryData(getNewsOptions.queryKey)
 			if (previousNews) {
 				const newNews = previousNews.filter((news: News) => news.id !== id)
 				queryClient.setQueryData(getNewsOptions.queryKey, newNews)
-				
 			}
 		},
 		onSuccess: () => {
@@ -109,9 +105,16 @@ export const useUpdateNews = () => {
 	const queryClient = useQueryClient()
 	return useMutation({
 		mutationKey: ["update-news"],
-		mutationFn: async ({ photo, ...data }: typeof updateNewsSchema._type & {id: string, updatedBy?: string, updatedAt?: Timestamp}) => {
+		mutationFn: async ({
+			photo,
+			...data
+		}: typeof updateNewsSchema._type & {
+			id: string
+			updatedBy?: string
+			updatedAt?: Timestamp
+		}) => {
 			const formData = new FormData()
-			if(photo instanceof File) {
+			if (photo instanceof File) {
 				formData.append("photo", photo)
 			}
 			const request = await updateNewsAction(data, formData)
@@ -132,14 +135,16 @@ export const useUpdateNews = () => {
 						return {
 							...news,
 							title: variables?.title || news?.title,
-							description: variables?.description ||  news?.description,
+							description: variables?.description || news?.description,
 							tags: variables.tags || news.tags,
-							updatedAt: variables?.updatedAt ? new Timestamp(variables.updatedAt.seconds, variables.updatedAt.nanoseconds) : news.updatedAt,
+							updatedAt: variables?.updatedAt
+								? new Timestamp(variables.updatedAt.seconds, variables.updatedAt.nanoseconds)
+								: news.updatedAt,
 							updatedBy: variables?.updatedBy || news.updatedBy,
-							photo: data?.photo || news.photo
+							photo: data?.photo || news.photo,
 						}
 					}
-					return news	
+					return news
 				})
 				queryClient.setQueryData(getNewsOptions.queryKey, newNews)
 			}
