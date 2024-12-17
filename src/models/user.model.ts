@@ -10,7 +10,7 @@ export interface User {
 	password: string
 	uid: string
 	photo?: string
-	phone: string | null // todo: adicionar
+	phone: string
 }
 
 export type UserWTempUid = User & { tempUid?: string | null }
