@@ -107,7 +107,7 @@ const getAnimalImages = (animals: Animal[]) => {
 		const storageImages = await getAnimalImage(animal.id)
 		return { ...animal, photo: storageImages[0][0] }
 	})
-	return animalsWithImages
+	return Promise.all(animalsWithImages)
 }
 
 const deleteAnimalImage = async (id: string) => {
