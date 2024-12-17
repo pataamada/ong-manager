@@ -1,16 +1,16 @@
-import { collection, addDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebase-secret"
-import { PaymentService } from "@/services/Asaas/payment.service"
-import type { IPaymentCreateBoletoOrPix } from "@/types/Asaas/Payment"
-import type { IClientCreate } from "@/types/Asaas/Customer"
 import { CustomerService } from "@/services/Asaas/customer.service"
+import { PaymentService } from "@/services/Asaas/payment.service"
+import type { IClientCreate } from "@/types/Asaas/Customer"
+import type { IPaymentCreateBoletoOrPix } from "@/types/Asaas/Payment"
+import { addDoc, collection } from "firebase/firestore"
 
 export const handleExpenseCreation = async (
 	userId: string,
 	userCpfCnpj: string,
 	category: string,
 	value: number,
-	proof: string[],
+	proof: File[],
 	description: string,
 	date: string,
 ) => {
@@ -25,7 +25,6 @@ export const handleExpenseCreation = async (
 	const customerId = customer.data[0].id
 
 	return await saveExpenseDb(value, customerId, date, userId, category, description, proof)
-	
 }
 
 const saveExpenseDb = async (
@@ -35,7 +34,7 @@ const saveExpenseDb = async (
 	userId: string,
 	category: string,
 	description: string,
-	proof: string[],
+	proof: File[],
 ) => {
 	const expenseData: IPaymentCreateBoletoOrPix = {
 		billingType: "BOLETO",

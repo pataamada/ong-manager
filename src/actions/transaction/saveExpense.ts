@@ -2,11 +2,10 @@
 import { actionClient } from "@/actions/safe-action"
 import type { IExpense } from "@/models/transaction.model"
 import { handleSaveTransaction } from "@/services/finance.service"
-import { serverTimestamp } from "firebase/firestore"
 import { z } from "zod"
 
 const schema = z.object({
-  transactionType: z.literal("expense"),
+	transactionType: z.literal("expense"),
 	// userId: z.string(),
 	category: z.enum([
 		"Aluguel",
@@ -26,31 +25,30 @@ const schema = z.object({
 	]),
 	value: z.number(),
 	description: z.string(),
-	proof: z.array(z.string()),
+	// proof: z.array(z.instanceof(File)),
 })
 
-export const saveExpenseAction = actionClient
-	.schema(schema)
-	.action(
-    async ({ 
-      parsedInput: {
-        transactionType,
-        // userId,
-        category, 
-        value, 
-        description, 
-        proof,
-      } 
-    }) => {
-      const expenseObject: IExpense = {
-        transactionType,
-        // userId,
-        category,
-        value,
-        description,
-        proof,
-        date: new Date().toISOString(),
-      }
-      const savedExpense = await handleSaveTransaction(expenseObject)
+export const saveExpenseAction = actionClient.schema(schema).action(
+	async ({
+		parsedInput: {
+			transactionType,
+			// userId,
+			category,
+			value,
+			description,
+			// proof,
+		},
+	}) => {
+		const expenseObject: IExpense = {
+			transactionType,
+			// userId,
+			category,
+			value,
+			description,
+			// proof,
+			date: new Date().toISOString(),
+		}
+		const savedExpense = await handleSaveTransaction(expenseObject)
 		return JSON.parse(savedExpense)
-	})
+	},
+)

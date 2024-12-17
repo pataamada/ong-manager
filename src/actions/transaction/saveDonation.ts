@@ -10,7 +10,7 @@ const schema = z.object({
 	userName: z.string().optional(),
 	userCpfCnpj: z.string().optional(),
 	animalId: z.string().optional(),
-	category:z.enum([
+	category: z.enum([
 		"Aluguel",
 		"Energia Elétrica",
 		"Água",
