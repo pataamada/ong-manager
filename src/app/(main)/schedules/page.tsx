@@ -1,3 +1,40 @@
+'use client'
+
+import { PixService } from "@/services/Asaas/pix.service"
+import Image from "next/image"
+import { useEffect, useState } from "react"
+
 export default function Schedules() {
-	return <div>Agenda</div>
+
+	const [pix, setPix] = useState()
+
+	const getPaginatePix = async () => {
+		PixService.listPaginate().then(result => {
+			if (result instanceof Error) {
+
+			} else {
+				console.log(result)
+				setPix(result.data[0])
+			}
+		})
+	}
+
+	useEffect(() => {
+		getPaginatePix()
+	}, [])
+
+	return <div>
+		{pix && (
+			<div>
+				<Image
+					src={`data:image/png;base64,${pix.qrCode.encodedImage}`}
+					alt="QR Code"
+					width={300}
+					height={300}
+				/>
+
+				<div className="w-4">{pix.qrCode.payload}</div>
+			</div>
+		)}
+	</div>
 }
