@@ -1,16 +1,17 @@
 'use client'
 
+import { findDonationsAction, findExpensesAction } from "@/actions/transaction/findFinance";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { paginateItems } from "@/utils/paginateItems";
 import { Plus } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { IPropsTotalizer, Totalizer } from "./_components/Totalizer";
 import { NewRegister } from "./_components/modals/new-register";
-import { useEffect, useState } from "react";
 import { TableAll } from "./_components/tables/TableAll";
-import { TableExpense } from "./_components/tables/TableExpense";
 import { TableDonation } from "./_components/tables/TableDonation";
-import { findDonationsAction } from "@/actions/transaction/findFinance";
+import { TableExpense } from "./_components/tables/TableExpense";
 
 const mockedTotalizers: IPropsTotalizer[] = [
   {
@@ -53,23 +54,66 @@ const mockedFinance = {
 
 export default function Finance() {
   const [isModalNewRegister, setIsModalNewRegister] = useState(false)
-  const [filterType, setFilterType] = useState<'all' | 'donations' | 'expense'>('all')
+  const [filterType, setFilterType] = useState<'all' | 'donations' | 'expense'>('donations')
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [totalData, setTotalData] = useState(mockedFinance.all.length);
+  const [pageSize, setPageSize] = useState(1);
+  const [totalData, setTotalData] = useState(0);
+  const [donations, setDonations] = useState([]);
+  const [donationsPagination, setDonationsPagination] = useState([]);
+  const [expenses, setExpenses] = useState([]);
+  const [expensesPagination, setExpensesPagination] = useState([]);
 
   const getAllDonations = async () => {
     try {
-      const response = findDonationsAction()
-      console.log(response, 'reponse')
+      const response = await findDonationsAction()
+      setDonations(response?.data)
+      handlePaginationDonations(response?.data)
+    } catch (error) {
+      console.log(error, 'error')
+    }
+  }
+  const getAllExpenses = async () => {
+    try {
+      const response = await findExpensesAction()
+      setExpenses(response?.data)
+      handlePaginationExpenses(response?.data)
     } catch (error) {
       console.log(error, 'error')
     }
   }
 
+  // const handlePaginationAll = () => {
+  //   const joinData = [...donations, ...expenses]
+
+  //   const {data, totalItems} = paginateItems(joinData, page, pageSize);
+  //   setDonationsPagination(data)
+  //   setTotalData(totalItems)
+  // }
+  const handlePaginationDonations = (items: any) => {
+    const {data, totalItems} = paginateItems(items, page, pageSize);
+    setDonationsPagination(data)
+    setTotalData(totalItems)
+  }
+  const handlePaginationExpenses = (items: any) => {
+    const {data, totalItems} = paginateItems(items, page, pageSize);
+    setExpensesPagination(data)
+    setTotalData(totalItems)
+  }
+  
   useEffect(() => {
     getAllDonations()
+    getAllExpenses()
   }, [])
+
+  useEffect(() => {
+    if (filterType === 'donations') {
+      handlePaginationDonations(donations)
+    } else if (filterType === 'expense') {
+      handlePaginationExpenses(expenses)
+    } else {
+      // handlePaginationAll()
+    }
+  }, [filterType ,page, pageSize])
 
   return (
     <div>
@@ -94,7 +138,7 @@ export default function Finance() {
         <div className="flex flex-col w-full gap-4">
           <div className="flex w-full gap-4 flex-wrap lg:flex-nowrap">
             <div className="flex p-[5px] rounded-[6px] bg-[#F4F4F5]">
-              <div
+              {/* <div
                 onClick={() => setFilterType("all")}
                 className={`flex justify-center items-center rounded-[3px] px-3 h-[34px] hover:cursor-pointer ${
                   filterType === "all" ? "bg-[#FFFFFF]" : "bg-[#F4F4F5]"
@@ -103,7 +147,7 @@ export default function Finance() {
                 <div className="font-semibold text-sm text-[#09090B]">
                   Todas
                 </div>
-              </div>
+              </div> */}
               <div
                 onClick={() => setFilterType("donations")}
                 className={`flex justify-center items-center rounded-[3px] px-3 h-[34px] hover:cursor-pointer ${
@@ -165,27 +209,27 @@ export default function Finance() {
           {/* list */}
           {filterType === "all" && (
             <TableAll
-              data={mockedFinance.all}
+              data={[]}
               totalData={totalData}
               page={page}
               pageSize={pageSize}
-              handlePage={(page, pageSize) => ({})}
+              handlePage={(currentPage) => setPage(currentPage)}
               handlePageSize={(pageSize) => setPageSize(pageSize)}
             />
           )}
           {filterType === "donations" && (
             <TableDonation
-              data={mockedFinance.donations}
+              data={donationsPagination}
               totalData={totalData}
               page={page}
               pageSize={pageSize}
-              handlePage={(page, pageSize) => ({})}
+              handlePage={(currentPage) => setPage(currentPage)}
               handlePageSize={(pageSize) => setPageSize(pageSize)}
             />
           )}
           {filterType === "expense" && (
             <TableExpense
-              data={mockedFinance.expense}
+              data={expensesPagination}
               totalData={totalData}
               page={page}
               pageSize={pageSize}

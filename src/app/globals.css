@@ -2,11 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-<<<<<<< HEAD
 /* styles matine datatable */
 @layer mantine, mantine-datatable;
-=======
->>>>>>> e20437b (feat: avatar on user row, validate users page, change primary color)
 
 @layer base {
   :root {
@@ -16,11 +13,8 @@
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-<<<<<<< HEAD
     --primary: 160 84% 39%;
-=======
     --primary: 240 5.9% 10%;
->>>>>>> e20437b (feat: avatar on user row, validate users page, change primary color)
     --primary-foreground: 0 0% 98%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
@@ -32,11 +26,8 @@
     --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-<<<<<<< HEAD
     --ring: var(--primary);
-=======
     --ring: 240 5.9% 10%;
->>>>>>> e20437b (feat: avatar on user row, validate users page, change primary color)
     --radius: 0.5rem;
     --chart-1: 215 20% 72%;
     --chart-2: 158 75% 53%;

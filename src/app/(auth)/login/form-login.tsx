@@ -119,11 +119,8 @@ export default function FormLogin() {
 					</div>
 				</div>
 				<Button variant="success" className="w-full" type="submit" disabled={isPending}>
-<<<<<<< HEAD
 					{isPending ? "Entrando..." : "Entrar"}
-=======
 					Entrar
->>>>>>> e20437b (feat: avatar on user row, validate users page, change primary color)
 				</Button>
 
 				<div className="text-center">

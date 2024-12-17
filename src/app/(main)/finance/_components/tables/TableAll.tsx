@@ -13,7 +13,7 @@ interface ITableAll {
   page: number;
   pageSize: number;
   totalData: number;
-  handlePage: (page: number, pageSize: number) => void;
+  handlePage: (page: number) => void;
   handlePageSize: (pageSize: number) => void;
 }
 
@@ -34,7 +34,7 @@ export const TableAll = ({
       recordsPerPageLabel="Registros por página"
       recordsPerPageOptions={PAGE_SIZES_TABLE}
       onRecordsPerPageChange={handlePageSize}
-      onPageChange={(p) => handlePage(p, pageSize)}
+      onPageChange={(p) => handlePage(p)}
       minHeight={500}
       backgroundColor={{ dark: "#fff", light: "#000" }}
       paginationSize="md"
