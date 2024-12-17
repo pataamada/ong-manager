@@ -1,11 +1,12 @@
 import { PAGE_SIZES_TABLE } from "@/utils";
+import { formatDateToBrazilian } from "@/utils/formatData";
 import { DataTable } from "mantine-datatable";
 import Image from "next/image";
 
 interface ITableExpense {
   data: {
-    type: string;
-    cause: string
+    category: string
+    description: string
     date: string;
     value: string;
   }[];
@@ -59,12 +60,22 @@ export const TableExpense = ({
       horizontalSpacing='xl'
       columns={[
         {
-          accessor: "cause",
+          accessor: "category",
           title: "Causa",
           titleClassName: "font-normal text-base text-[#52525B]",
-          render: ({ cause }) => (
+          render: ({ category }) => (
             <div className="flex justify-center items-center p-1 px-3 rounded-full bg-[#F4F4F5] max-w-max">
-                <div className="text-sm font-semibold text-[#09090B]">{cause}</div>
+                <div className="text-sm font-semibold text-[#09090B]">{category}</div>
+            </div>
+          ),
+        },
+        {
+          accessor: "description",
+          title: "Descrição",
+          titleClassName: "font-normal text-base text-[#52525B]",
+          render: ({ description }) => (
+            <div className="font-normal text-base text-[#09090B]">
+              {description}
             </div>
           ),
         },
@@ -74,7 +85,7 @@ export const TableExpense = ({
           titleClassName: "font-normal text-base text-[#52525B]",
           render: ({ date }) => (
             <div className="font-normal text-base text-[#09090B]">
-              {date}
+              {formatDateToBrazilian(date)}
             </div>
           ),
         },
@@ -82,13 +93,14 @@ export const TableExpense = ({
           accessor: "value",
           title: "Valor",
           titleClassName: "font-normal text-base text-[#52525B]",
-          render: ({ value, type }) => (
+          render: ({ value }) => (
             <div
-              className={`font-normal text-base ${
-                type === "donation" ? "text-[#10B981]" : "text-[#EF4444]"
-              }`}
+              className={`font-normal text-base text-[#EF4444]`}
             >
-              {value}
+              {value.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+              })}
             </div>
           ),
         },

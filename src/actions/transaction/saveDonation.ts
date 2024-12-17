@@ -2,7 +2,7 @@
 import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
 import type { IDonation } from "@/models/transaction.model"
-import { handleSaveTransaction } from "@/services/transaction.service"
+import { handleSaveTransaction } from "@/services/finance.service"
 
 const schema = z.object({
 	transactionType: z.literal("donation"),
@@ -57,6 +57,6 @@ export const saveDonationAction = actionClient
 				date: new Date().toISOString(),
 			}
 			const savedDonation = await handleSaveTransaction(donationObject)
-			return JSON.stringify(savedDonation)
+			return JSON.parse(savedDonation)
 		},
 	)

@@ -1,9 +1,13 @@
 'use client'
 
+import { saveDonationAction } from "@/actions/transaction/saveDonation";
+import { saveExpenseAction } from "@/actions/transaction/saveExpense";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "@/hooks/use-toast";
 import { validateCpf } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogProps } from "@radix-ui/react-dialog";
@@ -13,9 +17,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Steps } from "../Steps";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { saveDonationAction } from "@/actions/transaction/saveDonation";
-import { formatDateToISO } from "@/utils/formatData";
 
 interface UploadedImage {
   file: File;
@@ -25,9 +26,25 @@ interface UploadedImage {
 interface INewRegisterModal extends DialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void
+  onReloadData: () => void
 }
 
-const mockedCauses = ['Água', 'Cirurgia', 'Limpeza', 'Energia', 'Ração', 'Aluguel']
+const mockedCauses =[
+  "Aluguel",
+  "Água",
+  "Brinquedos",
+  "Castração",
+  "Energia Elétrica",
+  "Exames/Tratamento Médico",
+  "Gás",
+  "Internet",
+  "Manutenção do espaço",
+  "Produtos de Limpeza",
+  "Ração/Suplementos",
+  "Remédios",
+  "Salário",
+  "Vacinas/Vermífugos"
+];
 const mockedAnimal = ['Nina', 'Cabeça de Pastel', 'Caramelo Amarelo', 'Pretinho', 'Lua', 'Batata quente']
 
 const mockedSteps = {
@@ -72,12 +89,13 @@ const ExpensiveStepTwoSchema = z
   value: z.string(),
   categoryId: z.string(),
   description: z.string().trim(),
-  proof: z.array(z.instanceof(File)),
+  proof: z.array(z.instanceof(File)).optional(),
 })
 
 export const NewRegister = ({
   open,
   onOpenChange,
+  onReloadData,
   ...props
 }: INewRegisterModal) => {
   const [type, setType] = useState<'donation' | 'expensive'>('donation')
@@ -114,15 +132,12 @@ export const NewRegister = ({
     resolver: zodResolver(ExpensiveStepTwoSchema),
   })
   
-  const handleOnSubmitStepTwo = (data) => {
-    console.log(data, 'data StepTwo')
-
+  const handleOnSubmitStepTwo = () => {
     setStep(step + 1)
   }  
 
-  const handleOnSubmitStepThree = (e) => {
+  const handleOnSubmitStepThree = async (e) => {
     e.preventDefault();
-    console.log({...formDonationStepThree.control._formValues}, 'data')
     const formData = {
       ...formDonationStepThree.control._formValues,
       proof: donationsFiles.map((item) => item.file),
@@ -131,24 +146,67 @@ export const NewRegister = ({
     try {
       const validatedData = DonationStepThreeSchema.parse(formData);
       const allData = {
-        userName: 'Anya Forger',
-        userCpf: '81552346064',
+        userName: formDonationStepTwo.control._formValues.name ?? '',
+        userCpfCnpj: formDonationStepTwo.control._formValues.cpf ?? '',
         animalId: validatedData.animalId,
         category: validatedData.cause,
-        value: Number(500),
+        value: Number(validatedData.value),
         description: validatedData.description,
         proof: ['validatedData.proof'],
-        date: formatDateToISO(new Date())
+        transactionType: 'donation',
+        cause: validatedData.cause
       }
-      const response = saveDonationAction(allData)
-      console.log(response, 'reponse')
+      const response = await saveDonationAction(allData)
+      if(response?.serverError){
+        toast({
+          title: "Erro ao cadastrar doação",
+          description: response.serverError,
+          variant: "destructive",
+        })
+        return
+      }
+
+      onOpenChange(false)
+      onReloadData()
+      toast({
+        title: "Doação",
+        description: "Doação cadastrada com sucesso!",
+        variant: "default",
+      })
     } catch (error) {
-      console.error("Erro de validação:", error.errors);
+      console.error("Erro:", error);
     }
   };
 
-  const handleOnSubmitStepTwoExpensive = (data) => {
-    console.log(data, 'data StepTwoExpensive')
+  const handleOnSubmitStepTwoExpensive = async (data) => {
+    try {
+      const form = {
+        category: data.categoryId,
+        description: data.description,
+        value: Number(data.value),
+        proof: ['validatedData.proof'],
+        transactionType: 'expense'
+      }
+      const response = await saveExpenseAction(form)
+      if(response?.serverError){
+        toast({
+          title: "Erro ao cadastrar despesa",
+          description: response.serverError,
+          variant: "destructive",
+        })
+        return
+      }
+
+      onOpenChange(false)
+      onReloadData()
+      toast({
+        title: "Despesa",
+        description: "Despesa cadastrada com sucesso!",
+        variant: "default",
+      })
+    } catch (error) {
+      console.error("Erro:", error);
+    }
   }  
 
   const handleCancel = () => {
@@ -479,13 +537,16 @@ export const NewRegister = ({
                     <FormLabel className="font-semibold">Categoria</FormLabel>
                     <FormControl>
                       <Select
-                      // onValueChange={}
+                        onValueChange={field.onChange}
+                        value={field.value}
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Selecionar categoria" />
+                          <SelectValue placeholder="Selecionar causa" />
                         </SelectTrigger>
                         <SelectContent>
-                          {/* <SelectItem value={}>Administrador</SelectItem> */}
+                          {mockedCauses.map(i => (
+                            <SelectItem key={i} value={i}>{i}</SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -501,10 +562,12 @@ export const NewRegister = ({
                     <FormLabel className="font-semibold">Descrição</FormLabel>
                     <FormControl>
                       <div className="flex items-center w-full rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 group container-input gap-2">
-                        <textarea
+                      <textarea
                           id="description"
                           placeholder="Descreva do que se trata a despesa..."
                           className="w-full h-[100px] py-2 resize-none bg-transparent focus:outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground group-[.container-input]:focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                          onChange={field.onChange}
+                          value={field.value}
                         />
                       </div>
                     </FormControl>
@@ -564,6 +627,14 @@ export const NewRegister = ({
                 </FormControl>
                 <FormMessage />
               </FormItem>
+            </div>
+            <div className="flex justify-end gap-2 mt-6">
+              <Button variant='outline' className="flex items-center gap-2" onClick={handleCancel}>
+                Cancelar
+              </Button>
+              <Button type="submit" variant='default' className="flex items-center gap-2 bg-[#09090B] hover:bg-[#3A3A3B]">
+                {step === steps.length ? 'Criar' : 'Avançar'}
+              </Button>
             </div>
           </form>
         </Form>

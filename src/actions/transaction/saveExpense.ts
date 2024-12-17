@@ -1,12 +1,12 @@
 "use server"
-import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
-import { handleSaveTransaction } from "@/services/transaction.service"
 import type { IExpense } from "@/models/transaction.model"
+import { handleSaveTransaction } from "@/services/finance.service"
+import { z } from "zod"
 
 const schema = z.object({
   transactionType: z.literal("expense"),
-	userId: z.string(),
+	// userId: z.string(),
 	category: z.enum([
 		"Aluguel",
 		"Energia Elétrica",
@@ -34,7 +34,7 @@ export const saveExpenseAction = actionClient
     async ({ 
       parsedInput: {
         transactionType,
-        userId,
+        // userId,
         category, 
         value, 
         description, 
@@ -43,7 +43,7 @@ export const saveExpenseAction = actionClient
     }) => {
       const expenseObject: IExpense = {
         transactionType,
-        userId,
+        // userId,
         category,
         value,
         description,
@@ -51,5 +51,5 @@ export const saveExpenseAction = actionClient
         date: new Date().toISOString(),
       }
       const savedExpense = await handleSaveTransaction(expenseObject)
-		return JSON.stringify(savedExpense)
+		return JSON.parse(savedExpense)
 	})

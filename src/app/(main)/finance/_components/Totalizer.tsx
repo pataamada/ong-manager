@@ -23,7 +23,10 @@ export const Totalizer = ({type, label, value}: IPropsTotalizer) => {
       </div>
       <div>
         <div className={`font-normal text-base text-[#52525B]`}>{label}</div>
-        <div className={`font-bold text-2xl ${type === 'expenses' ? 'text-[#EF4444]' : type === 'donations' ? 'text-[#34D399]' : 'text-[#09090B]' }`}>{value}</div>
+        <div className={`font-bold text-2xl ${type === 'expenses' ? 'text-[#EF4444]' : type === 'donations' ? 'text-[#34D399]' : 'text-[#09090B]'}`}>{value.toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+        })}</div>
       </div>
     </div>
   );

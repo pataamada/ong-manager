@@ -1,15 +1,17 @@
 'use client'
 
 import { findDonationsAction, findExpensesAction } from "@/actions/transaction/findFinance";
+import { PawLoader } from "@/components/paw-loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { When } from "@/components/when";
+import { PAGE_SIZES_TABLE } from "@/utils";
 import { paginateItems } from "@/utils/paginateItems";
 import { Plus } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { IPropsTotalizer, Totalizer } from "./_components/Totalizer";
 import { NewRegister } from "./_components/modals/new-register";
-import { TableAll } from "./_components/tables/TableAll";
 import { TableDonation } from "./_components/tables/TableDonation";
 import { TableExpense } from "./_components/tables/TableExpense";
 
@@ -17,53 +19,36 @@ const mockedTotalizers: IPropsTotalizer[] = [
   {
     type: 'total',
     label: 'Total',
-    value: 'R$ 300,00'
+    value: 'R$ 0,00'
   },
   {
     type: 'donations',
     label: 'Doações',
-    value: 'R$ 1600,00'
+    value: 'R$ 0,00'
   },
   {
     type: 'expenses',
     label: 'Despesas',
-    value: 'R$ 1300,00'
+    value: 'R$ 0,00'
   },
 ]
-
-const mockedFinance = {
-  all: [
-    {type: 'expense', category: 'Água', description: 'Aliquam porta nisl dolor, molestie pellentesque elit molestie in. Morbi metus neque, elementum ullam', date: '2020-05-06 11:24:08', value: 'R$230,00'},
-    {type: 'donation', category: 'Cirurgia', description: 'Aliquam porta nisl dolor, molestie pellentesque elit molestie in. Morbi metus neque, elementum ullam', date: '2020-05-06 11:24:08', value: 'R$230,00'},
-    {type: 'expense', category: 'Limpeza', description: 'Aliquam porta nisl dolor, molestie pellentesque elit molestie in. Morbi metus neque, elementum ullam', date: '2020-05-06 11:24:08', value: 'R$230,00'},
-    {type: 'donation', category: 'Energia', description: 'Aliquam porta nisl dolor, molestie pellentesque elit molestie in. Morbi metus neque, elementum ullam', date: '2020-05-06 11:24:08', value: 'R$230,00'},
-    {type: 'expense', category: 'Ração', description: 'Aliquam porta nisl dolor, molestie pellentesque elit molestie in. Morbi metus neque, elementum ullam', date: '2020-05-06 11:24:08', value: 'R$230,00'},
-    {type: 'donation', category: 'Aluguel', description: 'Aliquam porta nisl dolor, molestie pellentesque elit molestie in. Morbi metus neque, elementum ullam', date: '2020-05-06 11:24:08', value: 'R$230,00'},
-  ],
-  donations: [
-    {type: 'donation', animal: 'nina', cause: 'Ração', donor: 'João Victor Zignago', date: '2020-05-06 11:24:08', value: 'R$230,00',avatar: 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/775c1b96352685.5eac4787ab295.jpg'},
-    {type: 'donation', animal: 'Donatelo Esquentado', cause: 'Cirugia', donor: 'João Victor Zignago', date: '2020-05-06 11:24:08', value: 'R$230,00',avatar: 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/775c1b96352685.5eac4787ab295.jpg'},
-    {type: 'donation', animal: 'Cabeça de Pastel', cause: 'Cirurgia', donor: 'João Victor Zignago', date: '2020-05-06 11:24:08', value: 'R$230,00',avatar: 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/775c1b96352685.5eac4787ab295.jpg'},
-  ],
-  expense: [
-    {type: 'expense', cause: 'Ração', date: '2020-05-06 11:24:08', value: 'R$230,00'},
-    {type: 'expense', cause: 'Limpeza', date: '2020-05-06 11:24:08', value: 'R$230,00'},
-    {type: 'expense', cause: 'Água', date: '2020-05-06 11:24:08', value: 'R$230,00'},
-  ]
-}
 
 export default function Finance() {
   const [isModalNewRegister, setIsModalNewRegister] = useState(false)
   const [filterType, setFilterType] = useState<'all' | 'donations' | 'expense'>('donations')
+  const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(1);
-  const [totalData, setTotalData] = useState(0);
+  const [pageSize, setPageSize] = useState(PAGE_SIZES_TABLE[0]);
+  const [totalDataDonations, setTotalDataDonations] = useState(0);
+  const [totalDataExpenses, setTotalDataExpenses] = useState(0);
   const [donations, setDonations] = useState([]);
   const [donationsPagination, setDonationsPagination] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [expensesPagination, setExpensesPagination] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getAllDonations = async () => {
+    setIsLoading(true)
     try {
       const response = await findDonationsAction()
       setDonations(response?.data)
@@ -73,6 +58,7 @@ export default function Finance() {
     }
   }
   const getAllExpenses = async () => {
+    setIsLoading(true)
     try {
       const response = await findExpensesAction()
       setExpenses(response?.data)
@@ -82,30 +68,43 @@ export default function Finance() {
     }
   }
 
-  // const handlePaginationAll = () => {
-  //   const joinData = [...donations, ...expenses]
-
-  //   const {data, totalItems} = paginateItems(joinData, page, pageSize);
-  //   setDonationsPagination(data)
-  //   setTotalData(totalItems)
-  // }
   const handlePaginationDonations = (items: any) => {
+    setIsLoading(true)
     const {data, totalItems} = paginateItems(items, page, pageSize);
     setDonationsPagination(data)
-    setTotalData(totalItems)
+    setTotalDataDonations(totalItems)
+    setIsLoading(false)
   }
   const handlePaginationExpenses = (items: any) => {
+    setIsLoading(true)
     const {data, totalItems} = paginateItems(items, page, pageSize);
     setExpensesPagination(data)
-    setTotalData(totalItems)
+    setTotalDataExpenses(totalItems)
+    setIsLoading(false)
   }
+
+  // const clearCollection = async (collectionName = 'donations') => {
+  //   try {
+  //     const querySnapshot = await getDocs(collection(db, collectionName));
+  //     const deletePromises = querySnapshot.docs.map((docItem) =>
+  //       deleteDoc(doc(db, collectionName, docItem.id))
+  //     );
+  
+  //     await Promise.all(deletePromises);
+  //     console.log(`Coleção ${collectionName} foi limpa com sucesso!`);
+  //   } catch (error) {
+  //     console.error("Erro ao limpar a coleção:", error);
+  //   }
+  // };
   
   useEffect(() => {
     getAllDonations()
     getAllExpenses()
+    // clearCollection()
   }, [])
 
   useEffect(() => {
+    setIsLoading(true)
     if (filterType === 'donations') {
       handlePaginationDonations(donations)
     } else if (filterType === 'expense') {
@@ -121,11 +120,28 @@ export default function Finance() {
         <NewRegister
           open={isModalNewRegister}
           onOpenChange={(open) => setIsModalNewRegister(open)}
+          onReloadData={getAllDonations}
         />
       )}
 
       <div className="flex flex-wrap lg:flex-nowrap gap-4">
-        {mockedTotalizers.map((i) => (
+        {[
+        {
+          type: 'total',
+          label: 'Total',
+          value: donations.reduce((sum, item) => sum + item.value, 0) - expenses.reduce((sum, item) => sum + item.value, 0)
+        },
+        {
+          type: 'donations',
+          label: 'Doações',
+          value: donations.reduce((sum, item) => sum + item.value, 0)
+        },
+        {
+          type: 'expenses',
+          label: 'Despesas',
+          value: expenses.reduce((sum, item) => sum + item.value, 0)
+        },
+      ].map((i) => (
           <Totalizer
             key={i.type}
             type={i.type}
@@ -170,9 +186,11 @@ export default function Finance() {
               </div>
             </div>
             <div className="flex justify-end flex-1 gap-4 flex-wrap lg:flex-nowrap">
-              <Input
+              {/* <Input
                 placeholder="Pesquisar..."
                 className="w-full max-w-sm"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                 leftIcon={
                   <Image
                     src={`/search.svg`}
@@ -195,7 +213,7 @@ export default function Finance() {
                     alt="ícone"
                   />
                 }
-              />
+              /> */}
               <Button
                 className="flex items-center gap-2 bg-[#09090B] hover:bg-[#3A3A3B]"
                 onClick={() => setIsModalNewRegister(true)}
@@ -206,8 +224,16 @@ export default function Finance() {
             </div>
           </div>
 
-          {/* list */}
-          {filterType === "all" && (
+          <When
+            condition={!isLoading}
+            fallback={
+              <div className="flex flex-1 items-center justify-center">
+                <PawLoader />
+              </div>
+            }
+          >
+            {/* list */}
+            {/* {filterType === "all" && (
             <TableAll
               data={[]}
               totalData={totalData}
@@ -216,27 +242,28 @@ export default function Finance() {
               handlePage={(currentPage) => setPage(currentPage)}
               handlePageSize={(pageSize) => setPageSize(pageSize)}
             />
-          )}
-          {filterType === "donations" && (
-            <TableDonation
-              data={donationsPagination}
-              totalData={totalData}
-              page={page}
-              pageSize={pageSize}
-              handlePage={(currentPage) => setPage(currentPage)}
-              handlePageSize={(pageSize) => setPageSize(pageSize)}
-            />
-          )}
-          {filterType === "expense" && (
-            <TableExpense
-              data={expensesPagination}
-              totalData={totalData}
-              page={page}
-              pageSize={pageSize}
-              handlePage={(page, pageSize) => ({})}
-              handlePageSize={(pageSize) => setPageSize(pageSize)}
-            />
-          )}
+          )} */}
+            {filterType === "donations" && (
+              <TableDonation
+                data={donationsPagination}
+                totalData={totalDataDonations}
+                page={page}
+                pageSize={pageSize}
+                handlePage={(currentPage) => setPage(currentPage)}
+                handlePageSize={(pageSize) => setPageSize(pageSize)}
+              />
+            )}
+            {filterType === "expense" && (
+              <TableExpense
+                data={expensesPagination}
+                totalData={totalDataExpenses}
+                page={page}
+                pageSize={pageSize}
+                handlePage={(currentPage) => setPage(currentPage)}
+                handlePageSize={(pageSize) => setPageSize(pageSize)}
+              />
+            )}
+          </When>
         </div>
       </div>
     </div>
