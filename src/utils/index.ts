@@ -3,6 +3,7 @@ import { type NextRequest, NextResponse } from "next/server"
 export const PAGE_SIZES_TABLE = [10, 20, 30, 40, 50];
 
 export const redirectTo = (request: NextRequest, to: string) =>
+<<<<<<< HEAD
 	NextResponse.redirect(new URL(to, request.nextUrl))
 
 export const initialLetters = (fullname: string): string => {
@@ -38,3 +39,14 @@ export function validateCpf(cpf: string) {
 
 	return true
 }
+=======
+    NextResponse.redirect(new URL(to, request.nextUrl));
+
+export const initialLetters = (fullname: string) => {
+    const names = fullname.split(" ")
+    if(names.length < 2) {
+        return fullname.slice(2)
+    }  
+    return names[0][0] + names[1][0]
+} 
+>>>>>>> e20437b (feat: avatar on user row, validate users page, change primary color)

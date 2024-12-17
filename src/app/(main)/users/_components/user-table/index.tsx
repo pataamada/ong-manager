@@ -16,12 +16,7 @@ import {
 import { Filter, Plus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-// import {
-// 	DropdownMenu,
-// 	DropdownMenuCheckboxItem,
-// 	DropdownMenuContent,
-// 	DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu"
+
 import { Input } from "@/components/ui/input"
 import {
 	Table,
@@ -34,15 +29,6 @@ import {
 import { columns } from "./columns"
 import { usersMock } from "../mock"
 import type { User } from "@/models/user.model"
-// import {
-// 	Select,
-// 	SelectContent,
-// 	SelectGroup,
-// 	SelectItem,
-// 	SelectLabel,
-// 	SelectTrigger,
-// 	SelectValue,
-// } from "@/components/ui/select"
 
 export function UsersTable() {
 	const [sorting, setSorting] = React.useState<SortingState>([])
@@ -60,9 +46,15 @@ export function UsersTable() {
 		})
 		setData(() => updatedData)
 	}
+	const handleEdit = (row: Row<User>) => {
+		console.log(row)
+	}
+	const handleDelete = (row: Row<User>) => {
+		console.log(row)
+	}
 	const table = useReactTable({
 		data,
-		columns: columns(handleRoleChange),
+		columns: columns({ roleChange: handleRoleChange, delete: handleDelete, edit: handleEdit }),
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
@@ -87,33 +79,8 @@ export function UsersTable() {
 					onChange={event => table.getColumn("user")?.setFilterValue(event.target.value)}
 					className="max-w-sm mr-auto"
 				/>
-				
-				{/* <DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="outline" className="ml-auto">
-							Colunas <ChevronDown className="ml-2 h-4 w-4" />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						{table
-							.getAllColumns()
-							.filter(column => column.getCanHide())
-							.map(column => {
-								return (
-									<DropdownMenuCheckboxItem
-										key={column.id}
-										className="capitalize"
-										checked={column.getIsVisible()}
-										onCheckedChange={value => column.toggleVisibility(!!value)}
-									>
-										{(column.columnDef.meta as { title?: string })?.title}
-									</DropdownMenuCheckboxItem>
-								)
-							})}
-					</DropdownMenuContent>
-				</DropdownMenu> */}
-                <Button variant="outline" size="icon">
-					<Filter size={20}/>
+				<Button variant="outline" size="icon">
+					<Filter size={20} />
 				</Button>
 				<Button>
 					<Plus />
@@ -160,8 +127,8 @@ export function UsersTable() {
 			</div>
 			<div className="flex items-center justify-end space-x-2 py-4">
 				<div className="flex-1 text-sm text-muted-foreground">
-					{table.getFilteredSelectedRowModel().rows.length} of{" "}
-					{table.getFilteredRowModel().rows.length} row(s) selected.
+					{table.getFilteredSelectedRowModel().rows.length} de{" "}
+					{table.getFilteredRowModel().rows.length} linha(s) selecionada.
 				</div>
 				<div className="space-x-2">
 					<Button
