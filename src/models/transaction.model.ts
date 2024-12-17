@@ -3,7 +3,7 @@ export interface IDonation {
 	animalId?: string
 	userName?: string
 	userCpfCnpj?: string
-	category: Category
+	category: string
 	value: number
 	description: string
 	proof: string[]
@@ -13,7 +13,7 @@ export interface IDonation {
 export interface IExpense {
 	transactionType: transactionType
 	userId: string
-	category: Category
+	category: string
 	value: number
 	description: string
 	proof: string[]
@@ -22,18 +22,19 @@ export interface IExpense {
 
 type transactionType = "donation" | "expense"
 
-type Category =
-	| "Aluguel"
-	| "Energia Elétrica"
-	| "Água"
-	| "Produtos de Limpeza"
-	| "Ração/Suplementos"
-	| "Brinquedos"
-	| "Vacinas/Vermífugos"
-	| "Castração"
-	| "Exames/Tratamento Medico"
-	| "Remédios"
-	| "Salario"
-	| "Gás"
-	| "Internet"
-	| "Manutenção do espaço"
+export enum Category {
+	Aluguel = "Aluguel",
+	"Energia Eletrica" = "Energia Elétrica",
+  Agua = "Água",
+  "Produtos de Limpeza" = "Produtos de Limpeza",
+  "Racao/Suplementos" = "Ração/Suplementos",
+  Brinquedos = "Brinquedos",
+  "Vacinas/Vermifugos" = "Vacinas/Vermífugos",
+  Castracao = "Castração",
+  "Exames/TratamentoMedico" = "Exames/Tratamento Medico",
+  Remedios = "Remédios",
+  Salario = "Salario",
+  Gas = "Gás",
+  Internet = "Internet",
+  "Manutencao do Espaco" = "Manutenção do espaço",
+}

@@ -4,5 +4,5 @@ import { findAnimals } from "@/services/animal.service"
 
 export const findAnimalAction = actionClient.action(async () => {
 	const animals = await findAnimals()
-	return JSON.stringify(animals)
+	return JSON.parse(animals)
 })

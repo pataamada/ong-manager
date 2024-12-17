@@ -48,7 +48,7 @@ export const findAnimals = async () => {
 	const q = query(collection(db, "animais"))
 	const querySnapshot = await getDocs(q)
 	const animals = querySnapshot.docs.map(doc => doc.data())
-	return animals
+	return JSON.stringify(animals)
 }
 
 export const findAnimalById = async (animalId: string) => {

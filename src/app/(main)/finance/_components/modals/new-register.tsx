@@ -13,10 +13,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogProps } from "@radix-ui/react-dialog";
 import { InputMask } from "@react-input/mask";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Steps } from "../Steps";
+import { findAnimalAction } from "@/actions/animal/findAnimals";
 
 interface UploadedImage {
   file: File;
@@ -102,6 +103,7 @@ export const NewRegister = ({
   const [step, setStep] = useState(1)
   const [donationsFiles, setDonationsFiles] = useState<{ file: File; preview: string }[]>([]);
   const [expensivesFiles, setExpensivesFiles] = useState<UploadedImage[] | []>([]);
+  const [animals, setAnimals] = useState([]);
 
   const handleImageUpload = (event: any, setValue: any) => {
     const files = Array.from(event.target.files);
@@ -220,6 +222,17 @@ export const NewRegister = ({
     }
     setStep(step + 1)
   }  
+
+  const getAnimals = async () => {
+    const response = await findAnimalAction()
+    setAnimals(response.data)
+    console.log(response, 'anialsssssssssssss')
+  } 
+
+
+  useEffect(() => {
+    getAnimals()
+  }, [])
 
   let content = (
     <div className="flex gap-4">
@@ -407,9 +420,10 @@ export const NewRegister = ({
                           <SelectValue placeholder="Selecionar animal" />
                         </SelectTrigger>
                         <SelectContent>
-                          {mockedAnimal.map(i => (
-                            <SelectItem key={i} value={i}>{i}</SelectItem>
+                          {animals && animals[0]?.name && animals.map(i => (
+                            <SelectItem key={i.name} value={i.name}>{i.name}</SelectItem>
                           ))}
+                          <SelectItem key={'all'} value={'Todos'}>{'Todos'}</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>

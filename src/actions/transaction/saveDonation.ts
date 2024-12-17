@@ -1,5 +1,6 @@
 "use server"
 import { z } from "zod"
+import { serverTimestamp } from "firebase/firestore"
 import { actionClient } from "@/actions/safe-action"
 import type { IDonation } from "@/models/transaction.model"
 import { handleSaveTransaction } from "@/services/finance.service"
@@ -9,7 +10,7 @@ const schema = z.object({
 	userName: z.string().optional(),
 	userCpfCnpj: z.string().optional(),
 	animalId: z.string().optional(),
-	category: z.enum([
+	category:z.enum([
 		"Aluguel",
 		"Energia Elétrica",
 		"Água",

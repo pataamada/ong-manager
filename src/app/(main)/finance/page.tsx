@@ -78,6 +78,7 @@ export default function Finance() {
   const handlePaginationExpenses = (items: any) => {
     setIsLoading(true)
     const {data, totalItems} = paginateItems(items, page, pageSize);
+    console.log(expenses, 'expesnes')
     setExpensesPagination(data)
     setTotalDataExpenses(totalItems)
     setIsLoading(false)
@@ -96,6 +97,11 @@ export default function Finance() {
   //     console.error("Erro ao limpar a coleção:", error);
   //   }
   // };
+
+  const onReloadData = async () => {
+    await getAllDonations()
+    await getAllExpenses()
+  }
   
   useEffect(() => {
     getAllDonations()
@@ -120,7 +126,7 @@ export default function Finance() {
         <NewRegister
           open={isModalNewRegister}
           onOpenChange={(open) => setIsModalNewRegister(open)}
-          onReloadData={getAllDonations}
+          onReloadData={onReloadData}
         />
       )}
 
