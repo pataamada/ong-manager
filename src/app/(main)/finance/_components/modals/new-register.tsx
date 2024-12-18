@@ -59,14 +59,6 @@ const mockedCauses = [
 	"Salário",
 	"Vacinas/Vermífugos",
 ]
-const mockedAnimal = [
-	"Nina",
-	"Cabeça de Pastel",
-	"Caramelo Amarelo",
-	"Pretinho",
-	"Lua",
-	"Batata quente",
-]
 
 const mockedSteps = {
 	donation: [

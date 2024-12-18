@@ -28,7 +28,7 @@ const schema = z.object({
 	]),
 	value: z.number(),
 	description: z.string(),
-	proof: z.array(z.string()),
+	// proof: z.array(z.string()),
 })
 
 export const saveDonationAction = actionClient
@@ -43,7 +43,7 @@ export const saveDonationAction = actionClient
 				category,
 				value,
 				description,
-				proof,
+				// proof,
 			},
 		}) => {
 			const donationObject: IDonation = {
@@ -54,7 +54,7 @@ export const saveDonationAction = actionClient
 				category,
 				value,
 				description,
-				proof,
+				// proof,
 				date: new Date().toISOString(),
 			}
 			const savedDonation = await handleSaveTransaction(donationObject)
