@@ -27,7 +27,7 @@ export async function isUserAuthenticated(session: string | undefined = undefine
 	try {
 		const isRevoked = await auth.verifyIdToken(_session, true)
 		return !!isRevoked
-	} catch (error) {
+	} catch {
 		return false
 	}
 }
