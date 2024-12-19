@@ -3,7 +3,6 @@
 /.pnp
 .pnp.js
 .yarn/install-state.gz
-yarn.lock
 .vscode
 pnpm-lock.yaml
 package-lock.json
