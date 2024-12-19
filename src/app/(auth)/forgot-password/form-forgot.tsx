@@ -57,7 +57,7 @@ export default function FormForgotPassword() {
 				className="gap-6 w-full flex flex-col md:max-w-[400px] my-auto mx-auto"
 			>
 				<div className="flex flex-col items-center gap-2 mx-auto">
-					<h2 className="text-center">Recuperação de senha</h2>
+					<h2 className="text-center text-h5">Recuperação de senha</h2>
 				</div>
 
 				<FormField

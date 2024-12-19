@@ -1,5 +1,4 @@
 "use client"
-
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer"
 import { Menu } from "lucide-react"
 import { DialogTitle } from "@radix-ui/react-dialog"
@@ -18,22 +17,17 @@ export function LeftDrawer() {
 		await logout()
 		router.replace("/login")
 		setTimeout(() => {
-            setUser(null)
+			setUser(null)
 		}, 100)
 	}
 	return (
-		<div className="sm:hidden px-6 py-2 flex items-center bg-white min-h-[64px] drop-shadow-md sticky top-0">
+		<div className="sm:hidden px-6 py-2 flex items-center bg-white min-h-[64px] drop-shadow-md sticky top-0 z-50">
 			<Drawer direction="left">
 				<div className="flex justify-between w-full items-center">
 					<DrawerTrigger>
 						<Menu className="size-6" />
 					</DrawerTrigger>
-					<Image
-						src="/logo-h.svg"
-						width={150}
-						height={40}
-						alt="Pata Amada Logo"
-					/>
+					<Image src="/logo-h.svg" width={150} height={40} alt="Pata Amada Logo" />
 				</div>
 				<DrawerContent className="min-w-[250px] h-screen top-0 left-0 right-auto mt-0 rounded-none p-4">
 					<DialogTitle className="sr-only">Menu lateral</DialogTitle>
@@ -43,7 +37,7 @@ export function LeftDrawer() {
 							email={user?.user.email}
 							onLogout={handleLogout}
 							photo={user?.user.photoURL}
-                            side="bottom"
+							side="bottom"
 						/>
 						<div className="flex flex-col">
 							<h6>{user?.user.displayName}</h6>

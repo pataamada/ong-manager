@@ -11,11 +11,12 @@ const userSchema = z.object({
 	email: z.string().trim().email(),
 	password: z.string().trim().min(8).max(100),
 	cpf: z.string().trim().length(11),
+	phone: z.string().trim().max(15),
 })
 
 export const createUser = actionClient
 	.schema(userSchema)
-	.action(async ({ parsedInput: { name, cpf, email, password } }) => {
+	.action(async ({ parsedInput: { name, cpf, email, password, phone } }) => {
 		if (await existsCpf(cpf)) {
 			throw new Error("CPF já cadastrado")
 		}
@@ -28,7 +29,7 @@ export const createUser = actionClient
 			throw new Error("Erro ao criar o usuário")
 		}
 		await authAdmin.setCustomUserClaims(user.uid, { role: UserRoles.Authenticated })
-		await createUserService(user.uid, { cpf })
-		revalidatePath('/users')
-		return user
+		await createUserService(user.uid, { cpf, phone })
+		revalidatePath("/users")
+		return JSON.stringify(user)
 	})

@@ -1,12 +1,11 @@
 "use client"
 
-import { routesAliasesList } from "@/app/route"
+import { routesAliasesList } from "@/utils/route"
 import {
 	Breadcrumb,
 	BreadcrumbItem,
 	BreadcrumbLink,
 	BreadcrumbList,
-	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { usePathname } from "next/navigation"
@@ -14,40 +13,30 @@ import { usePathname } from "next/navigation"
 export default function BreadCrumb() {
 	const pathname = usePathname()
 	const pathSegments = pathname.split("/").filter(segment => segment !== "")
-
-	const routes = routesAliasesList
-
+	const currentRoute = routesAliasesList.find(
+		route => pathname.includes(route.href) || route.href.includes(pathname),
+	)
 	return (
 		<Breadcrumb>
 			<BreadcrumbList>
 				<BreadcrumbItem>
-					<BreadcrumbLink
-						className="text-2xl font-bold text-black"
-						href={routes.find(route => route.href === pathname)?.href}
-					>
-						{routes.find(route => route.href === pathname)?.alias ?? "Nome da roda não definido"}
+					<BreadcrumbLink className="text-2xl font-bold text-black" href={currentRoute?.href}>
+						{currentRoute?.alias ?? "Nome da roda não definido"}
 					</BreadcrumbLink>
 				</BreadcrumbItem>
-				{pathSegments.map((segment, index) => {
+				{pathSegments.map((_, index) => {
 					const href = `/${pathSegments.slice(0, index + 1).join("/")}`
 					const isLast = index === pathSegments.length - 1
 
 					return (
-						<BreadcrumbItem key={href}>
-							{isLast ? (
-								<BreadcrumbPage>
-									{routes.find(route => route.href === href)?.alias ?? "Nome da roda não definido"}
-								</BreadcrumbPage>
-							) : (
-								<>
-									<BreadcrumbLink href={href}>
-										{routes.find(route => route.href === href)?.alias ??
-											"Nome da roda não definido"}
-									</BreadcrumbLink>
-									<BreadcrumbSeparator />
-								</>
-							)}
-						</BreadcrumbItem>
+						<div key={href}>
+							<BreadcrumbItem >
+								<BreadcrumbLink href={`${href}-index`}>
+									{routesAliasesList.find(route => route.href === href)?.alias}
+								</BreadcrumbLink>
+							</BreadcrumbItem>
+							{!isLast && <BreadcrumbSeparator />}
+						</div>
 					)
 				})}
 			</BreadcrumbList>

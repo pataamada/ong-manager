@@ -45,7 +45,6 @@ export const useCreateUser = (toast?: (params: Toast) => void) => {
 			}
 			return request?.data
 		},
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		onMutate: async ({ password, ...values }) => {
 			await queryClient.cancelQueries(getUsersOptions)
 			const previousUsers = queryClient.getQueryData(getUsersOptions.queryKey)
@@ -102,7 +101,6 @@ const updateUserSchema = z.object({
 	uid: z.string(),
 	name: z.string().trim().min(4).max(255).optional(),
 	role: z.nativeEnum(UserRoles).optional(),
-	address: z.string().trim().max(512).optional(),
 })
 export const useUpdateUser = (toast?: (params: Toast) => void) => {
 	const queryClient = useQueryClient()
@@ -163,7 +161,7 @@ export const useDeleteUser = (toast?: (params: Toast) => void) => {
 		onSuccess(_, variables) {
 			toast?.({
 				title: "Usuário apagado!",
-				description:"O usuário foi apagado com sucesso!",
+				description: "O usuário foi apagado com sucesso!",
 				variant: "default",
 			})
 			queryClient?.setQueryData<UserWOutPassword[]>(["users"], oldData => {

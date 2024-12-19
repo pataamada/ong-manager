@@ -1,5 +1,4 @@
 "use client"
-
 import React from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { z } from "zod"
@@ -11,41 +10,50 @@ import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
 import { createUser } from "@/actions/auth/user/create"
 import { PasswordInput } from "@/components/custom-ui/password-input"
-import { validateCpf } from "@/utils"
 import { InputMask } from "@react-input/mask"
 import { useAction } from "next-safe-action/hooks"
+import { redirect } from "next/navigation"
+import { validateCpf } from "@/utils"
 
-const formRegisterSchema = z.object({
-	fullName: z
-		.string()
-		.min(4, "Nome completo é obrigatório")
-		.max(256, "O nome completo deve ter no máximo 256 caracteres"),
-	cpf: z
-		.string()
-		.min(11, "O CPF deve ter pelo menos 11 caracteres")
-		.trim()
-		.transform(cpf => cpf.replaceAll(".", "").replace("-", "")),
-	email: z
-		.string()
-		.email("Por favor, insira um e-mail válido")
-		.max(256, "Máximo de 256 caracteres"),
-	password: z
-		.string()
-		.min(8, "A senha deve ter pelo menos 8 caracteres")
-		.max(256, "Máximo de 256 caracteres"),
-	confirmPassword: z
-		.string()
-		.min(8, "A confirmação de senha deve ter pelo menos 8 caracteres")
-		.max(256, "Máximo de 256 caracteres"),
-}).refine(data => data.password === data.confirmPassword, {
-	message: "As senhas não coincidem",
-	path: ["confirmPassword"],
-}).superRefine((data, ctx) => {
-	const isValidCpf = validateCpf(data.cpf || "")
-	if (!isValidCpf) {
-		ctx.addIssue({ path: ["cpf"], code: "custom", message: "Digite um cpf válido" })
-	}
-})
+const formRegisterSchema = z
+	.object({
+		fullName: z
+			.string()
+			.min(4, "Nome completo é obrigatório")
+			.max(256, "O nome completo deve ter no máximo 256 caracteres"),
+		cpf: z
+			.string()
+			.min(11, "O CPF deve ter pelo menos 11 caracteres")
+			.trim()
+			.transform(cpf => cpf.replaceAll(".", "").replace("-", "")),
+		email: z
+			.string()
+			.email("Por favor, insira um e-mail válido")
+			.max(256, "Máximo de 256 caracteres"),
+		phone: z
+			.string()
+			.trim()
+			.max(15, "O telefone deve ter no máximo 11 dígitos")
+			.transform(phone => phone.replace(/\D/g, "")),
+		password: z
+			.string()
+			.min(8, "A senha deve ter pelo menos 8 caracteres")
+			.max(256, "Máximo de 256 caracteres"),
+		confirmPassword: z
+			.string()
+			.min(8, "A confirmação de senha deve ter pelo menos 8 caracteres")
+			.max(256, "Máximo de 256 caracteres"),
+	})
+	.refine(data => data.password === data.confirmPassword, {
+		message: "As senhas não coincidem",
+		path: ["confirmPassword"],
+	})
+	.superRefine((data, ctx) => {
+		const isValidCpf = validateCpf(data.cpf || "")
+		if (!isValidCpf) {
+			ctx.addIssue({ path: ["cpf"], code: "custom", message: "Digite um cpf válido" })
+		}
+	})
 
 type RegisterFormData = z.infer<typeof formRegisterSchema>
 
@@ -56,19 +64,25 @@ export default function FormRegister() {
 			fullName: "",
 			cpf: "",
 			email: "",
+			phone: "",
 			password: "",
 			confirmPassword: "",
 		},
 	})
 
 	const { toast } = useToast()
-	const { handleSubmit, formState: { errors } } = methods
+	const {
+		handleSubmit,
+		getValues,
+		formState: { errors },
+	} = methods
 	const { executeAsync, isPending } = useAction(createUser)
 	const onSubmit = async (data: RegisterFormData) => {
 		const result = await executeAsync({
 			name: data.fullName,
 			cpf: data.cpf,
 			email: data.email,
+			phone: data.phone,
 			password: data.password,
 		})
 		if (!result?.serverError) {
@@ -88,10 +102,13 @@ export default function FormRegister() {
 
 	return (
 		<FormProvider {...methods}>
-			<form onSubmit={handleSubmit(onSubmit)} className="gap-4 w-full flex flex-col md:max-w-[400px] my-auto mx-auto">
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				className="gap-4 w-full flex flex-col md:max-w-[400px] my-auto mx-auto"
+			>
 				<div className="flex flex-col items-center gap-2">
-					<h2 className="text-center">Apadrinhe seu animal</h2>
-					<h3 className="text-center">Cadastre-se na plataforma</h3>
+					<h2 className="text-center text-h5">Apadrinhe seu animal</h2>
+					<h3 className="text-center text-subtitle-2">Cadastre-se na plataforma</h3>
 				</div>
 
 				<FormField
@@ -128,7 +145,26 @@ export default function FormRegister() {
 						</FormItem>
 					)}
 				/>
-
+				<FormField
+					name="phone"
+					control={methods.control}
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel className="font-semibold">Telefone</FormLabel>
+							<FormControl>
+								<InputMask
+									mask="(__) _____-____"
+									replacement={{ _: /\d/ }}
+									component={Input}
+									id="phone"
+									placeholder="Digite seu telefone"
+									{...field}
+								/>
+							</FormControl>
+							{errors.phone && <FormMessage>{errors.phone.message}</FormMessage>}
+						</FormItem>
+					)}
+				/>
 				<FormField
 					name="email"
 					control={methods.control}
@@ -156,7 +192,6 @@ export default function FormRegister() {
 						</FormItem>
 					)}
 				/>
-
 				<FormField
 					name="confirmPassword"
 					control={methods.control}
@@ -166,17 +201,22 @@ export default function FormRegister() {
 							<FormControl>
 								<PasswordInput id="confirmPassword" placeholder="Confirme sua senha" {...field} />
 							</FormControl>
-							{errors.confirmPassword && <FormMessage>{errors.confirmPassword.message}</FormMessage>}
+							{errors.confirmPassword && (
+								<FormMessage>{errors.confirmPassword.message}</FormMessage>
+							)}
 						</FormItem>
 					)}
 				/>
-
-				<Button className="w-full" variant="success" type="submit" disabled={isPending}>
+				<Button
+					className="w-full"
+					variant="success"
+					type="submit"
+					disabled={isPending || Object.values(getValues()).includes(undefined)}
+				>
 					Cadastrar
 				</Button>
-
 				<div className="text-center mt-4">
-					<span className="text-sm font-normal">Já tem uma conta? </span>
+					<span className="text-sm font-normal">Já tem uma conta?</span>
 					<Link href="/login" className="text-sm font-semibold text-primary hover:text-primary/80">
 						Entrar
 					</Link>
