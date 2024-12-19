@@ -1,8 +1,8 @@
 import { collection, addDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebase-secret"
 import { PaymentService } from "@/services/Asaas/payment.service"
+import { checkIfCustomerExists } from "./Asaas/customer.service"
 import type { IPaymentCreateBoletoOrPix } from "@/types/Asaas/Payment"
-import { CustomerService } from "@/services/Asaas/customer.service"
 
 export const handleDonationCreation = async (
 	animalId: string | undefined,
@@ -15,10 +15,10 @@ export const handleDonationCreation = async (
 	date: string,
 ) => {
 	const customer = await checkIfCustomerExists(userCpfCnpj)
-	let customerId = ''
-	
+	let customerId = ""
+
 	if (customer instanceof Error) {
-		customerId = ''
+		customerId = ""
 	} else {
 		customerId = customer.data[0].id
 	}
@@ -55,7 +55,7 @@ const saveDonationDb = async (
 	}
 	const createdDonation = await PaymentService.createPayment(donationData)
 	if (createdDonation instanceof Error) {
-		console.log(createdDonation, 'PaymentService.createPayment')
+		console.log(createdDonation, "PaymentService.createPayment")
 		return
 	}
 
@@ -71,8 +71,4 @@ const saveDonationDb = async (
 		donation: createdDonation,
 	})
 	return JSON.stringify(document)
-}
-
-const checkIfCustomerExists = (cpfCnpj: string) => {
-	return CustomerService.getCustomerByCpfCnpj(cpfCnpj)
 }

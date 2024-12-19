@@ -41,14 +41,14 @@ export const saveAnimalDb = async (
 		atualizadoEm: serverTimestamp(),
 		atualizadoPor: atualizadoPor,
 	})
-	return JSON.stringify(document)
+	return document
 }
 
 export const findAnimals = async () => {
 	const q = query(collection(db, "animais"))
 	const querySnapshot = await getDocs(q)
 	const animals = querySnapshot.docs.map(doc => doc.data())
-	return JSON.stringify(animals)
+	return animals
 }
 
 export const findAnimalById = async (animalId: string) => {
@@ -84,7 +84,7 @@ export const updateAnimal = async (
 		atualizadoEm: serverTimestamp(),
 		atualizadoPor: atualizadoPor,
 	})
-	return JSON.stringify(updatedDocument)
+	return updatedDocument
 }
 
 export const deleteAnimal = async (animalId: string) => {

@@ -1,8 +1,8 @@
 import { db } from "@/lib/firebase/firebase-secret"
-import { CustomerService } from "@/services/Asaas/customer.service"
 import { PaymentService } from "@/services/Asaas/payment.service"
-import type { IPaymentCreateBoletoOrPix } from "@/types/Asaas/Payment"
 import { addDoc, collection } from "firebase/firestore"
+import { checkIfCustomerExists } from "./Asaas/customer.service"
+import type { IPaymentCreateBoletoOrPix } from "@/types/Asaas/Payment"
 
 export const handleExpenseCreation = async (
 	userId: string,
@@ -16,8 +16,7 @@ export const handleExpenseCreation = async (
 	const customer = await checkIfCustomerExists(userCpfCnpj)
 
 	if (customer instanceof Error) {
-		alert("Erro ao buscar cliente")
-		console.log(customer)
+		console.log("Erro ao buscar cliente", customer)
 		return
 	}
 
@@ -43,8 +42,7 @@ const saveExpenseDb = async (
 	}
 	const createdExpense = await PaymentService.createPayment(expenseData)
 	if (createdExpense instanceof Error) {
-		alert("Erro ao criar despesa")
-		console.log(createdExpense)
+		console.log("Erro ao criar despesa", createdExpense)
 		return
 	}
 
@@ -58,8 +56,4 @@ const saveExpenseDb = async (
 		expense: createdExpense,
 	})
 	return JSON.stringify(document)
-}
-
-const checkIfCustomerExists = (cpfCnpj: string) => {
-	return CustomerService.getCustomerByCpfCnpj(cpfCnpj)
 }
