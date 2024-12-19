@@ -25,7 +25,7 @@ export const Steps = ({ label, step, stepsCount, currentStep }: IStepsProps) => 
 						} `}
 					>
 						{step < currentStep ? (
-							<Image src={`/finance/check.svg`} width={16} height={16} priority alt="ícone" />
+							<Image src={"/finance/check.svg"} width={16} height={16} priority alt="ícone" />
 						) : (
 							step
 						)}

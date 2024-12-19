@@ -8,7 +8,7 @@ interface ITableExpense {
 		category: string
 		description: string
 		date: string
-		value: string
+		value: number
 	}[]
 	page: number
 	pageSize: number
@@ -85,7 +85,7 @@ export const TableExpense = ({
 					title: "Valor",
 					titleClassName: "font-normal text-base text-[#52525B]",
 					render: ({ value }) => (
-						<div className={`font-normal text-base text-[#EF4444]`}>
+						<div className={"font-normal text-base text-[#EF4444]"}>
 							{value.toLocaleString("pt-BR", {
 								style: "currency",
 								currency: "BRL",

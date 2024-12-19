@@ -43,7 +43,7 @@
 			"noUselessElse": "warn",
 			"noVar": "warn",
 			"noYodaExpression": "error",
-			"useNamingConvention": "info",
+			"useNamingConvention": "off",
 			"useImportType": "warn",
 			"useShorthandArrayType": "error",
 			"useShorthandAssign": "error"
@@ -55,7 +55,8 @@
 			"useAwait": "error"
 		},
 		"a11y": {
-			"useAltText": "warn"
+			"useAltText": "warn",
+			"useKeyWithClickEvents":"off"
 		},
 		"performance": {
 			"noAccumulatingSpread": "error",

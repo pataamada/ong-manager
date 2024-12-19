@@ -34,7 +34,6 @@ type CategoryType = keyof typeof categoryIcons
 
 export function ExpenseDetailsDialog({ open, onOpenChange, expense }: ExpenseDetailsDialogProps) {
 	if (!expense) return null
-	console.log(expense)
 
 	const CategoryIcon =
 		(expense.category && categoryIcons[expense.category as CategoryType]) || HelpCircle

@@ -2,9 +2,10 @@ import Image from "next/image"
 import React from "react"
 
 export interface IPropsTotalizer {
-	type: "total" | "donations" | "expenses"
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	type: "total" | "donations" | "expenses" | (string & {})
 	label: string
-	value: string
+	value: number
 }
 
 export const Totalizer = ({ type, label, value }: IPropsTotalizer) => {
@@ -22,7 +23,7 @@ export const Totalizer = ({ type, label, value }: IPropsTotalizer) => {
 				/>
 			</div>
 			<div>
-				<div className={`font-normal text-base text-[#52525B]`}>{label}</div>
+				<div className={"font-normal text-base text-[#52525B]"}>{label}</div>
 				<div
 					className={`font-bold text-2xl ${type === "expenses" ? "text-[#EF4444]" : type === "donations" ? "text-[#34D399]" : "text-[#09090B]"}`}
 				>

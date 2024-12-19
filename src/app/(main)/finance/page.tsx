@@ -11,6 +11,8 @@ import { Totalizer } from "./_components/Totalizer"
 import { NewRegister } from "./_components/modals/new-register"
 import { TableDonation } from "./_components/tables/TableDonation"
 import { TableExpense } from "./_components/tables/TableExpense"
+import type { Donation, Expense } from "@/services/finance.service"
+import { ETransactionType } from "@/models/transaction.model"
 
 export default function Finance() {
 	const [isModalNewRegister, setIsModalNewRegister] = useState(false)
@@ -19,18 +21,18 @@ export default function Finance() {
 	const [pageSize, setPageSize] = useState(PAGE_SIZES_TABLE[0])
 	const [totalDataDonations, setTotalDataDonations] = useState(0)
 	const [totalDataExpenses, setTotalDataExpenses] = useState(0)
-	const [donations, setDonations] = useState([])
-	const [donationsPagination, setDonationsPagination] = useState([])
-	const [expenses, setExpenses] = useState([])
-	const [expensesPagination, setExpensesPagination] = useState([])
+	const [donations, setDonations] = useState<Donation[]>([])
+	const [expenses, setExpenses] = useState<Expense[]>([])
 	const [isLoading, setIsLoading] = useState(true)
 
 	const getAllDonations = async () => {
 		setIsLoading(true)
 		try {
 			const response = await findDonationsAction()
-			setDonations(response?.data)
-			handlePaginationDonations(response?.data)
+			if (response?.data) {
+				setDonations(response.data)
+				handlePaginationDonations(response.data)
+			}
 		} catch (error) {
 			console.log(error, "error")
 		}
@@ -39,42 +41,29 @@ export default function Finance() {
 		setIsLoading(true)
 		try {
 			const response = await findExpensesAction()
-			setExpenses(response?.data)
-			handlePaginationExpenses(response?.data)
+			if (response?.data) {
+				setExpenses(response.data)
+				handlePaginationExpenses(response.data)
+			}
 		} catch (error) {
 			console.log(error, "error")
 		}
 	}
 
-	const handlePaginationDonations = (items: any) => {
+	const handlePaginationDonations = (items: Donation[]) => {
 		setIsLoading(true)
 		const { data, totalItems } = paginateItems(items, page, pageSize)
-		setDonationsPagination(data)
+		setDonations(data)
 		setTotalDataDonations(totalItems)
 		setIsLoading(false)
 	}
-	const handlePaginationExpenses = (items: any) => {
+	const handlePaginationExpenses = (items: Expense[]) => {
 		setIsLoading(true)
 		const { data, totalItems } = paginateItems(items, page, pageSize)
-		// console.log(expenses, "expesnes")
-		setExpensesPagination(data)
+		setExpenses(data)
 		setTotalDataExpenses(totalItems)
 		setIsLoading(false)
 	}
-
-	// const clearCollection = async (collectionName = 'donations') => {
-	//   try {
-	//     const querySnapshot = await getDocs(collection(db, collectionName));
-	//     const deletePromises = querySnapshot.docs.map((docItem) =>
-	//       deleteDoc(doc(db, collectionName, docItem.id))
-	//     );
-
-	//     await Promise.all(deletePromises);
-	//     console.log(`Coleção ${collectionName} foi limpa com sucesso!`);
-	//   } catch (error) {
-	//     console.error("Erro ao limpar a coleção:", error);
-	//   }
-	// };
 
 	const onReloadData = async () => {
 		await getAllDonations()
@@ -86,7 +75,6 @@ export default function Finance() {
 	useEffect(() => {
 		getAllDonations()
 		getAllExpenses()
-		// clearCollection()
 	}, [])
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,16 +125,6 @@ export default function Finance() {
 				<div className="flex flex-col w-full gap-4">
 					<div className="flex w-full gap-4 flex-wrap lg:flex-nowrap">
 						<div className="flex p-[5px] rounded-[6px] bg-[#F4F4F5]">
-							{/* <div
-                onClick={() => setFilterType("all")}
-                className={`flex justify-center items-center rounded-[3px] px-3 h-[34px] hover:cursor-pointer ${
-                  filterType === "all" ? "bg-[#FFFFFF]" : "bg-[#F4F4F5]"
-                }`}
-              >
-                <div className="font-semibold text-sm text-[#09090B]">
-                  Todas
-                </div>
-              </div> */}
 							<div
 								onClick={() => setFilterType("donations")}
 								className={`flex justify-center items-center rounded-[3px] px-3 h-[34px] hover:cursor-pointer ${
@@ -165,34 +143,6 @@ export default function Finance() {
 							</div>
 						</div>
 						<div className="flex justify-end flex-1 gap-4 flex-wrap lg:flex-nowrap">
-							{/* <Input
-                placeholder="Pesquisar..."
-                className="w-full max-w-sm"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                leftIcon={
-                  <Image
-                    src={`/search.svg`}
-                    width={16}
-                    height={16}
-                    priority
-                    alt="ícone"
-                  />
-                }
-              />
-              <Input
-                placeholder="Selecionar período"
-                className="w-full max-w-sm"
-                leftIcon={
-                  <Image
-                    src={`/calendar.svg`}
-                    width={16}
-                    height={16}
-                    priority
-                    alt="ícone"
-                  />
-                }
-              /> */}
 							<Button
 								className="flex items-center gap-2 bg-[#09090B] hover:bg-[#3A3A3B]"
 								onClick={() => setIsModalNewRegister(true)}
@@ -211,20 +161,16 @@ export default function Finance() {
 							</div>
 						}
 					>
-						{/* list */}
-						{/* {filterType === "all" && (
-            <TableAll
-              data={[]}
-              totalData={totalData}
-              page={page}
-              pageSize={pageSize}
-              handlePage={(currentPage) => setPage(currentPage)}
-              handlePageSize={(pageSize) => setPageSize(pageSize)}
-            />
-          )} */}
 						{filterType === "donations" && (
 							<TableDonation
-								data={donationsPagination}
+								data={donations.map(({ animalId, category, userName, date, value }) => ({
+									type: ETransactionType.Donation,
+									animalId,
+									category,
+									userName,
+									date,
+									value,
+								}))}
 								totalData={totalDataDonations}
 								page={page}
 								pageSize={pageSize}
@@ -234,7 +180,12 @@ export default function Finance() {
 						)}
 						{filterType === "expense" && (
 							<TableExpense
-								data={expensesPagination}
+								data={expenses.map(({ category, description, date, value }) => ({
+									category,
+									description,
+									date,
+									value,
+								}))}
 								totalData={totalDataExpenses}
 								page={page}
 								pageSize={pageSize}

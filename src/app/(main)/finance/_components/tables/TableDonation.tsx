@@ -11,7 +11,7 @@ interface ITableDonation {
 		category: string
 		userName?: string
 		date: string
-		value: string
+		value: number
 	}[]
 	page: number
 	pageSize: number
@@ -117,7 +117,7 @@ export const TableDonation = ({
 					titleClassName: "font-normal text-base text-[#52525B]",
 					render: ({ value }) => (
 						<div className={"font-normal text-base text-[#10B981]"}>
-							{(+value).toLocaleString("pt-BR", {
+							{value.toLocaleString("pt-BR", {
 								style: "currency",
 								currency: "BRL",
 							})}

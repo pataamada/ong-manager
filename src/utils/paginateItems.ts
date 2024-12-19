@@ -5,7 +5,7 @@ type Paginate<T> = {
     totalItems: number;
   };
   
-export function paginateItems<T>(
+export function paginateItems<T extends { date: string }>(
     items: T[],
     currentPage: number,
     itemsPerPage: number

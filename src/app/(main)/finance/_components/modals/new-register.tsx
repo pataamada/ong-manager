@@ -26,11 +26,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import type { DialogProps } from "@radix-ui/react-dialog"
 import { InputMask } from "@react-input/mask"
 import Image from "next/image"
-import { useEffect, useState } from "react"
+import { type FormEvent, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Steps } from "../Steps"
 import { findAnimalAction } from "@/actions/animal/findAnimals"
+import type { Animal } from "@/models/animal.model"
+import {  ETransactionType, type Category } from "@/models/transaction.model"
 
 interface INewRegisterModal extends DialogProps {
 	open: boolean
@@ -97,10 +99,10 @@ const ExpensiveStepTwoSchema = z.object({
 })
 
 export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INewRegisterModal) => {
-	const [type, setType] = useState<"donation" | "expensive">("donation")
+	const [type, setType] = useState<ETransactionType>(ETransactionType.Donation)
 	const [step, setStep] = useState(1)
 	const [donationsFiles] = useState<{ file: File; preview: string }[]>([])
-	const [animals, setAnimals] = useState([])
+	const [animals, setAnimals] = useState<Animal[]>([])
 
 	// const handleImageUpload = (event: any, setValue: any) => {
 	// 	const files = Array.from(event.target.files)
@@ -133,7 +135,7 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 		setStep(step + 1)
 	}
 
-	const handleOnSubmitStepThree = async (e: any) => {
+	const handleOnSubmitStepThree = async (e: FormEvent) => {
 		e.preventDefault()
 		const formData = {
 			...formDonationStepThree.control._formValues,
@@ -146,14 +148,13 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 				userName: formDonationStepTwo.control._formValues.name ?? "",
 				userCpfCnpj: formDonationStepTwo.control._formValues.cpf ?? "",
 				animalId: validatedData.animalId,
-				category: validatedData.cause,
+				category: validatedData.cause as Category,
 				value: Number(validatedData.value),
 				description: validatedData.description,
-				// proof: ["validatedData.proof"],
-				transactionType: "donation",
+				transactionType: ETransactionType.Donation,
 				cause: validatedData.cause,
 			}
-			const response = await saveDonationAction(allData)
+			const response = await saveDonationAction({ ...allData })
 			if (response?.serverError) {
 				toast({
 					title: "Erro ao cadastrar doação",
@@ -175,16 +176,20 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 		}
 	}
 
-	const handleOnSubmitStepTwoExpensive = async data => {
+	const handleOnSubmitStepTwoExpensive = async (data: z.infer<typeof ExpensiveStepTwoSchema>) => {
 		try {
 			const form = {
 				category: data.categoryId,
 				description: data.description,
 				value: Number(data.value),
-				// proof: expensivesFiles.map(item => item.file),
-				transactionType: "expense",
+				transactionType: ETransactionType.Expense,
 			}
-			const response = await saveExpenseAction(form)
+			const response = await saveExpenseAction({
+				category: form.category,
+				description: form.description,
+				value: form.value,
+				transactionType: form.transactionType,
+			})
 			if (response?.serverError) {
 				toast({
 					title: "Erro ao cadastrar despesa",
@@ -219,10 +224,12 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 
 	const getAnimals = async () => {
 		const response = await findAnimalAction()
-		setAnimals(response.data)
-		console.log(response, "anialsssssssssssss")
+		if (response?.data) {
+			setAnimals(JSON.parse(response.data) as Animal[])
+		}
 	}
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		getAnimals()
 	}, [])
@@ -230,11 +237,11 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 	let content = (
 		<div className="flex gap-4">
 			<div
-				onClick={() => setType("donation")}
-				className={`flex w-full flex-col ${type === "donation" ? "border-2 border-[#27272A]" : "border border-[#E4E4E7]"} gap-4 p-6 rounded-lg hover:cursor-pointer`}
+				onClick={() => setType(ETransactionType.Donation)}
+				className={`flex w-full flex-col ${type === ETransactionType.Donation ? "border-2 border-[#27272A]" : "border border-[#E4E4E7]"} gap-4 p-6 rounded-lg hover:cursor-pointer`}
 			>
-				<div className={`flex justify-center items-center rounded h-[56px] w-[56px] bg-[#F4F4F5]`}>
-					<Image src={`/finance/heart-handshake.svg`} width={32} height={32} priority alt="ícone" />
+				<div className={"flex justify-center items-center rounded h-[56px] w-[56px] bg-[#F4F4F5]"}>
+					<Image src={"/finance/heart-handshake.svg"} width={32} height={32} priority alt="ícone" />
 				</div>
 				<div>
 					<div className="font-bold text-2xl text-[#09090B]">Doação</div>
@@ -242,12 +249,12 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 				</div>
 			</div>
 			<div
-				onClick={() => setType("expensive")}
-				className={`flex w-full flex-col ${type === "expensive" ? "border-2 border-[#27272A]" : "border border-[#E4E4E7]"} gap-4 p-6 rounded-lg hover:cursor-pointer`}
+				onClick={() => setType(ETransactionType.Expense)}
+				className={`flex w-full flex-col ${type === ETransactionType.Expense ? "border-2 border-[#27272A]" : "border border-[#E4E4E7]"} gap-4 p-6 rounded-lg hover:cursor-pointer`}
 			>
-				<div className={`flex justify-center items-center rounded h-[56px] w-[56px] bg-[#F4F4F5]`}>
+				<div className={"flex justify-center items-center rounded h-[56px] w-[56px] bg-[#F4F4F5]"}>
 					<Image
-						src={`/finance/trending-down-black.svg`}
+						src={"/finance/trending-down-black.svg"}
 						width={32}
 						height={32}
 						priority
@@ -262,7 +269,7 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 		</div>
 	)
 
-	if (type === "donation" && step === 2) {
+	if (type === ETransactionType.Donation && step === 2) {
 		content = (
 			<>
 				<div className="flex w-full rounded-md mb-4 py-2 px-3 gap-2 bg-[#FFF7ED] border border-[#FB923C]">
@@ -333,7 +340,7 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 		)
 	}
 
-	if (type === "donation" && step === 3) {
+	if (type === ETransactionType.Donation && step === 3) {
 		content = (
 			<Form {...formDonationStepThree}>
 				<form onSubmit={handleOnSubmitStepThree} className="flex flex-col gap-6">
@@ -424,47 +431,6 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 								</FormItem>
 							)}
 						/>
-						{/* <FormItem>
-								<FormLabel className="font-semibold">Comprovantes</FormLabel>
-								<FormControl>
-									<div className="space-y-4">
-										<div className="flex flex-wrap gap-4">
-											<label className="cursor-pointer">
-												<div className="w-[100px] h-[100px] flex items-center justify-center gap-1 p-3 border border-dashed border-[#A1A1AA] rounded bg-[#FAFAFA]">
-													<div className="text-normal text-3xl text-[#71717A]">+</div>
-													<div className="text-normal text-sm text-[#71717A]">Novo</div>
-												</div>
-												<input
-													type="file"
-													accept="image/*"
-													multiple
-													className="hidden"
-													onChange={e => handleImageUpload(e, setDonationsFiles)}
-												/>
-											</label>
-
-											{donationsFiles.map((image, index) => (
-												<div key={index} className="relative w-[100px] h-[100px]">
-													<Image
-														src={image.preview}
-														alt={`preview-${index}`}
-														layout="fill"
-														objectFit="cover"
-														className="rounded-md"
-													/>
-													<button
-														onClick={() => removeImage(index, setDonationsFiles)}
-														className="absolute top-2 right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center  hover:bg-red-600"
-													>
-														X
-													</button>
-												</div>
-											))}
-										</div>
-									</div>
-								</FormControl>
-								<FormMessage />
-							</FormItem> */}
 					</div>
 					<div className="flex justify-end gap-2 mt-6">
 						<Button variant="outline" className="flex items-center gap-2" onClick={handleCancel}>
@@ -483,7 +449,7 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 		)
 	}
 
-	if (type === "expensive" && step === 2) {
+	if (type === ETransactionType.Expense && step === 2) {
 		content = (
 			<Form {...formExpensiveStepTwo}>
 				<form
@@ -549,47 +515,6 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 								</FormItem>
 							)}
 						/>
-						{/* <FormItem>
-								<FormLabel className="font-semibold">Comprovantes</FormLabel>
-								<FormControl>
-									<div className="space-y-4">
-										<div className="flex flex-wrap gap-4">
-											<label className="cursor-pointer">
-												<div className="w-[100px] h-[100px] flex items-center justify-center gap-1 p-3 border border-dashed border-[#A1A1AA] rounded bg-[#FAFAFA]">
-													<div className="text-normal text-3xl text-[#71717A]">+</div>
-													<div className="text-normal text-sm text-[#71717A]">Novo</div>
-												</div>
-												<input
-													type="file"
-													accept="image/*"
-													multiple
-													className="hidden"
-													onChange={e => handleImageUpload(e, setExpensivesFiles)}
-												/>
-											</label>
-
-											{expensivesFiles.map((image, index) => (
-												<div key={index} className="relative w-[100px] h-[100px]">
-													<Image
-														src={image.preview}
-														alt={`preview-${index}`}
-														layout="fill"
-														objectFit="cover"
-														className="rounded-md"
-													/>
-													<button
-														onClick={() => removeImage(index, setExpensivesFiles)}
-														className="absolute top-2 right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center  hover:bg-red-600"
-													>
-														X
-													</button>
-												</div>
-											))}
-										</div>
-									</div>
-								</FormControl>
-								<FormMessage />
-							</FormItem> */}
 					</div>
 					<div className="flex justify-end gap-2 mt-6">
 						<Button variant="outline" className="flex items-center gap-2" onClick={handleCancel}>

@@ -1,26 +1,26 @@
 export interface IDonation {
-	transactionType: transactionType
+	transactionType: ETransactionType
 	animalId?: string
 	userName?: string
 	userCpfCnpj?: string
 	category: string
 	value: number
 	description: string
-	// proof: string[]
 	date: string
 }
 
 export interface IExpense {
-	transactionType: transactionType
-	// userId: string
+	transactionType: ETransactionType
 	category: string
 	value: number
 	description: string
-	// proof: string[]
 	date: string
 }
 
-type transactionType = "donation" | "expense"
+export enum ETransactionType {
+	Donation = "donation",
+	Expense = "expense",
+}
 
 export enum Category {
 	Aluguel = "aluguel",

@@ -1,30 +1,15 @@
 "use server"
 import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
-import type { IDonation } from "@/models/transaction.model"
+import { ETransactionType, type IDonation } from "@/models/transaction.model"
 import { handleSaveTransaction } from "@/services/finance.service"
 
 const schema = z.object({
-	transactionType: z.literal("donation"),
+	transactionType: z.nativeEnum(ETransactionType),
 	userName: z.string().optional(),
 	userCpfCnpj: z.string().optional(),
 	animalId: z.string().optional(),
-	category: z.enum([
-		"Aluguel",
-		"Energia Elétrica",
-		"Água",
-		"Produtos de Limpeza",
-		"Ração/Suplementos",
-		"Brinquedos",
-		"Vacinas/Vermífugos",
-		"Castração",
-		"Exames/Tratamento Medico",
-		"Remédios",
-		"Salario",
-		"Gás",
-		"Internet",
-		"Manutenção do espaço",
-	]),
+	category: z.string(),
 	value: z.number(),
 	description: z.string(),
 })
