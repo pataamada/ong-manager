@@ -16,9 +16,8 @@ import {
 
 export const createUser = async (userId: string, params: CreateUserPayload) => {
 	const document = await setDoc(doc(db, "users", userId), {
-		birthDate: null,
-		address: null,
 		cpf: params.cpf,
+		phone: params.phone,
 	})
 	return document
 }
@@ -45,14 +44,11 @@ export const findAll = async () => {
 		if (userDoc) {
 			return {
 				cpf: userDoc.data.cpf,
-				address: userDoc.data.address,
-				birthDate: userDoc.data.birthDate,
 				...userValue,
 			}
 		}
 		return userValue
 	})
-	console.log(filledUsers)
 	return filledUsers as UserWOutPassword[]
 }
 
@@ -61,9 +57,7 @@ export const updateUser = async (params: AtLeast<User, "uid">) => {
 		Object.entries({
 			name: params.name,
 			cpf: params.cpf,
-			birthDate: params.birthDate,
 			phone: params.photo,
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		}).filter(([_, value]) => value !== undefined),
 	) as AtLeast<User, "uid">
 
