@@ -8,7 +8,9 @@ export function Counters() {
 	return (
 		<>
 			<Card
-				title={data === undefined ? "0" : `R$ ${data?.yield.toString()!}`}
+				title={
+					data === undefined ? "0" : `R$ ${(data?.totalDonations - data?.totalExpenses).toString()}`
+				}
 				subtitle={"Esse mês"}
 			>
 				<p>Total Receita</p>

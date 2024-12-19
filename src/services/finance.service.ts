@@ -84,7 +84,6 @@ export const expensesByMonth = async (month?: number, year?: number) => {
 	return {
 		totalExpenses,
 		totalDonations,
-		yield: totalDonations - totalExpenses,
 	}
 }
 

@@ -4,12 +4,10 @@ import { Card } from "@/components/ui/card"
 import {
 	type ChartConfig,
 	ChartContainer,
-	ChartLegend,
-	ChartLegendContent,
 	ChartTooltip,
 	ChartTooltipContent,
 } from "@/components/ui/chart"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+import { Area, AreaChart, CartesianGrid, Legend, XAxis } from "recharts"
 
 const chartConfig = {
 	doacoes: {
@@ -52,18 +50,20 @@ export function AreaLegendChart() {
 						type="natural"
 						fill="var(--color-despesas)"
 						fillOpacity={0.4}
-						stroke="var(--color-despesas)"
+						stroke={chartConfig.despesas.color}
 						stackId="a"
+						name={chartConfig.despesas.label}
 					/>
 					<Area
 						dataKey="totalDonations"
 						type="natural"
 						fill="var(--color-doacoes)"
 						fillOpacity={0.4}
-						stroke="var(--color-doacoes)"
+						stroke={chartConfig.doacoes.color}
 						stackId="a"
+						name={chartConfig.doacoes.label}
 					/>
-					<ChartLegend content={<ChartLegendContent />} />
+					<Legend />
 				</AreaChart>
 			</ChartContainer>
 		</Card>
