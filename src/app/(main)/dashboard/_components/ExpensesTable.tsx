@@ -1,5 +1,4 @@
 "use client"
-
 import {
 	Table,
 	TableBody,
@@ -10,20 +9,14 @@ import {
 } from "@/components/ui/table"
 import { cn } from "@/lib/utils"
 import { formatCurrency } from "@/utils/formatCurrency"
-import { formatDateTodayYesterday } from "@/utils/formatDateTodayYesterday"
-import { subDays } from "date-fns"
+import { formatRelative, subDays } from "date-fns"
 import { ChevronRight } from "lucide-react"
 import { useState } from "react"
-import { Badge } from "../ui/badge"
 import { ExpenseDetailsDialog } from "./ExpenseDetailsDialog"
-
-interface TableData {
-	id: number
-	description?: string
-	category?: string
-	date: string
-	value: number
-}
+import { Badge } from "@/components/ui/badge"
+import { ptBR } from "date-fns/locale"
+import { useGetExpense } from "./queries/useDashboard"
+import type { Expense } from "@/services/finance.service"
 
 const legendaProdutos = [
 	{
@@ -51,82 +44,10 @@ const legendaProdutos = [
 	},
 ]
 
-const despesas: TableData[] = [
-	{
-		id: 1,
-		description: "Ração de hoje",
-		category: "Ração",
-		date: new Date().toISOString(),
-		value: 230,
-	},
-	{
-		id: 2,
-		description: "Shampoo, condicionador, sabonete",
-		category: "Produtos de Limpeza",
-		date: subDays(new Date(), 1).toISOString(),
-		value: 230,
-	},
-	{
-		id: 3,
-		description: "Energia elétrica",
-		category: "Água",
-		date: "2024-09-06T17:55:25.682Z",
-		value: 230,
-	},
-	{
-		id: 4,
-		description: "Ração para cães adultos",
-		category: "Ração",
-		date: "2024-09-07T10:30:00.000Z",
-		value: 450,
-	},
-	{
-		id: 5,
-		description: "Produtos de limpeza",
-		category: "Produtos de Limpeza",
-		date: "2024-09-07T14:15:00.000Z",
-		value: 180,
-	},
-	{
-		id: 6,
-		description: "Conta de energia",
-		category: "Energia",
-		date: "2024-09-08T09:00:00.000Z",
-		value: 320,
-	},
-	{
-		id: 7,
-		description: "Ração para filhotes",
-		category: "Ração",
-		date: "2024-09-08T11:45:00.000Z",
-		value: 280,
-	},
-	{
-		id: 8,
-		description: "Conta de água",
-		category: "Água",
-		date: "2024-09-09T08:20:00.000Z",
-		value: 195,
-	},
-	{
-		id: 9,
-		description: "Materiais de limpeza",
-		category: "Produtos de Limpeza",
-		date: "2024-09-09T13:30:00.000Z",
-		value: 150,
-	},
-	{
-		id: 10,
-		description: "Aluguel mensal",
-		category: "Aluguel",
-		date: "2024-09-10T16:00:00.000Z",
-		value: 1200,
-	}
-]
-
 export function ExpensesTable() {
-	const [selectedExpense, setSelectedExpense] = useState<TableData | null>(null)
-
+	const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null)
+	const { data, isError } = useGetExpense(true)
+	console.log(data)
 	return (
 		<>
 			<div className="relative overflow-hidden">
@@ -138,11 +59,11 @@ export function ExpensesTable() {
 								<TableHead className="w-5/12">Categoria</TableHead>
 								<TableHead className="w-5/12">Data</TableHead>
 								<TableHead className="w-5/12">Valor</TableHead>
-								<TableHead className="w-1/12"/>
+								<TableHead className="w-1/12" />
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{despesas.map((expense, index) => (
+							{data?.map((expense, index) => (
 								<TableRow
 									key={expense.id}
 									className={cn(
@@ -156,14 +77,19 @@ export function ExpensesTable() {
 										<Badge
 											className="text-nowrap"
 											style={{
-												backgroundColor: legendaProdutos.find(item => item.label === expense.category)
-													?.color,
+												backgroundColor: legendaProdutos.find(
+													item => item.label === expense.category,
+												)?.color,
 											}}
 										>
 											{expense.category}
 										</Badge>
 									</TableCell>
-									<TableCell>{formatDateTodayYesterday(expense.date)}</TableCell>
+									<TableCell>
+										{formatRelative(new Date(expense.date), new Date(), {
+											locale: ptBR,
+										})}
+									</TableCell>
 									<TableCell>{formatCurrency(expense.value)}</TableCell>
 									<TableCell>
 										<ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -177,7 +103,7 @@ export function ExpensesTable() {
 
 			<ExpenseDetailsDialog
 				open={!!selectedExpense}
-				onOpenChange={(open) => !open && setSelectedExpense(null)}
+				onOpenChange={open => !open && setSelectedExpense(null)}
 				expense={selectedExpense}
 			/>
 		</>

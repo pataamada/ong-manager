@@ -1,7 +1,6 @@
 import { db } from "@/lib/firebase/firebase-secret"
 import { CustomerService } from "@/services/Asaas/customer.service"
 import { PaymentService } from "@/services/Asaas/payment.service"
-import type { IClientCreate } from "@/types/Asaas/Customer"
 import type { IPaymentCreateBoletoOrPix } from "@/types/Asaas/Payment"
 import { addDoc, collection } from "firebase/firestore"
 
