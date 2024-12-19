@@ -1,6 +1,5 @@
 import "@/app/globals.css"
 import Adopt from "./-components/adopt"
-// import Campaigns from "./-components/campaigns"
 import Events from "./-components/events"
 import Finance from "./-components/finance"
 import Footer from "./-components/footer"
@@ -22,7 +21,6 @@ export default function Home() {
 					<Events/>
 					<History />
 					<Adopt />
-					{/* <Campaigns /> */}
 					<MeetAnimals />
 					<Finance />
 				</div>

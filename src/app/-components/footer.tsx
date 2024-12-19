@@ -15,7 +15,7 @@ export default function Footer() {
               <Image
                 width={100}
                 height={100}
-                src="/pata-amada-logo.png"
+                src="/logo-pata.svg"
                 alt="Logo Pata Amada"
                 className="w-32 mb-4"
               />

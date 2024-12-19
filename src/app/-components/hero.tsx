@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Heart } from "lucide-react"
 import Image from "next/image"
-import heroImage from '../../../../public/landing/hero.jpg'
+import heroImage from '../../../public/landing/hero.jpg'
 
 export default function Hero() {
 	/* TODO: Funcionalidade dos botões */

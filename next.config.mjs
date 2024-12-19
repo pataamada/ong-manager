@@ -1,17 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/login',
-        permanent: true,
-      },
-    ]
-  }, logging: {
+  images: {
+    domains: ['mir-s3-cdn-cf.behance.net'], 
+  },
+  logging: {
     fetches: {
       fullUrl: true,
     },
+  }, images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+        pathname: '/**',
+      },
+    ],
   },
 };
 
