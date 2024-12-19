@@ -12,8 +12,8 @@ import { createUser } from "@/actions/auth/user/create"
 import { PasswordInput } from "@/components/custom-ui/password-input"
 import { InputMask } from "@react-input/mask"
 import { useAction } from "next-safe-action/hooks"
-import { redirect } from "next/navigation"
 import { validateCpf } from "@/utils"
+import { useRouter } from "nextjs-toploader/app"
 
 const formRegisterSchema = z
 	.object({
@@ -33,6 +33,7 @@ const formRegisterSchema = z
 		phone: z
 			.string()
 			.trim()
+			.min(11, "O telefone deve ter pelo menos 11 dígitos")
 			.max(15, "O telefone deve ter no máximo 11 dígitos")
 			.transform(phone => phone.replace(/\D/g, "")),
 		password: z
@@ -69,12 +70,11 @@ export default function FormRegister() {
 			confirmPassword: "",
 		},
 	})
-
+	const route = useRouter()
 	const { toast } = useToast()
 	const {
 		handleSubmit,
-		getValues,
-		formState: { errors },
+		formState: { errors },reset
 	} = methods
 	const { executeAsync, isPending } = useAction(createUser)
 	const onSubmit = async (data: RegisterFormData) => {
@@ -91,11 +91,13 @@ export default function FormRegister() {
 				description: "Você foi cadastrado com sucesso!",
 				variant: "default",
 			})
+			reset()
+			route.replace("/login")
 			return
 		}
 		toast({
 			title: "Erro no cadastro",
-			description: "Ocorreu um erro ao tentar se cadastrar.",
+			description: result.serverError,
 			variant: "destructive",
 		})
 	}
@@ -211,7 +213,7 @@ export default function FormRegister() {
 					className="w-full"
 					variant="success"
 					type="submit"
-					disabled={isPending || Object.values(getValues()).includes(undefined)}
+					disabled={isPending}
 				>
 					Cadastrar
 				</Button>

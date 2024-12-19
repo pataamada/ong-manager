@@ -73,6 +73,18 @@ export const getColumns = (
 			),
 		},
 		{
+			accessorKey: "phone",
+			meta: {
+				title: "Telefone",
+			},
+			header: () => <div className="text-center">Telefone</div>,
+			cell: ({ row }) => (
+				<div className="text-center font-medium">
+					{format(row.original?.phone || "", { mask: "+__ (__) _____-____", replacement: { _: /\d/ } })}
+				</div>
+			),
+		},
+		{
 			accessorKey: "role",
 			meta: {
 				title: "Cargo",

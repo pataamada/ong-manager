@@ -1,10 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export const formatReturn = (data: any) => {
-	return JSON.parse(JSON.stringify(data))
-}
-
 export const redirectTo = (
 	request: NextRequest,
 	to: string,

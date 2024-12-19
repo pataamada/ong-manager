@@ -11,7 +11,13 @@ const userSchema = z.object({
 	email: z.string().trim().email(),
 	password: z.string().trim().min(8).max(100),
 	cpf: z.string().trim().length(11),
-	phone: z.string().trim().max(15),
+	phone: z
+		.string({ message: "Telefone é obrigatório" })
+		.trim()
+		.min(11, "O telefone deve ter pelo menos 11 dígitos")
+		.max(15, "Máximo de 15 caracteres")
+		.transform(phone => phone.replace(/\D/g, ""))
+		.transform(phone => `+55${phone}`),
 })
 
 export const createUser = actionClient
@@ -20,10 +26,12 @@ export const createUser = actionClient
 		if (await existsCpf(cpf)) {
 			throw new Error("CPF já cadastrado")
 		}
+		console.log({ name, cpf, email, password, phone })
 		const user = await authAdmin.createUser({
 			displayName: name,
 			email,
 			password,
+			phoneNumber: phone,
 		})
 		if (!user) {
 			throw new Error("Erro ao criar o usuário")

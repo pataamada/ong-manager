@@ -5,6 +5,7 @@ import { updateUser } from "@/actions/auth/user/update"
 import type { Toast } from "@/hooks/use-toast"
 import { UserRoles, type UserWOutPassword } from "@/models/user.model"
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import type { UserRecord } from "firebase-admin/auth"
 import { z } from "zod"
 
 export const getUsersOptions = queryOptions({
@@ -23,6 +24,7 @@ export const useGetUsers = () => {
 const userSchema = z.object({
 	name: z.string().trim().min(4).max(255),
 	email: z.string().trim().email(),
+	phone: z.string().trim().max(15),
 	password: z.string().trim().min(8).max(100),
 	cpf: z.string().trim().length(11),
 	role: z.nativeEnum(UserRoles),
@@ -43,7 +45,7 @@ export const useCreateUser = (toast?: (params: Toast) => void) => {
 				})
 				return Promise.reject(request.serverError)
 			}
-			return request?.data
+			return request?.data ? JSON.parse(request?.data) as UserRecord : undefined
 		},
 		onMutate: async ({ password, ...values }) => {
 			await queryClient.cancelQueries(getUsersOptions)

@@ -17,7 +17,6 @@ import {
 export const createUser = async (userId: string, params: CreateUserPayload) => {
 	const document = await setDoc(doc(db, "users", userId), {
 		cpf: params.cpf,
-		phone: params.phone,
 	})
 	return document
 }
@@ -40,6 +39,7 @@ export const findAll = async () => {
 			photo: user.photoURL,
 			role: user.customClaims?.role as UserRoles,
 			email: user.email,
+			phone: user.phoneNumber,
 		}
 		if (userDoc) {
 			return {
@@ -57,7 +57,7 @@ export const updateUser = async (params: AtLeast<User, "uid">) => {
 		Object.entries({
 			name: params.name,
 			cpf: params.cpf,
-			phone: params.photo,
+			phone: params.phone,
 		}).filter(([_, value]) => value !== undefined),
 	) as AtLeast<User, "uid">
 

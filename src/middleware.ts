@@ -13,6 +13,13 @@ export async function middleware(request: NextRequest) {
 	const isParamsFromRouteAdmin = accessPageList[UserRoles.Admin].some(route =>
 		paramsFromRoute?.includes(route),
 	)
+	
+	console.log("trying to access: ", path)
+	if (path === "/") {
+		return response
+	}
+	
+
 	if (!session && !isPublicRoute) return redirectTo(request, "/login", path)
 	const { user, role } = await verifySession(request, session!)
 

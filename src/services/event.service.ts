@@ -17,7 +17,6 @@ import {
 	uploadImages,
 } from "./storage/storage.service"
 import { getNewsImage } from "./news.service"
-import { formatReturn } from "@/utils"
 
 export const createEvent = async (params: CreateEvent) => {
 	const document = await addDoc(collection(db, "eventos"), {
@@ -46,7 +45,7 @@ export const findAllEvents = async () => {
 	const querySnapshot = await getDocs(q)
 	const events = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Event[]
 	const eventWithImages = await getEventImages(events)
-	return formatReturn(eventWithImages)
+	return JSON.stringify(eventWithImages)
 }
 
 export const updateEvent = async (params: AtLeast<UpdateEvent, "id">) => {

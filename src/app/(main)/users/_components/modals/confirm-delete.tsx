@@ -37,7 +37,7 @@ export function ConfirmDeleteUserAlert({
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel>Cancel</AlertDialogCancel>
-					<Button onClick={onSubmit} disabled={loading}>
+					<Button variant={"destructive"} onClick={onSubmit} disabled={loading}>
 						{loading ? "Apagando..." : "Excluir"}
 					</Button>
 				</AlertDialogFooter>

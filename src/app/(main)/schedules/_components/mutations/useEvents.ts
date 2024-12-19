@@ -11,7 +11,7 @@ export const getEventsOptions = queryOptions({
 	queryKey: ["events"],
 	queryFn: async () => {
 		const request = await findAllEventsAction()
-		return request?.data || []
+		return request?.data ? JSON.parse(request?.data) as Event[] : [] 
 	},
 })
 

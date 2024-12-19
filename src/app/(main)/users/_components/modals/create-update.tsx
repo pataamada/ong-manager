@@ -59,6 +59,10 @@ const createUserSchema = z
 			.email("Digite um email válido")
 			.trim()
 			.max(256, "Máximo de 256 caracteres"),
+		phone: z
+			.string({ message: "Telefone é obrigatório" })
+			.trim().min(11, "O telefone deve ter pelo menos 11 dígitos")
+			.max(15, "Máximo de 15 caracteres"),
 		cpf: z
 			.string()
 			.min(11, "O CPF deve ter pelo menos 11 caracteres")
@@ -100,6 +104,10 @@ export function CreateUpdateUserModal({
 			email: data?.email || "",
 			password: "",
 			role: data?.role || UserRoles.Authenticated,
+			phone: format((data?.phone || "").replace(/^\+55/, ""), {
+				mask: "(__) _____-____",
+				replacement: { _: /\d/ },
+			}),
 		},
 	})
 
@@ -110,6 +118,7 @@ export function CreateUpdateUserModal({
 		password,
 		cpf,
 		role,
+		phone,
 	}: z.infer<typeof createUserSchema>) => {
 		const tempUid = crypto.randomUUID()
 		if (!password && !data) {
@@ -124,7 +133,15 @@ export function CreateUpdateUserModal({
 
 		onClose?.()
 		if (!data && password) {
-			await create({ name, email, password, cpf: cpf!, role: UserRoles.Authenticated, tempUid })
+			await create({
+				name,
+				email,
+				password,
+				cpf: cpf!,
+				role: UserRoles.Authenticated,
+				phone,
+				tempUid,
+			})
 			onSubmit?.()
 			return
 		}
@@ -205,12 +222,35 @@ export function CreateUpdateUserModal({
 							/>
 							<FormField
 								control={form.control}
+								name="phone"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel className="font-semibold">Telefone</FormLabel>
+										<FormControl>
+											<InputMask
+												mask="(__) _____-____"
+												replacement={{ _: /\d/ }}
+												component={Input}
+												id="phone"
+												placeholder="Digite o telefone do usuário"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
 								name="role"
-								
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="font-semibold">Cargo</FormLabel>
-										<Select onValueChange={field.onChange} defaultValue={field.value} disabled={user?.user.uid === data?.uid}>
+										<Select
+											onValueChange={field.onChange}
+											defaultValue={field.value}
+											disabled={user?.user.uid === data?.uid}
+										>
 											<FormControl>
 												<SelectTrigger>
 													<SelectValue placeholder="Selecionar cargo" />
