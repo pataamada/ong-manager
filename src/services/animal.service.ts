@@ -8,129 +8,135 @@ import {
 	updateDoc,
 	serverTimestamp,
 	deleteDoc,
+	orderBy,
+	limit,
+	Timestamp,
 } from "firebase/firestore"
-import { db, storage } from "@/lib/firebase/firebase-secret"
-import { ref, uploadBytesResumable, getDownloadURL, listAll, deleteObject } from "firebase/storage"
+import { db } from "@/lib/firebase/firebase-secret"
+import type { Animal, CreateAnimal, UpdateAnimal } from "@/models/animal.model"
+import {
+	compareAndUploadImages,
+	deleteManyImages,
+	getImages,
+	uploadImages,
+} from "./storage/storage.service"
 
-export const saveAnimalDb = async (
-	nome: string,
-	idade: number,
-	tipo: string,
-	sexo: string,
-	tamanho: string,
-	fotos: string[],
-	observacoes: string,
-	castrado: boolean,
-	vacinas: string[],
-	disponivel: boolean,
-	atualizadoPor: string,
-) => {
+export const saveAnimal = async (params: CreateAnimal) => {
+	console.log("creating")
 	const document = await addDoc(collection(db, "animais"), {
-		animalId: crypto.randomUUID(),
-		nome: nome,
-		idade: idade,
-		tipo: tipo,
-		sexo: sexo,
-		tamanho: tamanho,
-		fotos: fotos,
-		observacoes: observacoes,
-		castrado: castrado,
-		vacinas: vacinas,
-		disponivel: disponivel,
-		cadastradoEm: serverTimestamp(),
-		atualizadoEm: serverTimestamp(),
-		atualizadoPor: atualizadoPor,
+		name: params.name,
+		age: params.age,
+		type: params.type,
+		sex: params.sex,
+		observations: params.observations,
+		avaliable: params.avaliable,
+		castration: params.castration,
+		createdAt: serverTimestamp(),
+		updatedAt: serverTimestamp(),
+		updatedBy: params.updatedBy,
 	})
-	return JSON.stringify(document)
+	let photos: string[] = []
+	try {
+		photos = await uploadAnimalImage([params.photo], document.id)
+	} catch (error) {
+		console.log(error)
+	}
+	return JSON.stringify({
+		id: document.id,
+		photo: photos[0],
+		createdAt: Timestamp.now().toJSON(),
+		updatedAt: Timestamp.now().toJSON(),
+		updatedBy: params.updatedBy,
+	})
 }
 
 export const findAnimals = async () => {
 	const q = query(collection(db, "animais"))
 	const querySnapshot = await getDocs(q)
-	const animals = querySnapshot.docs.map(doc => doc.data())
-	return animals
+	const animals = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Animal[]
+	const animalsWithImages = await getAnimalImages(animals)
+	return animalsWithImages
+}
+
+export const findRecentAnimals = async () => {
+	const q = query(collection(db, "animais"), orderBy("createdAt"), limit(6))
+	const querySnapshot = await getDocs(q)
+	const animals = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Animal[]
+	const animalsWithImages = await getAnimalImages(animals)
+	return animalsWithImages
 }
 
 export const findAnimalById = async (animalId: string) => {
 	const document = await getDoc(doc(db, `animais/${animalId}`))
-	return document.data()
+	return document.data() as Animal
 }
 
-export const updateAnimal = async (
-	animalId: string,
-	nome: string,
-	idade: number,
-	tipo: string,
-	sexo: string,
-	tamanho: string,
-	fotos: string[],
-	observacoes: string,
-	castrado: boolean,
-	vacinas: string[],
-	disponivel: boolean,
-	atualizadoPor: string,
-) => {
-	const updatedDocument = await updateDoc(doc(db, `animais/${animalId}`), {
-		nome: nome,
-		idade: idade,
-		tipo: tipo,
-		sexo: sexo,
-		tamanho: tamanho,
-		fotos: fotos,
-		observacoes: observacoes,
-		castrado: castrado,
-		vacinas: vacinas,
-		disponivel: disponivel,
-		atualizadoEm: serverTimestamp(),
-		atualizadoPor: atualizadoPor,
+export const updateAnimal = async (params: AtLeast<UpdateAnimal, "id">) => {
+	const storageImages = await getAnimalImage(params.id)
+
+	if (params.photo) {
+		const differentImages = compareAndUploadImages(
+			"animais",
+			params.id,
+			[params.photo],
+			storageImages[1],
+		)
+
+		if (differentImages) {
+			await deleteAnimalImage(params.id)
+			await uploadAnimalImage([params.photo], params.id)
+		}
+	}
+
+	console.log({
+		name: params.name,
+		age: params.age,
+		type: params.type,
+		sex: params.sex,
+		observations: params.observations,
+		avaliable: params.avaliable,
+		castration: params.castration,
+		updatedAt: serverTimestamp(),
+		updatedBy: params.updatedBy,
 	})
-	return JSON.stringify(updatedDocument)
+	await updateDoc(doc(db, `animais/${params.id}`), {
+		name: params.name,
+		age: params.age,
+		type: params.type,
+		sex: params.sex,
+		observations: params.observations,
+		avaliable: params.avaliable,
+		castration: params.castration,
+		updatedAt: serverTimestamp(),
+		updatedBy: params.updatedBy,
+	})
+	return true
 }
 
-export const deleteAnimal = async (animalId: string) => {
-	const deletedAnimal = await deleteDoc(doc(db, `animais/${animalId}`))
-	return JSON.stringify(deletedAnimal)
+export const deleteAnimal = async (id: string) => {
+	const storageImages = await getAnimalImage(id)
+	if (storageImages.length > 0) await deleteAnimalImage(id)
+
+	await deleteDoc(doc(db, `animais/${id}`))
+	return true
 }
 
-export const uploadAnimalImage = async (params: FormData) => {
-	if (params.get("foto") === null) {
-		throw Error("Nenhuma imagem foi selecionada")
-	}
-	const file = params.get("foto") as File
-	const fileName = file.name.split(".")[0]
-	const storageRef = ref(storage, `${params.get("tipo")}/${fileName}`)
-	const upload = uploadBytesResumable(storageRef, file)
-	return upload.on(
-		"state_changed",
-		snapshot => {},
-		error => {
-			throw Error("Erro ao fazer upload da imagem")
-		},
-		() =>
-			getDownloadURL(storageRef).then(url => {
-				console.log(url)
-				return url
-			}),
-	)
+const uploadAnimalImage = async (image: File[], animalId: string) => {
+	return await uploadImages(image, `animais/${animalId}`)
 }
 
-export const getAnimalImages = async (tipo: string) => {
-	const folder = await listAll(ref(storage, tipo))
-
-	const downloadUrls: string[] = []
-	for (const image in folder.items) {
-		downloadUrls.push(await getDownloadURL(ref(storage, `${image}`)))
-	}
-	return downloadUrls
+const getAnimalImage = async (id: string) => {
+	return await getImages(`animais/${id}`)
 }
 
-export const deleteImage = async (params: FormData) => {
-	const response = deleteObject(ref(storage, `${params.get("imageId")}`))
-		.then(() => {
-			console.log("Imagem deletada com sucesso")
-		})
-		.catch(error => {
-			throw Error("Erro ao deletar imagem")
-		})
-	return await response
+const getAnimalImages = (animals: Animal[]) => {
+	const animalsWithImages = animals.map(async animal => {
+		const storageImages = await getAnimalImage(animal.id)
+		return { ...animal, photo: storageImages[0][0] }
+	})
+	return Promise.all(animalsWithImages)
+}
+
+const deleteAnimalImage = async (id: string) => {
+	return await deleteManyImages(`animais/${id}`)
 }

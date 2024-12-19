@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 type WhenProps = {
-    condition?: boolean;
+    condition?: unknown;
     children?: ReactNode;
     fallback?: ReactNode;
 };
