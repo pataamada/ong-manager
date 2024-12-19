@@ -47,7 +47,7 @@ const legendaProdutos = [
 export function ExpensesTable() {
 	const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null)
 	const { data, isError } = useGetExpense(true)
-	console.log(data)
+	// console.log(data)
 	return (
 		<>
 			<div className="relative overflow-hidden">
