@@ -17,7 +17,7 @@ export default async function Dashboard() {
 			<Card
 				className="sm:col-span-2 lg:col-span-3 gap-4"
 				title={`Woof! Bem-vindo de volta, ${currentUser?.user?.displayName || "Admin"}`}
-				subtitle={`${formatRelative(new Date(currentUser?.user.metadata.lastSignInTime!), new Date(), { locale: ptBR })}`}
+				subtitle={`Último acesso: ${formatRelative(new Date(currentUser?.user.metadata.lastSignInTime!), new Date(), { locale: ptBR })}`}
 				childrenPosition="top"
 				textPosition="bottom"
 			>
