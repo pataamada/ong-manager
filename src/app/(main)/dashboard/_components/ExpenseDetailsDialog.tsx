@@ -23,17 +23,18 @@ interface ExpenseDetailsDialogProps {
 }
 
 const categoryIcons = {
-	Água: Droplets,
-	Energia: Zap,
-	Aluguel: Home,
-	Ração: DogBowl,
-	"Produtos de Limpeza": CleaningItems,
+	agua: Droplets,
+	energia: Zap,
+	aluguel: Home,
+	racao: DogBowl,
+	limpeza: CleaningItems,
 } as const
 
 type CategoryType = keyof typeof categoryIcons
 
 export function ExpenseDetailsDialog({ open, onOpenChange, expense }: ExpenseDetailsDialogProps) {
 	if (!expense) return null
+	console.log(expense)
 
 	const CategoryIcon =
 		(expense.category && categoryIcons[expense.category as CategoryType]) || HelpCircle
@@ -45,21 +46,21 @@ export function ExpenseDetailsDialog({ open, onOpenChange, expense }: ExpenseDet
 					<div className="flex items-center gap-3">
 						<div
 							className={cn("p-3 rounded-full", {
-								"bg-blue-100": expense.category === "Água",
-								"bg-yellow-100": expense.category === "Energia",
-								"bg-purple-100": expense.category === "Aluguel",
-								"bg-orange-100": expense.category === "Ração",
-								"bg-green-100": expense.category === "Produtos de Limpeza",
+								"bg-blue-100": expense.category === "agua",
+								"bg-yellow-100": expense.category === "energia",
+								"bg-purple-100": expense.category === "aluguel",
+								"bg-orange-100": expense.category === "racao",
+								"bg-green-100": expense.category === "limpeza",
 								"bg-gray-100": !categoryIcons[expense.category as CategoryType],
 							})}
 						>
 							<CategoryIcon
 								className={cn("h-6 w-6", {
-									"text-blue-600": expense.category === "Água",
-									"text-yellow-600": expense.category === "Energia",
-									"text-purple-600": expense.category === "Aluguel",
-									"text-orange-600": expense.category === "Ração",
-									"text-green-600": expense.category === "Produtos de Limpeza",
+									"text-blue-600": expense.category === "agua",
+									"text-yellow-600": expense.category === "energia",
+									"text-purple-600": expense.category === "aluguel",
+									"text-orange-600": expense.category === "racao",
+									"text-green-600": expense.category === "limpeza",
 									"text-gray-600": !categoryIcons[expense.category as CategoryType],
 								})}
 							/>
@@ -80,11 +81,11 @@ export function ExpenseDetailsDialog({ open, onOpenChange, expense }: ExpenseDet
 							<span className="text-sm text-muted-foreground">Categoria</span>
 							<Badge
 								className={cn("w-fit", {
-									"bg-blue-500 hover:bg-blue-600": expense.category === "Água",
-									"bg-yellow-500 hover:bg-yellow-600": expense.category === "Energia",
-									"bg-purple-500 hover:bg-purple-600": expense.category === "Aluguel",
-									"bg-orange-500 hover:bg-orange-600": expense.category === "Ração",
-									"bg-green-500 hover:bg-green-600": expense.category === "Produtos de Limpeza",
+									"bg-blue-500 hover:bg-blue-600": expense.category === "agua",
+									"bg-yellow-500 hover:bg-yellow-600": expense.category === "energia",
+									"bg-purple-500 hover:bg-purple-600": expense.category === "aluguel",
+									"bg-orange-500 hover:bg-orange-600": expense.category === "racao",
+									"bg-green-500 hover:bg-green-600": expense.category === "limpeza",
 								})}
 							>
 								{expense.category}
