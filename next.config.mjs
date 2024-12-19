@@ -12,6 +12,14 @@ const nextConfig = {
     fetches: {
       fullUrl: true,
     },
+  }, images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+        pathname: '/**',
+      },
+    ],
   },
 };
 
