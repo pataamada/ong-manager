@@ -68,7 +68,10 @@ export default function FormLogin() {
 	}
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="gap-6 w-full flex flex-col md:max-w-[400px] my-auto mx-auto">
+			<form
+				onSubmit={form.handleSubmit(onSubmit)}
+				className="gap-6 w-full flex flex-col md:max-w-[400px] my-auto mx-auto"
+			>
 				<div className="flex flex-col items-center gap-2 mx-auto">
 					<h5 className="text-center text-h5">Entre em sua conta</h5>
 					<p className="text-center text-subtitle-2">Bem-vindo de volta</p>
@@ -88,7 +91,7 @@ export default function FormLogin() {
 					)}
 				/>
 
-                <FormField
+				<FormField
 					control={form.control}
 					name="password"
 					render={({ field }) => (
@@ -131,7 +134,10 @@ export default function FormLogin() {
 
 				<div className="text-center">
 					<span className="text-sm font-normal">Ainda não tem uma conta? </span>
-					<Link href="/register" className="text-sm font-bold text-emerald-600 hover:text-emerald-500 no-underline">
+					<Link
+						href="/register"
+						className="text-sm font-bold text-emerald-600 hover:text-emerald-500 no-underline"
+					>
 						Cadastre-se
 					</Link>
 				</div>

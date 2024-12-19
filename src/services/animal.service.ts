@@ -22,7 +22,6 @@ import {
 } from "./storage/storage.service"
 
 export const saveAnimal = async (params: CreateAnimal) => {
-	console.log("creating")
 	const document = await addDoc(collection(db, "animais"), {
 		name: params.name,
 		age: params.age,

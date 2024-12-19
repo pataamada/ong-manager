@@ -1,5 +1,4 @@
 "use client"
-
 import { Button } from "@/components/ui/button"
 import { DialogClose } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
@@ -82,7 +81,7 @@ export function AnimalForm() {
 		resolver: zodResolver(Step1CreateModalSchema),
 		defaultValues: {
 			name: data?.name || "",
-			age: String(data?.age),
+			age: String(data?.age || ""),
 			observations: data?.observations || "",
 			image: data?.photo,
 		},

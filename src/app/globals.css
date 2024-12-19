@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* styles matine datatable */
+@layer mantine, mantine-datatable;
 
 @layer base {
   :root {
@@ -12,6 +14,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
     --primary: 160 84% 39%;
+    --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
@@ -24,6 +27,7 @@
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: var(--primary);
+    --ring: 240 5.9% 10%;
     --radius: 0.5rem;
     --chart-1: 215 20% 72%;
     --chart-2: 158 75% 53%;
@@ -60,11 +64,11 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --chart-1: 215 20% 72%;
+    --chart-2: 158 75% 53%;
+    --chart-3: 27 96% 61%;
+    --chart-4: 213 94% 68%;
+    --chart-5: 0 91% 71%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -90,7 +94,81 @@ html {
   }
 }
 
-input[type="date"]:not(.has-value):before{
+/* styles matine datatable */
+.mantine-datatable {
+  background-color: #FFF;
+}
+.mantine-Text-root {
+  color: var(--Gray-900, #5E6777);
+}
+.mantine-ScrollArea-viewport {
+  min-height: 450px;
+}
+.mantine-datatable-pagination{
+  padding-top: 20px !important;
+  padding-bottom: 0px !important;
+}
+.mantine-datatable-pagination .m_4081bf90.mantine-Group-root{
+  margin-right: auto;
+  @media (max-width: 767px) {
+      margin-right: 0px;
+  }
+}
+/* button pagination */
+.mantine-Pagination-control {
+  border-radius: 8px;
+  background-color: #E8EAEC;
+      color: #000;   
+  &[data-active = true] {
+      background-color: #09090B;
+      color: #fff;    
+  }
+  &[data-disabled] {
+      background-color: #C2C5CB;
+      color: black;  
+  }
+}
+/* button pagination dots */
+.mantine-Pagination-dots {
+  border-radius: 8px;
+  background: var(--General-Neutral-White, #FFF);
+  background-color: #E8EAEC;
+  color: black;  
+}
+/* button select per page */
+.mantine-focus-auto.mantine-active.m_77c9d27d.mantine-Button-root.m_87cf2631.mantine-UnstyledButton-root {
+  color: #000;
+  border-radius: 8px;
+  border: 1px solid var(--Gray-400, #C2C5CB);
+  background: var(--General-Neutral-White, #FFF);
+  .m_811560b9.mantine-Button-label {
+      margin-right: 8px;
+  }
+}
+/* dropdown select per page */
+.m_38a85659.mantine-Menu-dropdown.m_dc9b7c9f {
+  background-color: #fff;
+  border: 1px solid var(--Gray-400, #C2C5CB);
+  padding: 8px;
+  button {
+      padding: 4px
+  }
+  button[data-disabled = true] {
+      background-color: #09090B;
+      color: #fff;   
+      
+      .mantine-Text-root {
+          color: #fff;
+      }
+  }
+  button:hover {
+      background-color: #09090B;
+      
+      .mantine-Text-root {
+          color: #fff;
+      }
+  }
+}input[type="date"]:not(.has-value):before{
   color: lightgray;
   content: attr(placeholder);
 }

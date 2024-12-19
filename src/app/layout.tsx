@@ -7,6 +7,9 @@ import { Montserrat } from "next/font/google"
 import NextTopLoader from "nextjs-toploader"
 import { cn } from "@/lib/utils"
 import QueryProvider from "@/providers/query-provider"
+import { MantineProvider } from "@mantine/core"
+import "@mantine/core/styles.layer.css"
+import "mantine-datatable/styles.layer.css"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 
 export const metadata: Metadata = {
@@ -31,7 +34,9 @@ export default function RootLayout({
 				<QueryProvider>
 					<TooltipProvider>
 						<NextTopLoader color="#10b981" showSpinner={false} />
-						<NuqsAdapter>{children}</NuqsAdapter>
+						<MantineProvider defaultColorScheme="auto">
+							<NuqsAdapter>{children}</NuqsAdapter>
+						</MantineProvider>
 					</TooltipProvider>
 				</QueryProvider>
 			</body>

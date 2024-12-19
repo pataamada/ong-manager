@@ -1,20 +1,19 @@
 import { type NextRequest, NextResponse } from "next/server"
 
-export const redirectTo = (
-	request: NextRequest,
-	to: string,
-	from: string | undefined = undefined,
-) => {
-	const newUrl = new URL(to, request.nextUrl)
-	newUrl.searchParams.delete("tab")
-	if (from) newUrl.searchParams.set("from", from)
-	return NextResponse.redirect(newUrl)
-}
+export const PAGE_SIZES_TABLE = [10, 20, 30, 40, 50]
+
+export const redirectTo = (request: NextRequest, to: string) =>
+	NextResponse.redirect(new URL(to, request.nextUrl))
 
 export const initialLetters = (fullname: string): string => {
 	const [firstName = " ", secondName = " "] = fullname.split(/\s+/)
 	return `${firstName[0]}${secondName[0]}`
 }
+// export const initialLetters = (fullname: string): string => {
+// 	const [firstName = " ", secondName = " "] = fullname
+// 		.split(/\s+/)
+// 	return `${firstName[0]}${secondName[0]}`
+// }
 
 export function validateCpf(cpf: string) {
 	let sum = 0
@@ -43,3 +42,4 @@ export function validateCpf(cpf: string) {
 
 	return true
 }
+// NextResponse.redirect(new URL(to, request.nextUrl));
