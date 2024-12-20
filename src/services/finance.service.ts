@@ -31,7 +31,10 @@ export const getDonations = async (limited?: boolean) => {
 	let q = query(collection(db, "donations"))
 	if (limited) q = query(collection(db, "donations"), limit(20), orderBy("date", "desc"))
 	const querySnapshot = await getDocs(q)
-	const donations = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+	const donations = querySnapshot.docs.map(doc => ({
+		id: doc.id,
+		...doc.data(),
+	}))
 	return donations as Donation[]
 }
 
@@ -39,7 +42,10 @@ export const getExpenses = async (limited?: boolean) => {
 	let q = query(collection(db, "expenses"))
 	if (limited) q = query(collection(db, "expenses"), limit(20), orderBy("date", "desc"))
 	const querySnapshot = await getDocs(q)
-	const expenses = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+	const expenses = querySnapshot.docs.map(doc => ({
+		id: doc.id,
+		...doc.data(),
+	}))
 	return expenses as Expense[]
 }
 
@@ -96,7 +102,10 @@ export const incomesAndOutcomes = async () => {
 			sixMonthsAgo.getMonth() + 1,
 			sixMonthsAgo.getFullYear(),
 		)
-		balance.push({ month: format(sixMonthsAgo, "MMMM", { locale: ptBR }), ...balanceByMonth })
+		balance.push({
+			month: format(sixMonthsAgo, "MMMM", { locale: ptBR }),
+			...balanceByMonth,
+		})
 	}
 	return balance
 }

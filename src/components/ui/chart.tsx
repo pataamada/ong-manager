@@ -56,7 +56,9 @@ const ChartContainer = React.forwardRef<
 				{...props}
 			>
 				<ChartStyle id={chartId} config={config} />
-				<RechartsPrimitive.ResponsiveContainer>{children}</RechartsPrimitive.ResponsiveContainer>
+				<RechartsPrimitive.ResponsiveContainer>
+					{children}
+				</RechartsPrimitive.ResponsiveContainer>
 			</div>
 		</ChartContext.Provider>
 	)
@@ -140,7 +142,9 @@ const ChartTooltipContent = React.forwardRef<
 
 			if (labelFormatter) {
 				return (
-					<div className={cn("font-medium", labelClassName)}>{labelFormatter(value, payload)}</div>
+					<div className={cn("font-medium", labelClassName)}>
+						{labelFormatter(value, payload)}
+					</div>
 				)
 			}
 
@@ -196,7 +200,8 @@ const ChartTooltipContent = React.forwardRef<
 															"w-1": indicator === "line",
 															"w-0 border-[1.5px] border-dashed bg-transparent":
 																indicator === "dashed",
-															"my-0.5": nestLabel && indicator === "dashed",
+															"my-0.5":
+																nestLabel && indicator === "dashed",
 														},
 													)}
 													style={
@@ -323,9 +328,10 @@ function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key:
 }
 
 export {
-  ChartContainer, ChartLegend,
-  ChartLegendContent,
-  ChartStyle, ChartTooltip,
-  ChartTooltipContent
+	ChartContainer,
+	ChartLegend,
+	ChartLegendContent,
+	ChartStyle,
+	ChartTooltip,
+	ChartTooltipContent,
 }
-

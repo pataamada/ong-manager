@@ -18,7 +18,11 @@ export default function AnimalsCard(animal: AnimalsCardProps) {
 		<Card className="relative w-full max-w-80 min-h-[420px]">
 			<div className="relative h-[220px] w-full overflow-hidden rounded-t-md">
 				<div className="absolute z-10 gap-2 flex top-6 right-6 md:top-4 md:right-4">
-					<Button className="size-fit p-2" variant={"secondary"} onClick={() => animal.onEdit?.(animal)}>
+					<Button
+						className="size-fit p-2"
+						variant={"secondary"}
+						onClick={() => animal.onEdit?.(animal)}
+					>
 						<Pen className="size-4" />
 					</Button>
 
@@ -43,11 +47,20 @@ export default function AnimalsCard(animal: AnimalsCardProps) {
 			<CardContent className="p-4 content-center">
 				<div className="flex py-1 gap-2">
 					<Badge variant="secondary">
-						<span className="font-bold"> {animal.castration ? "Castrado" : "Não castrado"}</span>
+						<span className="font-bold">
+							{" "}
+							{animal.castration ? "Castrado" : "Não castrado"}
+						</span>
 					</Badge>
 					<Badge variant={animal.avaliable ? "default" : "destructive"}>
-						<span className="mr-2">{animal.avaliable ? "Disponível" : "Indisponível"}</span>
-						<Icon name={animal.avaliable ? "Check" : "X"} className="w-4 h-4" strokeWidth="2px" />
+						<span className="mr-2">
+							{animal.avaliable ? "Disponível" : "Indisponível"}
+						</span>
+						<Icon
+							name={animal.avaliable ? "Check" : "X"}
+							className="w-4 h-4"
+							strokeWidth="2px"
+						/>
 					</Badge>
 				</div>
 				<div className="flex flex-row p-0 pb-2 items-center justify-between">
@@ -64,19 +77,29 @@ export default function AnimalsCard(animal: AnimalsCardProps) {
 						<p className="text-zinc-600 text-base text-end">{animal.sex}</p>
 					</div>
 					<div className="flex flex-row gap-y-1 justify-between">
-						<span className="text-zinc-400 text-base text-start flex-auto">Data de Cadastro:</span>
+						<span className="text-zinc-400 text-base text-start flex-auto">
+							Data de Cadastro:
+						</span>
 						<span className="text-zinc-600 text-base text-end">
 							{format(
-								new Timestamp(animal.createdAt.seconds, animal.createdAt.nanoseconds).toMillis(),
+								new Timestamp(
+									animal.createdAt.seconds,
+									animal.createdAt.nanoseconds,
+								).toMillis(),
 								"dd/MM/yyyy",
 							)}
 						</span>
 					</div>
 					<div className="flex flex-row gap-y-1 justify-between">
-						<span className="text-zinc-400 text-base text-start flex-auto">Atualizado em:</span>
+						<span className="text-zinc-400 text-base text-start flex-auto">
+							Atualizado em:
+						</span>
 						<span className="text-zinc-600 text-base text-end">
 							{format(
-								new Timestamp(animal.updatedAt.seconds, animal.updatedAt.nanoseconds).toMillis(),
+								new Timestamp(
+									animal.updatedAt.seconds,
+									animal.updatedAt.nanoseconds,
+								).toMillis(),
 								"dd/MM/yyyy - HH:mm",
 							)}
 						</span>

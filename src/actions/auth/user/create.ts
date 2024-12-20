@@ -36,7 +36,9 @@ export const createUser = actionClient
 		if (!user) {
 			throw new Error("Erro ao criar o usuário")
 		}
-		await authAdmin.setCustomUserClaims(user.uid, { role: UserRoles.Authenticated })
+		await authAdmin.setCustomUserClaims(user.uid, {
+			role: UserRoles.Authenticated,
+		})
 		await createUserService(user.uid, { cpf, phone })
 		revalidatePath("/users")
 		return JSON.stringify(user)

@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    domains: ['mir-s3-cdn-cf.behance.net'], 
-  },
   logging: {
     fetches: {
       fullUrl: true,
@@ -12,6 +9,11 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'firebasestorage.googleapis.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'mir-s3-cdn-cf.behance.net',
         pathname: '/**',
       },
     ],

@@ -11,7 +11,7 @@ export const getEventsOptions = queryOptions({
 	queryKey: ["events"],
 	queryFn: async () => {
 		const request = await findAllEventsAction()
-		return request?.data ? JSON.parse(request?.data) as Event[] : [] 
+		return request?.data ? (JSON.parse(request?.data) as Event[]) : []
 	},
 })
 
@@ -25,7 +25,10 @@ export const useCreateEvent = () => {
 	const queryClient = useQueryClient()
 	return useMutation({
 		mutationKey: ["create-event"],
-		mutationFn: async ({ image, ...data }: typeof eventSchema._type & { updatedBy: string }) => {
+		mutationFn: async ({
+			image,
+			...data
+		}: typeof eventSchema._type & { updatedBy: string }) => {
 			const formData = new FormData()
 			formData.append("image", image)
 			const request = await createEventAction(data, formData)
@@ -103,7 +106,10 @@ export const useUpdateEvent = () => {
 		mutationFn: async ({
 			image,
 			...data
-		}: typeof updateEventSchema._type & { id: string; updatedBy?: string }) => {
+		}: typeof updateEventSchema._type & {
+			id: string
+			updatedBy?: string
+		}) => {
 			const formData = new FormData()
 			if (image instanceof File) {
 				formData.append("image", image)

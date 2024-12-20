@@ -12,7 +12,9 @@ export const Step = ({ label, step, currentStep, stepsCount }: IStepsProps) => {
 			<div className="flex items-center justify-center">
 				<div
 					className={`relative rounded-lg h-[40px] w-[40px] flex justify-center items-center ${
-						step <= currentStep ? "bg-[#27272A]" : "bg-[#FFFFFF] border-2 border-[#27272A]"
+						step <= currentStep
+							? "bg-[#27272A]"
+							: "bg-[#FFFFFF] border-2 border-[#27272A]"
 					}`}
 				>
 					<div className="absolute top-11 text-nowrap font-semibold text-sm text-[#27272A]">

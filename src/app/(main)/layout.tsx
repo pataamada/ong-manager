@@ -5,7 +5,6 @@ import { getCurrentUser } from "@/lib/firebase/firebase-admin"
 import { AuthProvider } from "@/providers/auth-provider"
 import type { ReactNode } from "react"
 
-
 export default async function Layout({
 	children,
 }: Readonly<{

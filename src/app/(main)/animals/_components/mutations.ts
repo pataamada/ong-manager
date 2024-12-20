@@ -41,7 +41,7 @@ const createAnimalSchema = z.object({
 })
 
 const updateAnimalSchema = z.object({
-  id: z.string(),
+	id: z.string(),
 	name: z.string().optional(),
 	age: z.number().optional(),
 	type: z.nativeEnum(AnimalType).optional(),
@@ -52,7 +52,6 @@ const updateAnimalSchema = z.object({
 	updatedBy: z.string(),
 	photo: z.instanceof(File).optional(),
 })
-
 
 export const useCreateAnimal = () => {
 	const queryClient = useQueryClient()
@@ -143,10 +142,7 @@ export const useUpdateAnimal = () => {
 	const queryClient = useQueryClient()
 	return useMutation({
 		mutationKey: ["update-animal"],
-		mutationFn: async ({
-			photo,
-			...data
-		}: typeof updateAnimalSchema._type) => {
+		mutationFn: async ({ photo, ...data }: typeof updateAnimalSchema._type) => {
 			const formData = new FormData()
 			if (photo instanceof File) {
 				formData.append("file", photo)
@@ -163,7 +159,7 @@ export const useUpdateAnimal = () => {
 		onSuccess: async (_, variables) => {
 			await queryClient.cancelQueries(getAnimalsOptions)
 			const previousAnimals = queryClient.getQueryData(getAnimalsOptions.queryKey)
-      
+
 			if (previousAnimals) {
 				const newsAnimals = previousAnimals.map((animal: Animal) => {
 					if (animal.id === variables.id) {
@@ -174,8 +170,14 @@ export const useUpdateAnimal = () => {
 							type: variables?.type || animal.type,
 							sex: variables?.sex || animal.sex,
 							observations: variables?.observations || animal.observations,
-							avaliable: variables?.avaliable !== undefined ? variables.avaliable : animal.avaliable,
-							castration: variables?.castration !== undefined ? variables.castration : animal.castration,
+							avaliable:
+								variables?.avaliable !== undefined
+									? variables.avaliable
+									: animal.avaliable,
+							castration:
+								variables?.castration !== undefined
+									? variables.castration
+									: animal.castration,
 							updatedBy: variables?.updatedBy || animal.updatedBy,
 						}
 					}

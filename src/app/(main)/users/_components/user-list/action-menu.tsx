@@ -34,7 +34,10 @@ export function ActionMenu<T>({
 					<span>Editar</span>
 				</DropdownMenuItem>
 				{!noDelete && (
-					<DropdownMenuItem className="gap-2 text-red-500" onClick={() => onDeleteClick?.(value)}>
+					<DropdownMenuItem
+						className="gap-2 text-red-500"
+						onClick={() => onDeleteClick?.(value)}
+					>
 						<Trash size={16} />
 						<span>Apagar</span>
 					</DropdownMenuItem>

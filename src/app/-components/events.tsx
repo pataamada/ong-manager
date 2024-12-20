@@ -47,7 +47,10 @@ const mockedEvents: Event[] = [
 const formatDate = (date: string) => {
 	const month = new Date(date).toLocaleString("pt-BR", { month: "long" })
 	const day = new Date(date).getDate()
-	const time = new Date(date).toLocaleString("pt-BR", { hour: "numeric", minute: "numeric" })
+	const time = new Date(date).toLocaleString("pt-BR", {
+		hour: "numeric",
+		minute: "numeric",
+	})
 	return { month, day, time }
 }
 
@@ -59,11 +62,16 @@ export function Events() {
 				<Carousel>
 					<CarouselContent className="-ml-6">
 						{mockedEvents.map(event => (
-							<CarouselItem className="pl-6 lg:basis-[45%] md:basis-2/3 basis-10/12" key={event.id}>
+							<CarouselItem
+								className="pl-6 lg:basis-[45%] md:basis-2/3 basis-10/12"
+								key={event.id}
+							>
 								<div className=" bg-white border rounded-lg min-h-[350px] w-[640px] h-full max-w-full select-none text-pretty flex sm:flex-row flex-col-reverse">
 									<div className="md:p-6 p-2 px-6 pr-0 flex items-center sm:justify-center sm:flex-col text-zinc-500 gap-2">
 										<span className="flex flex-row-reverse sm:flex-col text-center gap-2">
-											<p className="capitalize text-subtitle-2">{formatDate(event.date).month}</p>
+											<p className="capitalize text-subtitle-2">
+												{formatDate(event.date).month}
+											</p>
 											<p className="sm:text-[3.25rem] sm:font-bold sm:text-zinc-800 sm:leading-[60px] text-subtitle-2">
 												{formatDate(event.date).day}
 											</p>
@@ -75,7 +83,10 @@ export function Events() {
 									<div className="md:p-5 p-2 px-6 ">
 										<div className="w-full rounded-lg h-[180px] relative">
 											<Image
-												src={event.image || "/landing-page/events/card-placeholder.svg"}
+												src={
+													event.image ||
+													"/landing-page/events/card-placeholder.svg"
+												}
 												alt={event.title}
 												className="object-cover rounded-lg"
 												fill

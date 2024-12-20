@@ -59,7 +59,9 @@ export function Header() {
 					</SheetTrigger>
 					<SheetContent side="right" className="w-[300px] sm:w-[400px] border-l">
 						<SheetHeader className="mb-6">
-							<SheetTitle className="text-2xl font-bold text-zinc-800">Menu</SheetTitle>
+							<SheetTitle className="text-2xl font-bold text-zinc-800">
+								Menu
+							</SheetTitle>
 						</SheetHeader>
 						<nav className="flex flex-col gap-4">
 							{navigationItems.map(item => (

@@ -40,7 +40,9 @@ export const getColumns = (
 					<Avatar>
 						<AvatarImage src={row.original.photo} />
 						<AvatarFallback
-							className={cn(isCurrentUser(row) && "bg-emerald-500 text-white font-bold")}
+							className={cn(
+								isCurrentUser(row) && "bg-emerald-500 text-white font-bold",
+							)}
 						>
 							{initialLetters(row.original.name)}
 						</AvatarFallback>
@@ -68,7 +70,10 @@ export const getColumns = (
 			header: () => <div className="text-center">CPF</div>,
 			cell: ({ row }) => (
 				<div className="text-center font-medium">
-					{format(row.original.cpf, { mask: "___.___.___-__", replacement: { _: /\d/ } })}
+					{format(row.original.cpf, {
+						mask: "___.___.___-__",
+						replacement: { _: /\d/ },
+					})}
 				</div>
 			),
 		},
@@ -80,7 +85,10 @@ export const getColumns = (
 			header: () => <div className="text-center">Telefone</div>,
 			cell: ({ row }) => (
 				<div className="text-center font-medium">
-					{format(row.original?.phone || "", { mask: "+__ (__) _____-____", replacement: { _: /\d/ } })}
+					{format(row.original?.phone || "", {
+						mask: "+__ (__) _____-____",
+						replacement: { _: /\d/ },
+					})}
 				</div>
 			),
 		},
@@ -98,7 +106,10 @@ export const getColumns = (
 						onValueChange={value => {
 							callbacks.roleChange?.({
 								...row,
-								original: { ...row.original, role: value as UserRoles },
+								original: {
+									...row.original,
+									role: value as UserRoles,
+								},
 							})
 						}}
 						readonly={isCurrentUser(row)}
@@ -108,7 +119,11 @@ export const getColumns = (
 								value: UserRoles.Admin,
 								description: "Ver, Criar, Atualizar e Apagar",
 							},
-							{ title: "Autenticado", value: UserRoles.Authenticated, description: "Ver" },
+							{
+								title: "Autenticado",
+								value: UserRoles.Authenticated,
+								description: "Ver",
+							},
 						]}
 					/>
 				</div>

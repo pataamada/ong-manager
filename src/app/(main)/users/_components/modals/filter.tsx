@@ -22,7 +22,9 @@ export function FilterDrawer() {
 		const hasRoleFilter = filters.find(filter => filter.id === "role")
 		if (hasRoleFilter) {
 			setFilters(filters =>
-				filters.map(filter => (filter.id === "role" ? { ...filter, value: roleFilter } : filter)),
+				filters.map(filter =>
+					filter.id === "role" ? { ...filter, value: roleFilter } : filter,
+				),
 			)
 		} else {
 			setFilters(filters => [...filters, { id: "role", value: roleFilter }])
@@ -46,7 +48,9 @@ export function FilterDrawer() {
 							<span className="text-sm font-bold">Cargo</span>
 						</h1>
 						<Select
-							defaultValue={filters.find(filter => filter.id === "role")?.value as UserRoles}
+							defaultValue={
+								filters.find(filter => filter.id === "role")?.value as UserRoles
+							}
 							onValueChange={value => setRoleFilter(value as UserRoles)}
 						>
 							<SelectTrigger className="w-full">

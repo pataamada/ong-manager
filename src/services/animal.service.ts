@@ -52,7 +52,10 @@ export const saveAnimal = async (params: CreateAnimal) => {
 export const findAnimals = async () => {
 	const q = query(collection(db, "animais"))
 	const querySnapshot = await getDocs(q)
-	const animals = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Animal[]
+	const animals = querySnapshot.docs.map(doc => ({
+		...doc.data(),
+		id: doc.id,
+	})) as Animal[]
 	const animalsWithImages = await getAnimalImages(animals)
 	return animalsWithImages
 }
@@ -60,7 +63,10 @@ export const findAnimals = async () => {
 export const findRecentAnimals = async () => {
 	const q = query(collection(db, "animais"), orderBy("createdAt"), limit(6))
 	const querySnapshot = await getDocs(q)
-	const animals = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Animal[]
+	const animals = querySnapshot.docs.map(doc => ({
+		...doc.data(),
+		id: doc.id,
+	})) as Animal[]
 	const animalsWithImages = await getAnimalImages(animals)
 	return animalsWithImages
 }

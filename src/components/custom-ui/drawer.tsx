@@ -40,7 +40,7 @@ const DrawerContent = React.forwardRef<
 	}
 >(({ className, children, side = "right", backgroundOverlay, ...props }, ref) => (
 	<DrawerPortal>
-		<DrawerOverlay background={backgroundOverlay}/>
+		<DrawerOverlay background={backgroundOverlay} />
 		<DialogPrimitive.Content
 			ref={ref}
 			className={cn(

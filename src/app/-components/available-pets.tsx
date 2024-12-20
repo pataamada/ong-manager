@@ -1,6 +1,5 @@
 "use client"
 
-
 import { Button } from "@/components/ui/button"
 import { Icon } from "@iconify/react"
 import { AnimatePresence, motion } from "framer-motion"
@@ -68,7 +67,6 @@ function PetImage({ pet, className }: { pet: Pet; className?: string }) {
 				exit={{ opacity: 0, x: -20 }}
 				transition={{ duration: 0.3 }}
 				className={`relative ${className}`}
-
 			>
 				<Image
 					src={pet.photo}
@@ -79,10 +77,7 @@ function PetImage({ pet, className }: { pet: Pet; className?: string }) {
 				/>
 				<div className="flex flex-row gap-2 mt-2 absolute bottom-4 w-full px-4 [&>*]:text-paragraph-3 ">
 					{/* TODO: Adicionar funcionalidades para os botões */}
-					<Button
-						className="text-black w-[50%] gap-2 font-bold"
-						variant={"outline"}
-					>
+					<Button className="text-black w-[50%] gap-2 font-bold" variant={"outline"}>
 						<Icon icon="fa-solid:heart" width={16} height={16} />
 						Apadrinhar
 					</Button>
@@ -134,9 +129,7 @@ export function AvailablePets() {
 	const [selectedPet, setSelectedPet] = useState<Pet>(availablePets[0])
 
 	return (
-		<div 
-		id="available-pets"
-		className="text-center">
+		<div id="available-pets" className="text-center">
 			<h3 className="text-4xl font-bold">
 				Conheça nossos
 				<span className="text-primary"> peludos!</span>
@@ -160,7 +153,10 @@ export function AvailablePets() {
 							))}
 						</div>
 						<div className="lg:hidden block mx-auto py-2 ">
-							<PetImage pet={selectedPet} className="w-full max-h-[350px] max-w-[350px] mx-auto" />
+							<PetImage
+								pet={selectedPet}
+								className="w-full max-h-[350px] max-w-[350px] mx-auto"
+							/>
 						</div>
 						<p className="text-zinc-500 text-sm lg:text-[1.75rem] lg:leading-[2.25rem] mb-4 max-h-[90px] lg:h-[220px] lg:max-h-[220px] text-pretty overflow-hidden text-ellipsis line-clamp-4 lg:line-clamp-6 text-center lg:text-left ">
 							{selectedPet.description}

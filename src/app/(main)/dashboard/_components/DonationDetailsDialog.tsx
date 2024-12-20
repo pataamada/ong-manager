@@ -27,7 +27,9 @@ export function DonationDetailsDialog({
 							<Heart className="h-6 w-6 text-primary" />
 						</div>
 						<div>
-							<DialogTitle className="text-xl font-bold">Detalhes da Doação</DialogTitle>
+							<DialogTitle className="text-xl font-bold">
+								Detalhes da Doação
+							</DialogTitle>
 							{/* <DialogDescription className="text-base text-foreground">
 								{donation.anonymous ? "Doação Anônima" : "Doação Identificada"}
 							</DialogDescription> */}

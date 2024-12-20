@@ -182,7 +182,12 @@ export function AnimalForm() {
 											objectFit="cover"
 											value={field.value}
 											onChange={field.onChange}
-											onRemoveImage={() => formStep1CreateModalSchema.setValue("image", undefined)}
+											onRemoveImage={() =>
+												formStep1CreateModalSchema.setValue(
+													"image",
+													undefined,
+												)
+											}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -223,7 +228,10 @@ export function AnimalForm() {
 								<FormItem>
 									<FormLabel>Observações</FormLabel>
 									<FormControl>
-										<Textarea placeholder="Digite as observações..." {...field} />
+										<Textarea
+											placeholder="Digite as observações..."
+											{...field}
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -231,7 +239,10 @@ export function AnimalForm() {
 						/>
 						<div className="flex justify-end gap-2 mt-auto">
 							<DialogClose asChild>
-								<Button variant="secondary" onClick={() => formStep1CreateModalSchema.reset()}>
+								<Button
+									variant="secondary"
+									onClick={() => formStep1CreateModalSchema.reset()}
+								>
 									Cancelar
 								</Button>
 							</DialogClose>
@@ -245,7 +256,10 @@ export function AnimalForm() {
 
 			{step === 2 && (
 				<Form {...formStep2CreateModalSchema}>
-					<form onSubmit={formStep2CreateModalSchema.handleSubmit(onSubmit)} className="space-y-4">
+					<form
+						onSubmit={formStep2CreateModalSchema.handleSubmit(onSubmit)}
+						className="space-y-4"
+					>
 						<div className="space-y-4">
 							<FormField
 								control={formStep2CreateModalSchema.control}
@@ -253,14 +267,19 @@ export function AnimalForm() {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Tipo</FormLabel>
-										<Select onValueChange={field.onChange} defaultValue={field.value}>
+										<Select
+											onValueChange={field.onChange}
+											defaultValue={field.value}
+										>
 											<FormControl>
 												<SelectTrigger className="w-full">
 													<SelectValue placeholder="Selecione o tipo" />
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
-												<SelectItem value={AnimalType.Dog}>Cachorro</SelectItem>
+												<SelectItem value={AnimalType.Dog}>
+													Cachorro
+												</SelectItem>
 												<SelectItem value={AnimalType.Cat}>Gato</SelectItem>
 											</SelectContent>
 										</Select>
@@ -274,7 +293,10 @@ export function AnimalForm() {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Sexo</FormLabel>
-										<Select onValueChange={field.onChange} defaultValue={field.value}>
+										<Select
+											onValueChange={field.onChange}
+											defaultValue={field.value}
+										>
 											<FormControl>
 												<SelectTrigger className="w-full" ref={field.ref}>
 													<SelectValue placeholder="Selecione o sexo" />
@@ -298,7 +320,10 @@ export function AnimalForm() {
 								render={({ field }) => (
 									<FormItem className="flex items-center gap-2">
 										<FormControl>
-											<Switch checked={field.value} onCheckedChange={field.onChange} />
+											<Switch
+												checked={field.value}
+												onCheckedChange={field.onChange}
+											/>
 										</FormControl>
 										<FormLabel>Castrado</FormLabel>
 									</FormItem>
@@ -310,7 +335,10 @@ export function AnimalForm() {
 								render={({ field }) => (
 									<FormItem className="flex items-center gap-2">
 										<FormControl>
-											<Switch checked={field.value} onCheckedChange={field.onChange} />
+											<Switch
+												checked={field.value}
+												onCheckedChange={field.onChange}
+											/>
 										</FormControl>
 										<FormLabel>Disponível</FormLabel>
 									</FormItem>
@@ -323,8 +351,12 @@ export function AnimalForm() {
 								Voltar
 							</Button>
 							<Button type="submit" disabled={isCreatePending || isUpdatePending}>
-								<When condition={!data}>{isCreatePending ? "Criando..." : "Criar"}</When>
-								<When condition={data}>{isUpdatePending ? "Atualizando..." : "Atualizar"}</When>
+								<When condition={!data}>
+									{isCreatePending ? "Criando..." : "Criar"}
+								</When>
+								<When condition={data}>
+									{isUpdatePending ? "Atualizando..." : "Atualizar"}
+								</When>
 							</Button>
 						</div>
 					</form>

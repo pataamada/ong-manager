@@ -3,10 +3,8 @@ import { actionClient } from "../safe-action"
 import { updateEvent } from "@/services/event.service"
 import { zfd } from "zod-form-data"
 
-
-
 const fileSchema = zfd.formData({
-    image: zfd.file().optional(),
+	image: zfd.file().optional(),
 })
 const eventSchema = z.object({
 	id: z.string(),
@@ -19,9 +17,7 @@ const eventSchema = z.object({
 
 export const updateEventAction = actionClient
 	.schema(fileSchema)
-    .bindArgsSchemas([eventSchema])
+	.bindArgsSchemas([eventSchema])
 	.action(async ({ parsedInput: { image }, bindArgsParsedInputs: [rest] }) => {
 		return await updateEvent({ image, ...rest })
 	})
-
-

@@ -23,7 +23,7 @@ export function Filters() {
 				placeholder="Pesquisar..."
 				className="!w-[200px] hidden lg:block"
 				value={search}
-				onChange={(e) => setSearch(e.target.value)}
+				onChange={e => setSearch(e.target.value)}
 			/>
 			<CustomSelect
 				options={sorts}

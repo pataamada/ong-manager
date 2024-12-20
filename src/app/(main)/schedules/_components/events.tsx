@@ -1,7 +1,14 @@
 "use client"
 import { useAtomValue, useSetAtom } from "jotai"
 import { EventCard } from "./cards/event-card"
-import { confirmDeleteInfo, filterOrderAtom, filterSearchAtom, modalConfirmDelete, modalCreateEvent, updateEventData } from "./store"
+import {
+	confirmDeleteInfo,
+	filterOrderAtom,
+	filterSearchAtom,
+	modalConfirmDelete,
+	modalCreateEvent,
+	updateEventData,
+} from "./store"
 import { useGetEvents } from "./mutations/useEvents"
 import { When } from "@/components/when"
 import { PawLoader } from "@/components/paw-loader"
@@ -27,11 +34,7 @@ export function Events() {
 	}
 
 	const filteredData = data
-		?.filter(
-			event =>
-				contains(event.title, search) ||
-				contains(event.description, search),
-		)
+		?.filter(event => contains(event.title, search) || contains(event.description, search))
 		.sort((a, b) =>
 			order === "older"
 				? new Date(a.date).getTime() - new Date(b.date).getTime()
@@ -51,8 +54,15 @@ export function Events() {
 					condition={filteredData?.length}
 					fallback={
 						<div className="w-full flex-grow flex flex-col items-center justify-center">
-							<Image src="empty-state.svg" alt="empty users image" height={200} width={200} />
-							<span className="text-lg text-zinc-400">Parece que não tem eventos cadastradas</span>
+							<Image
+								src="empty-state.svg"
+								alt="empty users image"
+								height={200}
+								width={200}
+							/>
+							<span className="text-lg text-zinc-400">
+								Parece que não tem eventos cadastradas
+							</span>
 						</div>
 					}
 				>

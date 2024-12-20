@@ -34,7 +34,13 @@ export function ConfirmDeleteAlert({
 			<AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
 			<AlertDialogContent>
 				<AlertDialogHeader className="flex items-center">
-					<Image color="#fff" height={96} width={96} alt="delete-image" src={"delete-image.svg"} />
+					<Image
+						color="#fff"
+						height={96}
+						width={96}
+						alt="delete-image"
+						src={"delete-image.svg"}
+					/>
 					<AlertDialogTitle className="text-center">{title}</AlertDialogTitle>
 					<AlertDialogDescription className="text-center text-md">
 						{description}

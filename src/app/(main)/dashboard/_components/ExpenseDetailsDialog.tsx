@@ -60,12 +60,15 @@ export function ExpenseDetailsDialog({ open, onOpenChange, expense }: ExpenseDet
 									"text-purple-600": expense.category === "aluguel",
 									"text-orange-600": expense.category === "racao",
 									"text-green-600": expense.category === "limpeza",
-									"text-gray-600": !categoryIcons[expense.category as CategoryType],
+									"text-gray-600":
+										!categoryIcons[expense.category as CategoryType],
 								})}
 							/>
 						</div>
 						<div>
-							<DialogTitle className="text-xl font-bold">Detalhes da Despesa</DialogTitle>
+							<DialogTitle className="text-xl font-bold">
+								Detalhes da Despesa
+							</DialogTitle>
 							<DialogDescription className="text-base text-foreground">
 								{expense.description}
 							</DialogDescription>
@@ -81,10 +84,14 @@ export function ExpenseDetailsDialog({ open, onOpenChange, expense }: ExpenseDet
 							<Badge
 								className={cn("w-fit", {
 									"bg-blue-500 hover:bg-blue-600": expense.category === "agua",
-									"bg-yellow-500 hover:bg-yellow-600": expense.category === "energia",
-									"bg-purple-500 hover:bg-purple-600": expense.category === "aluguel",
-									"bg-orange-500 hover:bg-orange-600": expense.category === "racao",
-									"bg-green-500 hover:bg-green-600": expense.category === "limpeza",
+									"bg-yellow-500 hover:bg-yellow-600":
+										expense.category === "energia",
+									"bg-purple-500 hover:bg-purple-600":
+										expense.category === "aluguel",
+									"bg-orange-500 hover:bg-orange-600":
+										expense.category === "racao",
+									"bg-green-500 hover:bg-green-600":
+										expense.category === "limpeza",
 								})}
 							>
 								{expense.category}

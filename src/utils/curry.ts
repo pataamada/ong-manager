@@ -1,28 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-type Any = any;
+type Any = any
 
-export const __ = Symbol("curry");
+export const __ = Symbol("curry")
 
-type SameLength<T extends Any[]> = Extract<{ [K in keyof T]: Any }, Any[]>;
+type SameLength<T extends Any[]> = Extract<{ [K in keyof T]: Any }, Any[]>
 
 export type Curried<A extends Any[], R> = <P extends Partial<A>>(
-  ...args: P
+	...args: P
 ) => P extends A
-  ? R
-  : A extends [...SameLength<P>, ...infer S]
-    ? S extends Any[]
-      ? Curried<S, R>
-      : never
-    : never;
+	? R
+	: A extends [...SameLength<P>, ...infer S]
+		? S extends Any[]
+			? Curried<S, R>
+			: never
+		: never
 
 const cat = (prev: unknown[], next: unknown[]) => {
-  const arr = prev.reduce((res: unknown[], arg) => {
-    return res.concat(arg === __ ? next.shift() : arg);
-  }, []);
+	const arr = prev.reduce((res: unknown[], arg) => {
+		return res.concat(arg === __ ? next.shift() : arg)
+	}, [])
 
-  return [...arr, ...next];
-};
+	return [...arr, ...next]
+}
 
 /**
  * Implementation of curry function inspired by the solution from Stack Overflow.
@@ -38,11 +38,11 @@ const cat = (prev: unknown[], next: unknown[]) => {
  * console.log(curriedAdd(1, __, 3)(2)); // 6
  */
 export function curry<A extends unknown[], R>(fn: Fn<A, R>): Curried<A, R> {
-  return function curried(...args: Any[]): Any {
-    if (args.some((a) => a === __) || args.length < fn.length) {
-      return (...next: unknown[]) => curried(...cat(args, next));
-    }
+	return function curried(...args: Any[]): Any {
+		if (args.some(a => a === __) || args.length < fn.length) {
+			return (...next: unknown[]) => curried(...cat(args, next))
+		}
 
-    return fn(...(args as Any));
-  };
+		return fn(...(args as Any))
+	}
 }

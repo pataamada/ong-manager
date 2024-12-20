@@ -98,7 +98,11 @@ export default function FormLogin() {
 						<FormItem>
 							<FormLabel className="font-semibold">Senha</FormLabel>
 							<FormControl>
-								<PasswordInput id="password" placeholder="Digite sua senha" {...field} />
+								<PasswordInput
+									id="password"
+									placeholder="Digite sua senha"
+									{...field}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -111,9 +115,15 @@ export default function FormLogin() {
 						render={({ field }) => (
 							<FormItem className="flex items-center space-y-0">
 								<FormControl>
-									<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+									<Checkbox
+										checked={field.value}
+										onCheckedChange={field.onChange}
+									/>
 								</FormControl>
-								<FormLabel htmlFor="rememberMe" className="ml-2 block text-sm font-semibold">
+								<FormLabel
+									htmlFor="rememberMe"
+									className="ml-2 block text-sm font-semibold"
+								>
 									Lembrar-se
 								</FormLabel>
 							</FormItem>

@@ -43,7 +43,10 @@ export const createEvent = async (params: CreateEvent) => {
 export const findAllEvents = async () => {
 	const q = query(collection(db, "eventos"))
 	const querySnapshot = await getDocs(q)
-	const events = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Event[]
+	const events = querySnapshot.docs.map(doc => ({
+		...doc.data(),
+		id: doc.id,
+	})) as Event[]
 	const eventWithImages = await getEventImages(events)
 	return JSON.stringify(eventWithImages)
 }

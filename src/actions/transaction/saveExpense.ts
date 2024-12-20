@@ -11,15 +11,9 @@ const schema = z.object({
 	description: z.string(),
 })
 
-export const saveExpenseAction = actionClient.schema(schema).action(
-	async ({
-		parsedInput: {
-			transactionType,
-			category,
-			value,
-			description,
-		},
-	}) => {
+export const saveExpenseAction = actionClient
+	.schema(schema)
+	.action(async ({ parsedInput: { transactionType, category, value, description } }) => {
 		const expenseObject: IExpense = {
 			transactionType,
 			category,
@@ -29,5 +23,4 @@ export const saveExpenseAction = actionClient.schema(schema).action(
 		}
 		const savedExpense = await handleSaveTransaction(expenseObject)
 		return JSON.parse(savedExpense)
-	},
-)
+	})

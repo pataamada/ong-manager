@@ -18,7 +18,11 @@ export const Sidebar = () => {
 	}
 	return (
 		<aside className="hidden sm:flex sticky flex-col gap-4 bg-white p-3 border-r border-zinc-300 z-10">
-			<UserMenu email={user?.user.email} onLogout={handleLogout} photo={user?.user.photoURL} />
+			<UserMenu
+				email={user?.user.email}
+				onLogout={handleLogout}
+				photo={user?.user.photoURL}
+			/>
 			<Links items={links} role={user?.role || UserRoles.Authenticated} />
 		</aside>
 	)

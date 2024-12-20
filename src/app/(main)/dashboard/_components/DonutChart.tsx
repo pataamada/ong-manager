@@ -51,7 +51,10 @@ export function DonutChart() {
 	return (
 		<Card className="flex flex-col border-none shadow-none">
 			<CardContent className="flex-1 pb-0">
-				<ChartContainer config={chartConfig} className="mx-auto aspect-square h-[380px] w-full">
+				<ChartContainer
+					config={chartConfig}
+					className="mx-auto aspect-square h-[380px] w-full"
+				>
 					<PieChart>
 						<ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
 						<Pie

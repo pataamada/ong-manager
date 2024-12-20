@@ -51,12 +51,12 @@ export function Footer() {
 						className="mb-4"
 					/>
 					<p className="text</footer>-paragraph mb-6">
-						Somos a organização não governamental CãoDomínio, um abrigo que trabalha há 30 anos para
-						fornecer assistência a cães e gatos necessitados.
+						Somos a organização não governamental CãoDomínio, um abrigo que trabalha há
+						30 anos para fornecer assistência a cães e gatos necessitados.
 					</p>
 					<p className="text-paragraph mb-6">
-						Estamos localizados em: Rua 17 de Agosto, 130, Centro, Satuba/AL - CEP 57120-000.
-						Funcionamos de segunda à sexta, das 8 às 18:00.
+						Estamos localizados em: Rua 17 de Agosto, 130, Centro, Satuba/AL - CEP
+						57120-000. Funcionamos de segunda à sexta, das 8 às 18:00.
 					</p>
 					<div className="flex justify-start md:justify-center gap-4">
 						{socials.map((social, index) => (

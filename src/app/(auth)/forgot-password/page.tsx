@@ -1,7 +1,5 @@
-import FormForgotPassword from "./form-forgot";
+import FormForgotPassword from "./form-forgot"
 
 export default function ForgotPassword() {
-    return (
-     <FormForgotPassword/>
-    );
+	return <FormForgotPassword />
 }

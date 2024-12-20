@@ -6,79 +6,79 @@
 		"ignore": [],
 		"attributePosition": "auto",
 		"indentStyle": "tab",
-		"indentWidth": 2,
+		"indentWidth": 4,
 		"lineWidth": 100,
 		"lineEnding": "lf"
 	},
 	"javascript": {
 		"formatter": {
-		"arrowParentheses": "asNeeded",
-		"bracketSameLine": false,
-		"bracketSpacing": true,
-		"jsxQuoteStyle": "double",
-		"quoteProperties": "asNeeded",
-		"semicolons": "asNeeded",
-		"trailingCommas": "all"
+			"arrowParentheses": "asNeeded",
+			"bracketSameLine": false,
+			"bracketSpacing": true,
+			"jsxQuoteStyle": "double",
+			"quoteProperties": "asNeeded",
+			"semicolons": "asNeeded",
+			"trailingCommas": "all"
 		}
 	},
 	"linter": {
 		"enabled": true,
 		"rules": {
-		"recommended": true,
-		"complexity": {
-			"useArrowFunction": "info",
-			"noBannedTypes": "warn",
-			"noForEach": "off",
-			"noMultipleSpacesInRegularExpressionLiterals": "error",
-			"noUselessTernary": "warn",
-			"useFlatMap": "error"
-		},
-		"style": {
-			"noCommaOperator": "off",
-			"noNonNullAssertion": "off",
-			"noParameterAssign": "off",
-			"noNamespace": "error",
-			"noNegationElse": "error",
-			"noUnusedTemplateLiteral": "error",
-			"noUselessElse": "warn",
-			"noVar": "warn",
-			"noYodaExpression": "error",
-			"useNamingConvention": "off",
-			"useImportType": "warn",
-			"useShorthandArrayType": "error",
-			"useShorthandAssign": "error"
-		},
-		"suspicious": {
-			"noAssignInExpressions": "off",
-			"noConstEnum": "error",
-			"noDoubleEquals": "error",
-			"useAwait": "error"
-		},
-		"a11y": {
-			"useAltText": "warn",
-			"useKeyWithClickEvents":"off"
-		},
-		"performance": {
-			"noAccumulatingSpread": "error",
-			"noDelete": "error"
-		}
+			"recommended": true,
+			"complexity": {
+				"useArrowFunction": "info",
+				"noBannedTypes": "warn",
+				"noForEach": "off",
+				"noMultipleSpacesInRegularExpressionLiterals": "error",
+				"noUselessTernary": "warn",
+				"useFlatMap": "error"
+			},
+			"style": {
+				"noCommaOperator": "off",
+				"noNonNullAssertion": "off",
+				"noParameterAssign": "off",
+				"noNamespace": "error",
+				"noNegationElse": "error",
+				"noUnusedTemplateLiteral": "error",
+				"noUselessElse": "warn",
+				"noVar": "warn",
+				"noYodaExpression": "error",
+				"useNamingConvention": "off",
+				"useImportType": "warn",
+				"useShorthandArrayType": "error",
+				"useShorthandAssign": "error"
+			},
+			"suspicious": {
+				"noAssignInExpressions": "off",
+				"noConstEnum": "error",
+				"noDoubleEquals": "error",
+				"useAwait": "error"
+			},
+			"a11y": {
+				"useAltText": "warn",
+				"useKeyWithClickEvents": "off"
+			},
+			"performance": {
+				"noAccumulatingSpread": "error",
+				"noDelete": "error"
+			}
 		}
 	},
 	"json": {
 		"formatter": {
-		"trailingCommas": "none"
+			"trailingCommas": "none"
 		}
 	},
 	"files": {
 		"include": [
-		"src/**/*.js",
-		"src/**/*.ts",
-		"src/**/*.tsx",
-		"src/**/*.jsx",
-		"test/**/*.js",
-		"test/**/*.ts",
-		"test/**/*.tsx",
-		"test/**/*.jsx"
+			"src/**/*.js",
+			"src/**/*.ts",
+			"src/**/*.tsx",
+			"src/**/*.jsx",
+			"test/**/*.js",
+			"test/**/*.ts",
+			"test/**/*.tsx",
+			"test/**/*.jsx"
 		],
 		"ignore": ["**/*.min.js", ".next/**", "node_modules/**"]
 	}

@@ -30,7 +30,10 @@ export const findAll = async () => {
 	const q = query(collection(db, "users"))
 	const users = await auth.listUsers()
 	const querySnapshot = await getDocs(q)
-	const docs = querySnapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }))
+	const docs = querySnapshot.docs.map(doc => ({
+		id: doc.id,
+		data: doc.data(),
+	}))
 	const filledUsers = users.users.map(user => {
 		const userDoc = docs.find(doc => doc.id === user.uid)
 		const userValue = {

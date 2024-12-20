@@ -138,7 +138,10 @@ export const useUpdateNews = () => {
 							description: variables?.description || news?.description,
 							tags: variables.tags || news.tags,
 							updatedAt: variables?.updatedAt
-								? new Timestamp(variables.updatedAt.seconds, variables.updatedAt.nanoseconds)
+								? new Timestamp(
+										variables.updatedAt.seconds,
+										variables.updatedAt.nanoseconds,
+									)
 								: news.updatedAt,
 							updatedBy: variables?.updatedBy || news.updatedBy,
 							photo: data?.photo || news.photo,

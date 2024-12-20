@@ -32,7 +32,7 @@ import { z } from "zod"
 import { Steps } from "../Steps"
 import { findAnimalAction } from "@/actions/animal/findAnimals"
 import type { Animal } from "@/models/animal.model"
-import {  ETransactionType, type Category } from "@/models/transaction.model"
+import { ETransactionType, type Category } from "@/models/transaction.model"
 
 interface INewRegisterModal extends DialogProps {
 	open: boolean
@@ -240,19 +240,35 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 				onClick={() => setType(ETransactionType.Donation)}
 				className={`flex w-full flex-col ${type === ETransactionType.Donation ? "border-2 border-[#27272A]" : "border border-[#E4E4E7]"} gap-4 p-6 rounded-lg hover:cursor-pointer`}
 			>
-				<div className={"flex justify-center items-center rounded h-[56px] w-[56px] bg-[#F4F4F5]"}>
-					<Image src={"/finance/heart-handshake.svg"} width={32} height={32} priority alt="ícone" />
+				<div
+					className={
+						"flex justify-center items-center rounded h-[56px] w-[56px] bg-[#F4F4F5]"
+					}
+				>
+					<Image
+						src={"/finance/heart-handshake.svg"}
+						width={32}
+						height={32}
+						priority
+						alt="ícone"
+					/>
 				</div>
 				<div>
 					<div className="font-bold text-2xl text-[#09090B]">Doação</div>
-					<div className="font-normal text-base text-[#52525B]">Registrar entrada monetária</div>
+					<div className="font-normal text-base text-[#52525B]">
+						Registrar entrada monetária
+					</div>
 				</div>
 			</div>
 			<div
 				onClick={() => setType(ETransactionType.Expense)}
 				className={`flex w-full flex-col ${type === ETransactionType.Expense ? "border-2 border-[#27272A]" : "border border-[#E4E4E7]"} gap-4 p-6 rounded-lg hover:cursor-pointer`}
 			>
-				<div className={"flex justify-center items-center rounded h-[56px] w-[56px] bg-[#F4F4F5]"}>
+				<div
+					className={
+						"flex justify-center items-center rounded h-[56px] w-[56px] bg-[#F4F4F5]"
+					}
+				>
 					<Image
 						src={"/finance/trending-down-black.svg"}
 						width={32}
@@ -263,7 +279,9 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 				</div>
 				<div>
 					<div className="font-bold text-2xl text-[#09090B]">Despesas</div>
-					<div className="font-normal text-base text-[#52525B]">Controlar gastos e saídas </div>
+					<div className="font-normal text-base text-[#52525B]">
+						Controlar gastos e saídas{" "}
+					</div>
 				</div>
 			</div>
 		</div>
@@ -293,9 +311,15 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 								name="name"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel className="font-semibold">Nome completo</FormLabel>
+										<FormLabel className="font-semibold">
+											Nome completo
+										</FormLabel>
 										<FormControl>
-											<Input id="name" placeholder="Digite o nome completo" {...field} />
+											<Input
+												id="name"
+												placeholder="Digite o nome completo"
+												{...field}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -323,7 +347,11 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 							/>
 						</div>
 						<div className="flex justify-end gap-2 mt-6">
-							<Button variant="outline" className="flex items-center gap-2" onClick={handleCancel}>
+							<Button
+								variant="outline"
+								className="flex items-center gap-2"
+								onClick={handleCancel}
+							>
 								Cancelar
 							</Button>
 							<Button
@@ -350,7 +378,9 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 							name="value"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="font-semibold">Qual o valor da doação?</FormLabel>
+									<FormLabel className="font-semibold">
+										Qual o valor da doação?
+									</FormLabel>
 									<FormControl>
 										<Input id="value" placeholder="ex: 230,00" {...field} />
 									</FormControl>
@@ -363,7 +393,9 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 							name="cause"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="font-semibold">Qual a causa da doação??</FormLabel>
+									<FormLabel className="font-semibold">
+										Qual a causa da doação??
+									</FormLabel>
 									<FormControl>
 										<Select onValueChange={field.onChange} value={field.value}>
 											<SelectTrigger className="w-full">
@@ -387,7 +419,9 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 							name="animalId"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="font-semibold">Qual animal recebeu a doação?</FormLabel>
+									<FormLabel className="font-semibold">
+										Qual animal recebeu a doação?
+									</FormLabel>
 									<FormControl>
 										<Select onValueChange={field.onChange} value={field.value}>
 											<SelectTrigger className="w-full">
@@ -433,7 +467,11 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 						/>
 					</div>
 					<div className="flex justify-end gap-2 mt-6">
-						<Button variant="outline" className="flex items-center gap-2" onClick={handleCancel}>
+						<Button
+							variant="outline"
+							className="flex items-center gap-2"
+							onClick={handleCancel}
+						>
 							Cancelar
 						</Button>
 						<Button
@@ -462,7 +500,9 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 							name="value"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="font-semibold">Qual o valor da despesa?</FormLabel>
+									<FormLabel className="font-semibold">
+										Qual o valor da despesa?
+									</FormLabel>
 									<FormControl>
 										<Input id="value" placeholder="ex: 230,00" {...field} />
 									</FormControl>
@@ -517,7 +557,11 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 						/>
 					</div>
 					<div className="flex justify-end gap-2 mt-6">
-						<Button variant="outline" className="flex items-center gap-2" onClick={handleCancel}>
+						<Button
+							variant="outline"
+							className="flex items-center gap-2"
+							onClick={handleCancel}
+						>
 							Cancelar
 						</Button>
 						<Button
