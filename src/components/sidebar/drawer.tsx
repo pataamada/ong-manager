@@ -44,7 +44,11 @@ export function LeftDrawer() {
 							<span>{user?.user.email}</span>
 						</div>
 					</div>
-					<Links items={links} size="default" role={user?.role || UserRoles.Authenticated} />
+					<Links
+						items={links}
+						size="default"
+						role={user?.role || UserRoles.Authenticated}
+					/>
 				</DrawerContent>
 			</Drawer>
 		</div>

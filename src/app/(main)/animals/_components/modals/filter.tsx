@@ -86,7 +86,12 @@ export function FilterDrawer() {
 						<div className="flex items-center gap-2">
 							<Switch
 								checked={localFilters.available}
-								onCheckedChange={available => setLocalFilters({ ...localFilters, available })}
+								onCheckedChange={available =>
+									setLocalFilters({
+										...localFilters,
+										available,
+									})
+								}
 							/>
 							<h1 className="mb-2">
 								<span className="text-sm font-semibold">Disponível</span>
@@ -96,7 +101,12 @@ export function FilterDrawer() {
 						<div className="flex items-center gap-2">
 							<Switch
 								checked={localFilters.neutered}
-								onCheckedChange={neutered => setLocalFilters({ ...localFilters, neutered })}
+								onCheckedChange={neutered =>
+									setLocalFilters({
+										...localFilters,
+										neutered,
+									})
+								}
 							/>
 							<h1 className="mb-2">
 								<span className="text-sm font-semibold">Castrado</span>

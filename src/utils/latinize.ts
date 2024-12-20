@@ -9,5 +9,5 @@
  * @returns {string} - The latinized string with diacritical marks removed.
  */
 export function latinize(str = ""): string {
-  return str.normalize("NFD").replace(/\p{Diacritic}/gu, "");
+	return str.normalize("NFD").replace(/\p{Diacritic}/gu, "")
 }

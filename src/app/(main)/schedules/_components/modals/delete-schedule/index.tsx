@@ -21,8 +21,8 @@ export function DeleteScheduleModal() {
 			onSubmit={async () => {
 				if (infoModal?.id) {
 					setModal(false)
-					if(infoModal.type === "event") await deleteEvent(infoModal.id)
-					if(infoModal.type === "news") await deleteNews(infoModal.id)
+					if (infoModal.type === "event") await deleteEvent(infoModal.id)
+					if (infoModal.type === "news") await deleteNews(infoModal.id)
 				}
 			}}
 			loading={isDeletingEvents || isDeletingNews}

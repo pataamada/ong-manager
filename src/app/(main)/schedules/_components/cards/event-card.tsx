@@ -17,11 +17,25 @@ interface EventCardProps {
 	onEdit?: () => void
 }
 
-export function EventCard({ title, date, description, imageUrl, onDelete, onEdit }: EventCardProps) {
+export function EventCard({
+	title,
+	date,
+	description,
+	imageUrl,
+	onDelete,
+	onEdit,
+}: EventCardProps) {
 	return (
 		<Card className="w-full max-w-[400px] min-w-[250px] rounded-lg h-[500px]">
 			<CardHeader className="p-0 relative h-[220px]">
-				<Image priority fill src={imageUrl} alt={title} className="rounded-t-lg w-full object-contain"  sizes="220px" />
+				<Image
+					priority
+					fill
+					src={imageUrl}
+					alt={title}
+					className="rounded-t-lg w-full object-contain"
+					sizes="220px"
+				/>
 				<div className="absolute gap-2 flex top-4 right-4">
 					<Button className="size-fit p-2" variant={"secondary"} onClick={onEdit}>
 						<Pen className="size-5" />

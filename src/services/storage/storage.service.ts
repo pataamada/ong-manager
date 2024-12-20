@@ -56,7 +56,9 @@ export const compareAndUploadImages = (
 	// formato imagem local: filename
 	// formato imagem storage: collection/id/filename
 
-	const localImagesFormated = localImages.map(img => `${collectionName}/${documentId}/${img.name}`)
+	const localImagesFormated = localImages.map(
+		img => `${collectionName}/${documentId}/${img.name}`,
+	)
 	const uniqueImages = new Set(...localImagesFormated, ...storageImagesNames)
 	return uniqueImages.size !== storageImagesNames.length
 }

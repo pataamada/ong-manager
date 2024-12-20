@@ -20,7 +20,10 @@ export default function BreadCrumb() {
 		<Breadcrumb>
 			<BreadcrumbList>
 				<BreadcrumbItem>
-					<BreadcrumbLink className="text-2xl font-bold text-black" href={currentRoute?.href}>
+					<BreadcrumbLink
+						className="text-2xl font-bold text-black"
+						href={currentRoute?.href}
+					>
 						{currentRoute?.alias ?? "Nome da roda não definido"}
 					</BreadcrumbLink>
 				</BreadcrumbItem>
@@ -30,7 +33,7 @@ export default function BreadCrumb() {
 
 					return (
 						<div key={href}>
-							<BreadcrumbItem >
+							<BreadcrumbItem>
 								<BreadcrumbLink href={`${href}-index`}>
 									{routesAliasesList.find(route => route.href === href)?.alias}
 								</BreadcrumbLink>

@@ -17,7 +17,6 @@ export const initialLetters = (fullname: string): string => {
 	return `${firstName[0]}${secondName[0]}`
 }
 
-
 export function validateCpf(cpf: string) {
 	let sum = 0
 	let remainder = 0

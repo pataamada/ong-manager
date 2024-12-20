@@ -97,7 +97,10 @@ export function NewsForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 									options={[
 										{ value: "dog", label: "Cachorro" },
 										{ value: "cat", label: "Gato" },
-										{ value: "imediate", label: "Urgência" },
+										{
+											value: "imediate",
+											label: "Urgência",
+										},
 									]}
 									placeholder="selecionar categorias"
 									variant="secondary"

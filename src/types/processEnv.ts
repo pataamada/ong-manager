@@ -7,7 +7,7 @@ type EnvSchemaType = z.infer<typeof envSchema>
 declare global {
 	// biome-ignore lint/style/noNamespace: <explanation>
 	// biome-ignore lint/style/useNamingConvention: <explanation>
-		namespace NodeJS {
+	namespace NodeJS {
 		interface ProcessEnv extends EnvSchemaType {}
 	}
 }

@@ -15,7 +15,6 @@ function makeQueryClient() {
 	})
 }
 
-
 export function getQueryClient() {
 	if (isServer) {
 		// Server: always make a new query client

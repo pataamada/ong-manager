@@ -25,7 +25,12 @@ export function Card({
 	childrenPosition = "bottom",
 }: ICard) {
 	return (
-		<div className={clsx(["bg-card p-4 sm:p-6 rounded-lg shadow flex flex-col gap-2", className])}>
+		<div
+			className={clsx([
+				"bg-card p-4 sm:p-6 rounded-lg shadow flex flex-col gap-2",
+				className,
+			])}
+		>
 			<div
 				className={clsx([
 					"flex align-top justify-between",
@@ -50,7 +55,12 @@ export function Card({
 						className="bg-foreground text-white font-normal flex items-center gap-2"
 					>
 						Ver completo
-						<Image src={"/dashboard/arrow-icon.svg"} width={20} height={20} alt="icon de botão" />
+						<Image
+							src={"/dashboard/arrow-icon.svg"}
+							width={20}
+							height={20}
+							alt="icon de botão"
+						/>
 					</Button>
 				)}
 			</div>

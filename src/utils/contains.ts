@@ -1,5 +1,5 @@
-import { curry } from "./curry";
-import { latinize } from "./latinize";
+import { curry } from "./curry"
+import { latinize } from "./latinize"
 
 /**
  * Checks if a given text contains a specified value, ignoring case and diacritical marks.
@@ -22,5 +22,5 @@ import { latinize } from "./latinize";
  * console.log(contains("résumé", "Resume")); // true
  */
 export const contains = curry((text: string, value: string): boolean => {
-  return latinize(text).toLowerCase().includes(latinize(value).toLowerCase().trim());
-});
+	return latinize(text).toLowerCase().includes(latinize(value).toLowerCase().trim())
+})

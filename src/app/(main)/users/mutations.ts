@@ -45,7 +45,7 @@ export const useCreateUser = (toast?: (params: Toast) => void) => {
 				})
 				return Promise.reject(request.serverError)
 			}
-			return request?.data ? JSON.parse(request?.data) as UserRecord : undefined
+			return request?.data ? (JSON.parse(request?.data) as UserRecord) : undefined
 		},
 		onMutate: async ({ password, ...values }) => {
 			await queryClient.cancelQueries(getUsersOptions)
@@ -85,7 +85,9 @@ export const useCreateUser = (toast?: (params: Toast) => void) => {
 		onError: (_, variables) => {
 			const previousUsers = queryClient.getQueryData(getUsersOptions.queryKey)
 			if (previousUsers) {
-				const updatedUsers = previousUsers.filter(user => user?.tempUid !== variables?.tempUid)
+				const updatedUsers = previousUsers.filter(
+					user => user?.tempUid !== variables?.tempUid,
+				)
 				queryClient.setQueryData(getUsersOptions.queryKey, updatedUsers)
 			}
 		},

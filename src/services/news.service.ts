@@ -50,7 +50,10 @@ export const findNews = async (recent: boolean) => {
 	if (recent) q = query(collection(db, "noticias"), orderBy("createdAt", "desc"), limit(3))
 	q = query(collection(db, "noticias"), orderBy("createdAt", "desc"))
 	const querySnapshot = await getDocs(q)
-	const news = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as News[]
+	const news = querySnapshot.docs.map(doc => ({
+		...doc.data(),
+		id: doc.id,
+	})) as News[]
 	const newsWithImages = await getNewsImages(news)
 	return newsWithImages
 }

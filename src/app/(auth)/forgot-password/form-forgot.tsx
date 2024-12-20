@@ -34,7 +34,7 @@ export default function FormForgotPassword() {
 	// Função que será chamada ao submeter o formulário
 	const onSubmit = async (data: ForgotPasswordFormData) => {
 		const result = await executeAsync({ email: data.email })
-		if(result?.serverError){
+		if (result?.serverError) {
 			toast({
 				title: "Erro ao enviar email",
 				description: result.serverError,

@@ -47,7 +47,9 @@ export const TableAll = ({
 				</div>
 			}
 			paginationText={({ from, to, totalRecords }) =>
-				totalRecords === 0 ? "Vazio" : `Mostrando ${from} a ${to} de ${totalRecords} registros`
+				totalRecords === 0
+					? "Vazio"
+					: `Mostrando ${from} a ${to} de ${totalRecords} registros`
 			}
 			verticalSpacing="lg"
 			horizontalSpacing="xl"
@@ -74,7 +76,9 @@ export const TableAll = ({
 					accessor: "date",
 					title: "Data",
 					titleClassName: "font-normal text-base text-[#52525B]",
-					render: ({ date }) => <div className="font-normal text-base text-[#09090B]">{date}</div>,
+					render: ({ date }) => (
+						<div className="font-normal text-base text-[#09090B]">{date}</div>
+					),
 				},
 				{
 					accessor: "value",

@@ -26,7 +26,7 @@ export function NewsCard({
 	title,
 	className,
 	onDelete,
-	onEdit
+	onEdit,
 }: NewsCardProps) {
 	return (
 		<Card
@@ -36,7 +36,14 @@ export function NewsCard({
 			)}
 		>
 			<CardHeader className="p-4 bg-zinc-100 relative w-full h-full min-h-[200px] md:min-h-0">
-				<Image priority fill src={image} alt={title} className="rounded-lg w-full object-contain"  sizes="350px" />
+				<Image
+					priority
+					fill
+					src={image}
+					alt={title}
+					className="rounded-lg w-full object-contain"
+					sizes="350px"
+				/>
 			</CardHeader>
 			<CardContent className="w-full flex flex-col h-full p-4 gap-2">
 				<div className="flex gap-2">
@@ -48,7 +55,9 @@ export function NewsCard({
 				</div>
 
 				<CardTitle className="text-xl m-0 font-bold">{title}</CardTitle>
-				<CardDescription className="line-clamp-5 mb-auto min-h-[200px]">{description}</CardDescription>
+				<CardDescription className="line-clamp-5 mb-auto min-h-[200px]">
+					{description}
+				</CardDescription>
 				<p className="text-sm text-gray-400">
 					{format(createdAt, "dd 'de' MMMM 'às' HH:mm", {
 						locale: ptBR,

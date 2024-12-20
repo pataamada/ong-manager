@@ -112,8 +112,15 @@ export function UserTable({
 					condition={hasContent}
 					fallback={
 						<div className="w-full flex-grow flex flex-col items-center justify-center">
-							<Image src="empty-state.svg" alt="empty users image" height={200} width={200} />
-							<span className="text-lg text-zinc-400">Parece que não tem usuários cadastrados</span>
+							<Image
+								src="empty-state.svg"
+								alt="empty users image"
+								height={200}
+								width={200}
+							/>
+							<span className="text-lg text-zinc-400">
+								Parece que não tem usuários cadastrados
+							</span>
 						</div>
 					}
 				>
@@ -125,7 +132,10 @@ export function UserTable({
 										<TableHead key={header.id}>
 											{header.isPlaceholder
 												? null
-												: flexRender(header.column.columnDef.header, header.getContext())}
+												: flexRender(
+														header.column.columnDef.header,
+														header.getContext(),
+													)}
 										</TableHead>
 									))}
 								</TableRow>
@@ -135,13 +145,20 @@ export function UserTable({
 							{table.getRowModel().rows.map(row => (
 								<TableRow
 									key={row.id}
-									data-state={row.original.uid === currentUser?.user.uid && "current"}
+									data-state={
+										row.original.uid === currentUser?.user.uid && "current"
+									}
 									aria-disabled={!row.original.uid}
-									className={cn(!row.original.uid && "opacity-50 pointer-events-none")}
+									className={cn(
+										!row.original.uid && "opacity-50 pointer-events-none",
+									)}
 								>
 									{row.getVisibleCells().map(cell => (
 										<TableCell key={cell.id}>
-											{flexRender(cell.column.columnDef.cell, cell.getContext())}
+											{flexRender(
+												cell.column.columnDef.cell,
+												cell.getContext(),
+											)}
 										</TableCell>
 									))}
 								</TableRow>

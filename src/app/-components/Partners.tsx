@@ -97,9 +97,7 @@ export function Partners() {
 	])
 
 	return (
-		<div 
-		id="partners"
-		className="text-center py-8">
+		<div id="partners" className="text-center py-8">
 			<h2 className="text-h2 text-zinc-800 mb-2">Parceiros</h2>
 			<p className="mb-11 text-subtitle text-zinc-500">Conheça os parceiros da ONG</p>
 
@@ -114,7 +112,10 @@ export function Partners() {
 				>
 					<CarouselContent>
 						{partners.map(partner => (
-							<CarouselItem key={partner.id} className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4 mx-auto bg-white">
+							<CarouselItem
+								key={partner.id}
+								className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4 mx-auto bg-white"
+							>
 								<div className="border border-zinc-300 rounded-lg p-4 flex flex-col items-center h-[380px]">
 									<Image
 										src={partner.image}
@@ -123,15 +124,22 @@ export function Partners() {
 										height={160}
 										className="rounded-full mb-4"
 									/>
-									<h4 className="text-h4 text-center text-zinc-900">{partner.name}</h4>
-									<p className="text-subtitle-2 text-centertext-zinc-500">{partner.role}</p>
+									<h4 className="text-h4 text-center text-zinc-900">
+										{partner.name}
+									</h4>
+									<p className="text-subtitle-2 text-centertext-zinc-500">
+										{partner.role}
+									</p>
 									<div className="flex gap-4 bg-zinc-200 px-2 py-3 rounded-lg mt-3 font-bold">
 										{partner.linkedin && (
 											<a
 												href={partner.linkedin}
 												className="text-blue-500 hover:opacity-80 transition-opacity"
 											>
-												<Icon icon="meteor-icons:linkedin" className="w-6 h-6 text-black" />
+												<Icon
+													icon="meteor-icons:linkedin"
+													className="w-6 h-6 text-black"
+												/>
 											</a>
 										)}
 										{partner.github && (
@@ -139,7 +147,10 @@ export function Partners() {
 												href={partner.github}
 												className="text-gray-800 hover:opacity-80 transition-opacity"
 											>
-												<Icon icon="mingcute:github-line" className="w-6 h-6 text-black" />
+												<Icon
+													icon="mingcute:github-line"
+													className="w-6 h-6 text-black"
+												/>
 											</a>
 										)}
 									</div>

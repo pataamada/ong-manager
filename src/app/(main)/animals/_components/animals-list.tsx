@@ -47,10 +47,13 @@ export default function AnimalsList() {
 		[setDeleteInfo, setDeleteModal],
 	)
 
-	const handleEdit = useCallback((animal: Animal) => {
-		setUpdateInfo(animal)
-		setCreateModal(true)
-	}, [setUpdateInfo, setCreateModal])
+	const handleEdit = useCallback(
+		(animal: Animal) => {
+			setUpdateInfo(animal)
+			setCreateModal(true)
+		},
+		[setUpdateInfo, setCreateModal],
+	)
 	return (
 		<div className="w-full flex flex-col bg-white rounded-lg gap-6 min-h-full">
 			<When
@@ -65,14 +68,26 @@ export default function AnimalsList() {
 					condition={filteredAnimals.length > 0}
 					fallback={
 						<div className="w-full flex-grow flex flex-col items-center justify-center">
-							<Image src="empty-state.svg" alt="empty animals image" height={200} width={200} />
-							<span className="text-lg text-zinc-400">Parece que não tem animais cadastrados</span>
+							<Image
+								src="empty-state.svg"
+								alt="empty animals image"
+								height={200}
+								width={200}
+							/>
+							<span className="text-lg text-zinc-400">
+								Parece que não tem animais cadastrados
+							</span>
 						</div>
 					}
 				>
 					<div className="flex flex-wrap gap-6">
 						{filteredAnimals.map(animal => (
-							<AnimalsCard key={animal.id} {...animal} onDelete={handleDelete} onEdit={handleEdit} />
+							<AnimalsCard
+								key={animal.id}
+								{...animal}
+								onDelete={handleDelete}
+								onEdit={handleEdit}
+							/>
 						))}
 					</div>
 				</When>

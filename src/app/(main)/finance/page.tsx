@@ -139,7 +139,9 @@ export default function Finance() {
 									filterType === "expense" ? "bg-[#FFFFFF]" : "bg-[#F4F4F5]"
 								}`}
 							>
-								<div className="font-semibold text-sm text-[##71717A]">Despesas</div>
+								<div className="font-semibold text-sm text-[##71717A]">
+									Despesas
+								</div>
 							</div>
 						</div>
 						<div className="flex justify-end flex-1 gap-4 flex-wrap lg:flex-nowrap">
@@ -163,14 +165,16 @@ export default function Finance() {
 					>
 						{filterType === "donations" && (
 							<TableDonation
-								data={donations.map(({ animalId, category, userName, date, value }) => ({
-									type: ETransactionType.Donation,
-									animalId,
-									category,
-									userName,
-									date,
-									value,
-								}))}
+								data={donations.map(
+									({ animalId, category, userName, date, value }) => ({
+										type: ETransactionType.Donation,
+										animalId,
+										category,
+										userName,
+										date,
+										value,
+									}),
+								)}
 								totalData={totalDataDonations}
 								page={page}
 								pageSize={pageSize}

@@ -9,7 +9,9 @@ export function Counters() {
 		<>
 			<Card
 				title={
-					data === undefined ? "0" : `R$ ${(data?.totalDonations - data?.totalExpenses).toString()}`
+					data === undefined
+						? "0"
+						: `R$ ${(data?.totalDonations - data?.totalExpenses).toString()}`
 				}
 				subtitle={"Esse mês"}
 			>

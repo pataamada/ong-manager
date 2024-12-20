@@ -20,7 +20,12 @@ export default function ScheduleTabs() {
 		setOpenNewsModal(true)
 	}
 	return (
-		<Tabs defaultValue={tab} value={tab} onValueChange={setTab} className="flex flex-1 flex-col">
+		<Tabs
+			defaultValue={tab}
+			value={tab}
+			onValueChange={setTab}
+			className="flex flex-1 flex-col"
+		>
 			<div className="flex gap-2 justify-between">
 				<TabsList className="mb-2">
 					<TabsTrigger value="events">Eventos</TabsTrigger>
@@ -29,10 +34,12 @@ export default function ScheduleTabs() {
 				<Filters />
 				<Button onClick={handleOpenModal}>
 					<Plus size={16} />
-					<span className="ml-2">{tab === "events" ? "Criar Evento" : "Criar Notícias"}</span>
+					<span className="ml-2">
+						{tab === "events" ? "Criar Evento" : "Criar Notícias"}
+					</span>
 				</Button>
 			</div>
-			<TabsContent value="events" className="flex flex-1 data-[state=inactive]:hidden" >
+			<TabsContent value="events" className="flex flex-1 data-[state=inactive]:hidden">
 				<Events />
 			</TabsContent>
 			<TabsContent value="news" className="flex flex-1 data-[state=inactive]:hidden">

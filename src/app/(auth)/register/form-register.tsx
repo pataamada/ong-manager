@@ -52,7 +52,11 @@ const formRegisterSchema = z
 	.superRefine((data, ctx) => {
 		const isValidCpf = validateCpf(data.cpf || "")
 		if (!isValidCpf) {
-			ctx.addIssue({ path: ["cpf"], code: "custom", message: "Digite um cpf válido" })
+			ctx.addIssue({
+				path: ["cpf"],
+				code: "custom",
+				message: "Digite um cpf válido",
+			})
 		}
 	})
 
@@ -74,7 +78,8 @@ export default function FormRegister() {
 	const { toast } = useToast()
 	const {
 		handleSubmit,
-		formState: { errors },reset
+		formState: { errors },
+		reset,
 	} = methods
 	const { executeAsync, isPending } = useAction(createUser)
 	const onSubmit = async (data: RegisterFormData) => {
@@ -120,9 +125,15 @@ export default function FormRegister() {
 						<FormItem>
 							<FormLabel className="font-semibold">Nome completo</FormLabel>
 							<FormControl>
-								<Input id="fullName" placeholder="Digite seu nome completo" {...field} />
+								<Input
+									id="fullName"
+									placeholder="Digite seu nome completo"
+									{...field}
+								/>
 							</FormControl>
-							{errors.fullName && <FormMessage>{errors.fullName.message}</FormMessage>}
+							{errors.fullName && (
+								<FormMessage>{errors.fullName.message}</FormMessage>
+							)}
 						</FormItem>
 					)}
 				/>
@@ -188,9 +199,15 @@ export default function FormRegister() {
 						<FormItem>
 							<FormLabel className="font-semibold">Senha</FormLabel>
 							<FormControl>
-								<PasswordInput id="password" placeholder="Digite sua senha" {...field} />
+								<PasswordInput
+									id="password"
+									placeholder="Digite sua senha"
+									{...field}
+								/>
 							</FormControl>
-							{errors.password && <FormMessage>{errors.password.message}</FormMessage>}
+							{errors.password && (
+								<FormMessage>{errors.password.message}</FormMessage>
+							)}
 						</FormItem>
 					)}
 				/>
@@ -201,7 +218,11 @@ export default function FormRegister() {
 						<FormItem>
 							<FormLabel className="font-semibold">Confirmar senha</FormLabel>
 							<FormControl>
-								<PasswordInput id="confirmPassword" placeholder="Confirme sua senha" {...field} />
+								<PasswordInput
+									id="confirmPassword"
+									placeholder="Confirme sua senha"
+									{...field}
+								/>
 							</FormControl>
 							{errors.confirmPassword && (
 								<FormMessage>{errors.confirmPassword.message}</FormMessage>
@@ -209,17 +230,15 @@ export default function FormRegister() {
 						</FormItem>
 					)}
 				/>
-				<Button
-					className="w-full"
-					variant="success"
-					type="submit"
-					disabled={isPending}
-				>
+				<Button className="w-full" variant="success" type="submit" disabled={isPending}>
 					Cadastrar
 				</Button>
 				<div className="text-center mt-4">
 					<span className="text-sm font-normal">Já tem uma conta?</span>
-					<Link href="/login" className="text-sm font-semibold text-primary hover:text-primary/80">
+					<Link
+						href="/login"
+						className="text-sm font-semibold text-primary hover:text-primary/80"
+					>
 						Entrar
 					</Link>
 				</div>

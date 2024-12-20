@@ -44,7 +44,11 @@ export function UpdateEventForm({
 	})
 
 	const onSubmit = async (values: UpdateEventFormValues) => {
-		await mutateAsync({ id: data.id, updatedBy: user?.user.displayName || "", ...values })
+		await mutateAsync({
+			id: data.id,
+			updatedBy: user?.user.displayName || "",
+			...values,
+		})
 		onSuccess(false)
 	}
 	return (
@@ -103,7 +107,11 @@ export function UpdateEventForm({
 											<span className="flex w-full justify-start items-center">
 												<When
 													condition={field.value}
-													fallback={<span className="mr-auto">Selecionar Data</span>}
+													fallback={
+														<span className="mr-auto">
+															Selecionar Data
+														</span>
+													}
 												>
 													<span className="mr-auto">
 														{format(field.value || new Date(), "PPP", {
@@ -119,7 +127,11 @@ export function UpdateEventForm({
 								<PopoverContent className="w-auto p-0" align="start">
 									<Calendar
 										mode="single"
-										selected={typeof field.value === "string" ? new Date(field.value) : field.value}
+										selected={
+											typeof field.value === "string"
+												? new Date(field.value)
+												: field.value
+										}
 										onSelect={date => field.onChange(date?.toISOString() ?? "")}
 										disabled={date => {
 											const today = new Date()

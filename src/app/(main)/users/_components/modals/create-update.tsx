@@ -61,7 +61,8 @@ const createUserSchema = z
 			.max(256, "Máximo de 256 caracteres"),
 		phone: z
 			.string({ message: "Telefone é obrigatório" })
-			.trim().min(11, "O telefone deve ter pelo menos 11 dígitos")
+			.trim()
+			.min(11, "O telefone deve ter pelo menos 11 dígitos")
 			.max(15, "Máximo de 15 caracteres"),
 		cpf: z
 			.string()
@@ -100,7 +101,10 @@ export function CreateUpdateUserModal({
 		values: {
 			uid: data?.uid || "",
 			name: data?.name || "",
-			cpf: format(data?.cpf || "", { mask: "___.___.___-__", replacement: { _: /\d/ } }),
+			cpf: format(data?.cpf || "", {
+				mask: "___.___.___-__",
+				replacement: { _: /\d/ },
+			}),
 			email: data?.email || "",
 			password: "",
 			role: data?.role || UserRoles.Authenticated,
@@ -122,12 +126,18 @@ export function CreateUpdateUserModal({
 	}: z.infer<typeof createUserSchema>) => {
 		const tempUid = crypto.randomUUID()
 		if (!password && !data) {
-			form.setError("password", { type: "required", message: "Senha é obrigatória" })
+			form.setError("password", {
+				type: "required",
+				message: "Senha é obrigatória",
+			})
 			return
 		}
 
 		if (!cpf && !data) {
-			form.setError("cpf", { type: "validate", message: "Digite um cpf válido" })
+			form.setError("cpf", {
+				type: "validate",
+				message: "Digite um cpf válido",
+			})
 			return
 		}
 
@@ -160,11 +170,17 @@ export function CreateUpdateUserModal({
 			<DialogTrigger asChild>{children}</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(handleOnSubmit)} className="flex flex-col gap-6">
+					<form
+						onSubmit={form.handleSubmit(handleOnSubmit)}
+						className="flex flex-col gap-6"
+					>
 						<DialogHeader>
-							<DialogTitle>{data ? "Atualizar usuário" : "Criar usuário"}</DialogTitle>
+							<DialogTitle>
+								{data ? "Atualizar usuário" : "Criar usuário"}
+							</DialogTitle>
 							<DialogDescription>
-								Crie novos usuários ou edite suas informações, após isso clique em salvar/criar.
+								Crie novos usuários ou edite suas informações, após isso clique em
+								salvar/criar.
 							</DialogDescription>
 						</DialogHeader>
 						<div className="grid gap-2">
@@ -173,9 +189,15 @@ export function CreateUpdateUserModal({
 								name="name"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel className="font-semibold">Nome completo</FormLabel>
+										<FormLabel className="font-semibold">
+											Nome completo
+										</FormLabel>
 										<FormControl>
-											<Input id="name" placeholder="Digite o nome do usuário" {...field} />
+											<Input
+												id="name"
+												placeholder="Digite o nome do usuário"
+												{...field}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -257,8 +279,12 @@ export function CreateUpdateUserModal({
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
-												<SelectItem value={UserRoles.Authenticated}>Autenticado</SelectItem>
-												<SelectItem value={UserRoles.Admin}>Administrador</SelectItem>
+												<SelectItem value={UserRoles.Authenticated}>
+													Autenticado
+												</SelectItem>
+												<SelectItem value={UserRoles.Admin}>
+													Administrador
+												</SelectItem>
 											</SelectContent>
 										</Select>
 										<FormMessage />

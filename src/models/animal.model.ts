@@ -24,7 +24,7 @@ export interface Animal {
 	updatedBy: string
 }
 
-export type CreateAnimal = Omit<Animal, "id" | "createdAt" | "updatedAt" | "photo">& {
+export type CreateAnimal = Omit<Animal, "id" | "createdAt" | "updatedAt" | "photo"> & {
 	photo: File
 }
 

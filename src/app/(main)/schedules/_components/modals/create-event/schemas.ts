@@ -25,6 +25,5 @@ export const updateEventSchema = z.object({
 	),
 })
 
-
 export type EventFormValues = z.infer<typeof eventSchema>
 export type UpdateEventFormValues = z.infer<typeof updateEventSchema>

@@ -93,7 +93,11 @@ export function CreateEventForm({ setOpen }: { setOpen: (value: boolean) => void
 											<span className="flex w-full justify-start items-center">
 												<When
 													condition={field.value}
-													fallback={<span className="mr-auto">Selecionar Data</span>}
+													fallback={
+														<span className="mr-auto">
+															Selecionar Data
+														</span>
+													}
 												>
 													<span className="mr-auto">
 														{format(field.value || new Date(), "PPP", {

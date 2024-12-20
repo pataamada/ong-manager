@@ -47,7 +47,9 @@ export const TableExpense = ({
 				</div>
 			}
 			paginationText={({ from, to, totalRecords }) =>
-				totalRecords === 0 ? "Vazio" : `Mostrando ${from} a ${to} de ${totalRecords} registros`
+				totalRecords === 0
+					? "Vazio"
+					: `Mostrando ${from} a ${to} de ${totalRecords} registros`
 			}
 			verticalSpacing="lg"
 			horizontalSpacing="xl"

@@ -44,7 +44,10 @@ export function AreaLegendChart() {
 						interval="preserveStartEnd"
 						className="text-xs"
 					/>
-					<ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
+					<ChartTooltip
+						cursor={false}
+						content={<ChartTooltipContent indicator="line" />}
+					/>
 					<Area
 						dataKey="totalExpenses"
 						type="natural"

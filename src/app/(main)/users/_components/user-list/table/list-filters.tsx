@@ -10,7 +10,7 @@ export const filterLabels: Record<string, string> = {
 
 interface ListFiltersProps {
 	columnFilters: ColumnFiltersState
-    onRemoveFilter?: (id: string) => void
+	onRemoveFilter?: (id: string) => void
 }
 
 export function ListFilters({ columnFilters, onRemoveFilter }: ListFiltersProps) {
@@ -22,7 +22,10 @@ export function ListFilters({ columnFilters, onRemoveFilter }: ListFiltersProps)
 				.map(filter => (
 					<Badge key={filter.id} variant="secondary">
 						<span>{filterLabels[filter.id] || filter.id}</span>
-                        <X className="ml-2 w-4 h-4 cursor-pointer" onClick={() => onRemoveFilter?.(filter.id)}/>
+						<X
+							className="ml-2 w-4 h-4 cursor-pointer"
+							onClick={() => onRemoveFilter?.(filter.id)}
+						/>
 					</Badge>
 				))}
 		</div>

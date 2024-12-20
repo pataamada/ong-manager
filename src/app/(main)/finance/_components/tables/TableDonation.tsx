@@ -51,7 +51,9 @@ export const TableDonation = ({
 				</div>
 			}
 			paginationText={({ from, to, totalRecords }) =>
-				totalRecords === 0 ? "Vazio" : `Mostrando ${from} a ${to} de ${totalRecords} registros`
+				totalRecords === 0
+					? "Vazio"
+					: `Mostrando ${from} a ${to} de ${totalRecords} registros`
 			}
 			verticalSpacing="lg"
 			horizontalSpacing="xl"
@@ -70,9 +72,13 @@ export const TableDonation = ({
 								className="rounded"
 							/>
 							{animalId ? (
-								<div className="font-normal text-base text-[#09090B]">{animalId}</div>
+								<div className="font-normal text-base text-[#09090B]">
+									{animalId}
+								</div>
 							) : (
-								<div className="font-normal text- text-[#A1A1AA]">Nenhum animal especificado</div>
+								<div className="font-normal text- text-[#A1A1AA]">
+									Nenhum animal especificado
+								</div>
 							)}
 						</div>
 					),
@@ -94,7 +100,9 @@ export const TableDonation = ({
 					render: ({ userName }) => (
 						<div className="font-normal text-base text-[#09090B]">
 							{userName ? (
-								<div className="font-normal text-base text-[#09090B]">{userName}</div>
+								<div className="font-normal text-base text-[#09090B]">
+									{userName}
+								</div>
 							) : (
 								<div className="font-normal text- text-[#A1A1AA]">Anônimo</div>
 							)}

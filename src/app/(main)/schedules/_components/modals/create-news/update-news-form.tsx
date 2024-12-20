@@ -35,7 +35,11 @@ export function NewsUpdateForm({
 	})
 
 	const onSubmit = async (formData: UpdateNewsSchema) => {
-		await mutateAsync({ id: data.id,...formData, updatedBy: user?.user.displayName || "" })
+		await mutateAsync({
+			id: data.id,
+			...formData,
+			updatedBy: user?.user.displayName || "",
+		})
 		form.reset()
 		onSuccess?.()
 	}
@@ -105,7 +109,10 @@ export function NewsUpdateForm({
 									options={[
 										{ value: "dog", label: "Cachorro" },
 										{ value: "cat", label: "Gato" },
-										{ value: "imediate", label: "Urgência" },
+										{
+											value: "imediate",
+											label: "Urgência",
+										},
 									]}
 									placeholder="selecionar categorias"
 									variant="secondary"

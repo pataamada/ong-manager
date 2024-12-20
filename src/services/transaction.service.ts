@@ -11,7 +11,10 @@ export const handleSaveTransaction = async (Transaction: IExpense | IDonation) =
 export const getAllTransactions = async () => {
 	try {
 		const transactionSnapshot = await getDocs(collection(db, "transactions"))
-		return transactionSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+		return transactionSnapshot.docs.map(doc => ({
+			id: doc.id,
+			...doc.data(),
+		}))
 	} catch (error) {
 		console.error("Erro ao buscar todas as transações:", error)
 		throw new Error("Erro ao buscar transações.")
@@ -25,7 +28,10 @@ export const getOnlyDonations = async () => {
 			where("transactionType", "==", "donation"),
 		)
 		const donationsSnapshot = await getDocs(donationsQuery)
-		return donationsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+		return donationsSnapshot.docs.map(doc => ({
+			id: doc.id,
+			...doc.data(),
+		}))
 	} catch (error) {
 		console.error("Erro ao buscar doações:", error)
 		throw new Error("Erro ao buscar doações.")

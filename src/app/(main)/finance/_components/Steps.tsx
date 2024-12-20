@@ -13,7 +13,9 @@ export const Steps = ({ label, step, stepsCount, currentStep }: IStepsProps) => 
 			<div className="flex items-center justify-center">
 				<div
 					className={`relative rounded-lg h-[40px] w-[40px] flex justify-center items-center ${
-						step <= currentStep ? "bg-[#27272A]" : "bg-[#FFFFFF] border-2 border-[#27272A]"
+						step <= currentStep
+							? "bg-[#27272A]"
+							: "bg-[#FFFFFF] border-2 border-[#27272A]"
 					}`}
 				>
 					<div className="absolute top-11 text-nowrap font-semibold text-sm text-[#27272A]">
@@ -25,7 +27,13 @@ export const Steps = ({ label, step, stepsCount, currentStep }: IStepsProps) => 
 						} `}
 					>
 						{step < currentStep ? (
-							<Image src={"/finance/check.svg"} width={16} height={16} priority alt="ícone" />
+							<Image
+								src={"/finance/check.svg"}
+								width={16}
+								height={16}
+								priority
+								alt="ícone"
+							/>
 						) : (
 							step
 						)}

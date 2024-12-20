@@ -35,7 +35,12 @@ export default async function Dashboard() {
 						alt="banner"
 					/>
 					<div className="absolute right-0 h-full top-1/2 -translate-y-1/2 max-[840px]:flex hidden bg-primary items-center">
-						<Image src="/logo.svg" width={100} height={100} alt="Logo Cãodominio Satuba" />
+						<Image
+							src="/logo.svg"
+							width={100}
+							height={100}
+							alt="Logo Cãodominio Satuba"
+						/>
 					</div>
 				</div>
 			</Card>

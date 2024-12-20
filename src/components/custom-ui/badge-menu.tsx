@@ -60,7 +60,9 @@ const BadgeMenu = ({
 						<DropdownMenuRadioItem key={option.value} value={option.value}>
 							<div className="flex flex-col">
 								<h6 className="text-sm font-bold">{option.title}</h6>
-								{option.description && <span className="text-gray-500">{option.description}</span>}
+								{option.description && (
+									<span className="text-gray-500">{option.description}</span>
+								)}
 							</div>
 						</DropdownMenuRadioItem>
 					))}

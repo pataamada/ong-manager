@@ -7,7 +7,7 @@ export interface Event {
 	updatedBy: string
 }
 
-export type CreateEvent = Omit<Event, "id"  | "image"> & {
+export type CreateEvent = Omit<Event, "id" | "image"> & {
 	image: File
 }
 export type UpdateEvent = Omit<Event, "image"> & {

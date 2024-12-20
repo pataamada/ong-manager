@@ -62,8 +62,15 @@ export function News() {
 					condition={data?.length}
 					fallback={
 						<div className="w-full flex-grow flex flex-col items-center justify-center">
-							<Image src="empty-state.svg" alt="empty users image" height={200} width={200} />
-							<span className="text-lg text-zinc-400">Parece que não tem notícias cadastradas</span>
+							<Image
+								src="empty-state.svg"
+								alt="empty users image"
+								height={200}
+								width={200}
+							/>
+							<span className="text-lg text-zinc-400">
+								Parece que não tem notícias cadastradas
+							</span>
 						</div>
 					}
 				>
