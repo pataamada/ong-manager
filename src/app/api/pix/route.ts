@@ -1,10 +1,9 @@
 import { asaasGateway } from "@/lib/axiosConfig/asaasGateway"
-import { IPixPaginate } from "@/types/Asaas/Pix"
+import type { IPixPaginate } from "@/types/Asaas/Pix"
 import { NextResponse } from "next/server"
 
 export async function GET() {
-	const urlRelative = `/pix/addressKeys
-`
+	const urlRelative = "/pix/addressKeys"
 	try {
 		const { data } = await asaasGateway.get<IPixPaginate>(urlRelative)
 

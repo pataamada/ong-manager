@@ -229,7 +229,6 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 		}
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		getAnimals()
 	}, [])

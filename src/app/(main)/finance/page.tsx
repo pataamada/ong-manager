@@ -70,15 +70,11 @@ export default function Finance() {
 		await getAllExpenses()
 	}
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		getAllDonations()
 		getAllExpenses()
 	}, [])
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		setIsLoading(true)
 		if (filterType === "donations") {

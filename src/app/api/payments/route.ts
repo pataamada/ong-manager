@@ -14,7 +14,6 @@ export async function POST(req: NextRequest) {
 	try {
 		const { data } = await asaasGateway.post<IPayment>(urlRelative, dataValiding)
 		return NextResponse.json(data, { status: 201 })
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	} catch (error: any) {
 		console.log(error)
 		return NextResponse.json(error.response.data.errors.map((i: IErrorAsaas) => i.description))
