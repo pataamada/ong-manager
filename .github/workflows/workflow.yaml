@@ -5,8 +5,10 @@ on:
       - main
 
 jobs:
+  env:
+    REPO_NAME: ${{ vars.REPO_NAME }}
   update-prod-repo:
-    if: github.repository == 'quallifica-tech/caodominio'
+    if: github.repository == REPO_NAME
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +21,7 @@ jobs:
           echo "Setting up SSH key..."
           mkdir -p /home/runner/.ssh
           ssh-keyscan github.com >> /home/runner/.ssh/known_hosts
-          echo "${{ secrets.SSH_CAODOMINIO }}" > /home/runner/.ssh/id_ed25519
+          echo "${{ secrets.SSH_PROD_KEY }}" > /home/runner/.ssh/id_ed25519
           chmod 600 /home/runner/.ssh/id_ed25519
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add /home/runner/.ssh/id_ed25519
@@ -28,13 +30,15 @@ jobs:
       - name: Push to production repository
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+          USER_NAME: ${{ vars.USER_NAME }}
+          USER_EMAIL: ${{ vars.USER_EMAIL }}
         run: |
           echo "Adding remote repository..."
           git remote add production git@github.com:caodominio/ong-manager.git
-          git config --local user.email "qualificatech.caodominio@gmail.com"
-          git config --local user.name "caodominio"
+          git config --local user.email "${{ vars.USER_EMAIL }}"
+          git config --local user.name "${{ vars.USER_NAME }}"
 
-          git commit --amend --author="caodominio <qualificatech.caodominio@gmail.com>" --no-edit
+          git commit --amend --author="${{ vars.USER_NAME }} <${{ vars.USER_EMAIL }}>" --no-edit
 
           echo "Pushing changes to production..."
           git push --force production main || { echo "Push failed"; exit 10; }
