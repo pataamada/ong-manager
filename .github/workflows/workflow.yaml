@@ -37,5 +37,5 @@ jobs:
           
           
           echo "Pushing changes to production..."
-          git push --force production main || { echo "Push failed"; exit 35; }
+          git push --force production main || { echo "Push failed"; exit 10; }
           echo "Push completed successfully."
