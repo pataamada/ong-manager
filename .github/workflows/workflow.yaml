@@ -25,12 +25,17 @@ jobs:
           ssh-add /home/runner/.ssh/id_ed25519
           echo "SSH key setup completed."
 
-      - name: Push to production repository
+      - name: Commit changes to production repository
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
-          echo "Adding remote repository..."
+          echo "Configuring Git..."
           git remote add production git@github.com:caodominio/ong-manager.git
           git config --global user.email "$(git log -1 --pretty=format:'%ae')"
           git config --global user.name "$(git log -1 --pretty=format:'%an')"
+          
+          echo "Committing changes..."
+          git add .
+          git commit -m "Sync changes from development repository"
           echo "Pushing changes to production..."
-          git push production main:main --force || { echo "Push failed"; exit 1; }
-          echo "Push completed successfully."
+          git push production main:main
