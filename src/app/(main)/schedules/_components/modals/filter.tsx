@@ -41,7 +41,6 @@ export function FilterDrawer() {
 
 					<div>
 						<h1 className="mb-2">
-							<span className="text-sm font-bold text-red-500">* </span>
 							<Label htmlFor="search" className="text-sm font-bold">
 								Pesquisar
 							</Label>
@@ -56,11 +55,7 @@ export function FilterDrawer() {
 					</div>
 
 					<div>
-						<h1 className="mb-2">
-							<span className="text-sm font-bold text-red-500">* </span>
-							<span className="text-sm font-bold">Ordem</span>
-						</h1>
-
+						<h1 className="mb-2 text-sm font-bold">Ordem</h1>
 						<CustomSelect
 							options={sorts}
 							value={orderFilter}
