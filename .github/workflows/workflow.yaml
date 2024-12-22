@@ -25,11 +25,11 @@ jobs:
           git config --global user.email "$(git log -1 --pretty=format:'%ae')"
           git config --global user.name "$(git log -1 --pretty=format:'%an')"
           
-          # Verifica se há diferenças entre os repositórios
-          if git diff --quiet main; then
+          git fetch production main
+          
+          if git diff --quiet HEAD production/main; then
             echo "Não há mudanças para sincronizar"
             exit 0
           fi
           
-          # Se houver mudanças, faz o push
           git push production main:main
