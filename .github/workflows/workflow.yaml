@@ -4,19 +4,18 @@ on:
     branches:
       - main
 
-permissions:
-  contents: write
 
 jobs:
   update-prod-repo:
     if: github.repository == 'quallifica-tech/caodominio'
     runs-on: ubuntu-latest
     
+    permissions:
+      contents: write
+      pages: write 
+
     steps: 
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          
       - name: Push to production repository
         env:
           TOKEN: ${{ secrets.PROD_REPO_TOKEN }}
