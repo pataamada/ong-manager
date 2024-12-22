@@ -16,18 +16,21 @@ jobs:
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
+          echo "Setting up SSH key..."
           mkdir -p /home/runner/.ssh
           ssh-keyscan github.com >> /home/runner/.ssh/known_hosts
           echo "${{ secrets.SSH_CAODOMINIO }}" > /home/runner/.ssh/github_actions
           chmod 600 /home/runner/.ssh/github_actions
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null	
           ssh-add /home/runner/.ssh/github_actions
+          echo "SSH key setup completed."
 
       - name: Push to production repository
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
+          echo "Adding remote repository..."
           git remote add production git@github.com:caodominio/ong-manager.git
           git config --global user.email "$(git log -1 --pretty=format:'%ae')"
           git config --global user.name "$(git log -1 --pretty=format:'%an')"
-          git push production main:main --force
+          echo "Pushing changes to production..."
+          git push production main:main --force || { echo "Push failed"; exit 1; }
+          echo "Push completed successfully."
