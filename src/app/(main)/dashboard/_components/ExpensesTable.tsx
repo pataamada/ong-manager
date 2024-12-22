@@ -55,8 +55,8 @@ export function ExpensesTable() {
 					<Table className="w-full">
 						<TableHeader>
 							<TableRow className="border-none">
-								<TableHead className="w-5/12">Descrição</TableHead>
 								<TableHead className="w-5/12">Categoria</TableHead>
+								<TableHead className="w-5/12">Descrição</TableHead>
 								<TableHead className="w-5/12">Data</TableHead>
 								<TableHead className="w-5/12">Valor</TableHead>
 								<TableHead className="w-1/12" />
@@ -72,7 +72,6 @@ export function ExpensesTable() {
 									)}
 									onClick={() => setSelectedExpense(expense)}
 								>
-									<TableCell>{expense.description}</TableCell>
 									<TableCell className="font-medium">
 										<Badge
 											className="text-nowrap"
@@ -85,6 +84,7 @@ export function ExpensesTable() {
 											{expense.category}
 										</Badge>
 									</TableCell>
+									<TableCell>{expense.description}</TableCell>
 									<TableCell>
 										{formatRelative(new Date(expense.date), new Date(), {
 											locale: ptBR,
