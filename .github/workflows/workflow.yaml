@@ -5,15 +5,14 @@ on:
       - main
 
 jobs:
-  env:
-    REPO_NAME: ${{ vars.REPO_NAME }}
   update-prod-repo:
+    env:
+      REPO_NAME: ${{ vars.REPO_NAME }}
     if: github.repository == REPO_NAME
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
-
       - name: Set up SSH key
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
