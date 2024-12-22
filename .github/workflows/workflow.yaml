@@ -9,8 +9,7 @@ permissions:
 
 jobs:
   update-prod-repo:
-    # Só executa se for o repositório de desenvolvimento
-    if: github.repository == ${{ secrets.DEV_REPO_NAME }}
+    if: github.repository == secrets.DEV_REPO_NAME
     runs-on: ubuntu-latest
     
     steps: 
