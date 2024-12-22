@@ -63,7 +63,7 @@ export function UpdateEventForm({
 								<ImageUpload
 									value={field.value}
 									onChange={field.onChange}
-									onRemoveImage={() => form.setValue("image", null)}
+									isUpdating={true}
 								/>
 							</FormControl>
 						</FormItem>

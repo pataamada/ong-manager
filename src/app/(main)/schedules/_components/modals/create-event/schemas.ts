@@ -11,21 +11,18 @@ export const updateEventSchema = z.object({
 	title: z.string().min(6, "Mínimo de 6 caracteres").optional(),
 	date: z.string().min(1, "Data é obrigatória").optional(),
 	description: z.string().min(6, "Mínimo de 6 caracteres").optional(),
-	image: z
-		.union(
-			[
-				z
-					.instanceof(File, { message: "Imagem é obrigatória" })
-					.refine(file => file.size < 2 * 1024 * 1024, "O arquivo deve ter menos de 2MB")
-					.optional(),
-				z.string().optional(),
-				z.null(),
-			],
-			{
-				message: "Imagem é obrigatória",
-			},
-		)
-		.nullable(),
+	image: z.union(
+		[
+			z
+				.instanceof(File, { message: "Imagem é obrigatória" })
+				.refine(file => file.size < 2 * 1024 * 1024, "O arquivo deve ter menos de 2MB")
+				.optional(),
+			z.string().optional(),
+		],
+		{
+			message: "Imagem é obrigatória",
+		},
+	),
 })
 
 export type EventFormValues = z.infer<typeof eventSchema>

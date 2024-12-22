@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
-import { Trash } from "lucide-react"
+import { Pen, Trash } from "lucide-react"
 import Image from "next/image"
 import { type ChangeEvent, type MouseEvent, forwardRef } from "react"
 import { Button } from "../ui/button"
@@ -10,7 +10,7 @@ import { When } from "../when"
 interface ImageUploadProps {
 	value?: string | File | null
 	onChange?: (value?: string | File | null) => void
-	onRemoveImage?: () => void
+	isUpdating?: boolean
 	className?: string
 	height?: string
 	objectFit?: "cover" | "contain"
@@ -18,7 +18,7 @@ interface ImageUploadProps {
 
 const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(
 	(
-		{ value, onChange, onRemoveImage, className, height = "h-[200px]", objectFit = "contain" },
+		{ value, onChange, isUpdating, className, height = "h-[200px]", objectFit = "contain" },
 		ref,
 	) => {
 		const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +29,6 @@ const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(
 		}
 		const handleRemoveImage = (e: MouseEvent<HTMLButtonElement>) => {
 			onChange?.(null)
-			onRemoveImage?.()
 			e.stopPropagation()
 		}
 		const hasValue = value || (typeof value === "string" && value?.length > 0)
@@ -77,7 +76,11 @@ const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(
 						</div>
 					</When>
 				</Label>
-				<When condition={value || (typeof value === "string" && value?.length)}>
+				<When
+					condition={
+						(value || (typeof value === "string" && value?.length)) && !isUpdating
+					}
+				>
 					<Button
 						size="icon"
 						className="w-8 h-8 absolute top-2 right-2"
@@ -87,6 +90,14 @@ const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(
 					>
 						<Trash size={16} />
 					</Button>
+				</When>
+				<When condition={isUpdating}>
+					<Label
+						htmlFor={"image-upload"}
+						className="flex items-center justify-center w-8 h-8 absolute top-2 right-2 bg-white rounded-md cursor-pointer"
+					>
+						<Pen size={16} />
+					</Label>
 				</When>
 			</div>
 		)

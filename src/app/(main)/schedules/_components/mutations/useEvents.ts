@@ -129,7 +129,7 @@ export const useUpdateEvent = () => {
 				return
 			}
 			const parsedData = JSON.parse(data) as Event
-			await queryClient.cancelQueries(getEventsOptions)
+			await queryClient.invalidateQueries(getEventsOptions)
 			const previousEvents = queryClient.getQueryData(getEventsOptions.queryKey)
 			if (previousEvents) {
 				const newsEvents = previousEvents.map((events: Event) => {

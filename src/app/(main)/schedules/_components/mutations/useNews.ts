@@ -138,7 +138,7 @@ export const useUpdateNews = () => {
 				return
 			}
 			const parsedData = JSON.parse(data) as News
-			await queryClient.cancelQueries(getNewsOptions)
+			await queryClient.invalidateQueries(getNewsOptions)
 			const previousNews = queryClient.getQueryData(getNewsOptions.queryKey)
 			if (previousNews) {
 				const newNews = previousNews.map((news: News) => {
