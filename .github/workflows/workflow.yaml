@@ -6,9 +6,7 @@ on:
 
 jobs:
   update-prod-repo:
-    env:
-      REPO_NAME: ${{ vars.REPO_NAME }}
-    if: github.repository == env.REPO_NAME
+    if: github.repository == '${{ vars.REPO_NAME }}'
     runs-on: ubuntu-latest
 
     steps:
