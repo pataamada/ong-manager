@@ -1,7 +1,7 @@
 "use server"
-import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
 import { saveNews } from "@/services/news.service"
+import { z } from "zod"
 import { zfd } from "zod-form-data"
 
 const fileSchema = zfd.formData({
@@ -19,5 +19,5 @@ export const saveNewsAction = actionClient
 	.bindArgsSchemas([schema])
 	.action(async ({ parsedInput: { photo }, bindArgsParsedInputs: [rest] }) => {
 		const createdNews = await saveNews({ photo, ...rest })
-		return createdNews
+		return JSON.stringify(createdNews)
 	})
