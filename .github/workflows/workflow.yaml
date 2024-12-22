@@ -32,8 +32,8 @@ jobs:
           
           echo "Adding remote repository..."
           git remote add production git@github.com:caodominio/ong-manager.git
-          git config --global user.email "$(git log -1 --pretty=format:'%ae')"
-          git config --global user.name "$(git log -1 --pretty=format:'%an')"
+          git config --global user.email "qualificatech.caodominio@gmail.com"
+          git config --global user.name "caodominio"
           
           
           echo "Pushing changes to production..."
