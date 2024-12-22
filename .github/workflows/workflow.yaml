@@ -19,10 +19,10 @@ jobs:
           echo "Setting up SSH key..."
           mkdir -p /home/runner/.ssh
           ssh-keyscan github.com >> /home/runner/.ssh/known_hosts
-          echo "${{ secrets.SSH_CAODOMINIO }}" > /home/runner/.ssh/github_actions
-          chmod 600 /home/runner/.ssh/github_actions
+          echo "${{ secrets.SSH_CAODOMINIO }}" > /home/runner/.ssh/id_ed25519
+          chmod 600 /home/runner/.ssh/id_ed25519
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null	
-          ssh-add /home/runner/.ssh/github_actions
+          ssh-add /home/runner/.ssh/id_ed25519
           echo "SSH key setup completed."
 
       - name: Push to production repository
