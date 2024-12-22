@@ -1,0 +1,36 @@
+name: Update Production Repository 
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  update-prod-repo:
+    # Só executa se for o repositório de desenvolvimento
+    if: github.repository == ${{ secrets.DEV_REPO_NAME }}
+    runs-on: ubuntu-latest
+    
+    steps: 
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Push to production repository
+        env:
+          TOKEN: ${{ secrets.PROD_REPO_TOKEN }}
+        run: |
+          git remote add production https://oauth2:${TOKEN}@github.com/caodominio/ong-manager.git
+          git config --global user.email "$(git log -1 --pretty=format:'%ae')"
+          git config --global user.name "$(git log -1 --pretty=format:'%an')"
+          
+          # Verifica se há diferenças entre os repositórios
+          if git diff --quiet production/main; then
+            echo "Não há mudanças para sincronizar"
+            exit 0
+          fi
+          
+          # Se houver mudanças, faz o push
+          git push production main:main
