@@ -1,17 +1,17 @@
 "use client"
 
-import type { UserWOutPassword } from "@/models/user.model"
-import { ConfirmDeleteUserAlert } from "../modals/confirm-delete"
-import { useState } from "react"
-import { CreateUpdateUserModal } from "../modals/create-update"
-import { UserTable } from "./table"
-import type { Row } from "@tanstack/react-table"
-import { useDeleteUser, useGetUsers, useUpdateUser } from "../../mutations"
-import { FilterDrawer } from "../modals/filter"
 import { useAuth } from "@/hooks/use-auth"
-import { useAtom } from "jotai"
-import { confirmDeleteAtom, modalUserAtom } from "../store"
 import { useToast } from "@/hooks/use-toast"
+import type { UserWOutPassword } from "@/models/user.model"
+import type { Row } from "@tanstack/react-table"
+import { useAtom } from "jotai"
+import { useState } from "react"
+import { useDeleteUser, useGetUsers, useUpdateUser } from "../../mutations"
+import { ConfirmDeleteUserAlert } from "../modals/confirm-delete"
+import { CreateUpdateUserModal } from "../modals/create-update"
+import { FilterDrawer } from "../modals/filter"
+import { confirmDeleteAtom, modalUserAtom } from "../store"
+import { UserTable } from "./table"
 
 export function UserList() {
 	const { data, isLoading } = useGetUsers()

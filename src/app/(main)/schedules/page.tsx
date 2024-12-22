@@ -1,8 +1,11 @@
+"use client"
+
 import { Card } from "@/components/ui/card"
 import { CreateEventModal } from "./_components/modals/create-event"
 import { CreateNewsModal } from "./_components/modals/create-news"
-import ScheduleTabs from "./_components/schedule-tabs"
 import { DeleteScheduleModal } from "./_components/modals/delete-schedule"
+import { FilterDrawer } from "./_components/modals/filter"
+import ScheduleTabs from "./_components/schedule-tabs"
 
 export const dynamic = "force-dynamic"
 
@@ -13,6 +16,7 @@ export default function Schedules() {
 			<CreateEventModal />
 			<CreateNewsModal />
 			<DeleteScheduleModal />
+			<FilterDrawer />
 		</Card>
 	)
 }
