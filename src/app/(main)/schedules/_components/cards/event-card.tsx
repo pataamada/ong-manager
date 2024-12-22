@@ -1,18 +1,20 @@
-import * as React from "react"
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-import Image from "next/image"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { Calendar, Pen, Trash2 } from "lucide-react"
+import Image from "next/image"
 import { Button } from "../../../../../components/ui/button"
+
+import { When } from "@/components/when"
 
 interface EventCardProps {
 	title: string
 	date: string | number
 	description: string
 	imageUrl: string
+	hasEditButton?: boolean
+	hasDeleteButton?: boolean
 	onDelete?: () => void
 	onEdit?: () => void
 }
@@ -22,6 +24,8 @@ export function EventCard({
 	date,
 	description,
 	imageUrl,
+	hasEditButton = false,
+	hasDeleteButton = false,
 	onDelete,
 	onEdit,
 }: EventCardProps) {
@@ -37,12 +41,16 @@ export function EventCard({
 					sizes="220px"
 				/>
 				<div className="absolute gap-2 flex top-4 right-4">
-					<Button className="size-fit p-2" variant={"secondary"} onClick={onEdit}>
-						<Pen className="size-5" />
-					</Button>
-					<Button className="size-fit p-2" variant={"secondary"} onClick={onDelete}>
-						<Trash2 className="size-5 text-red-500" />
-					</Button>
+					<When condition={hasEditButton}>
+						<Button className="size-fit p-2" variant={"secondary"} onClick={onEdit}>
+							<Pen className="size-5" />
+						</Button>
+					</When>
+					<When condition={hasDeleteButton}>
+						<Button className="size-fit p-2" variant={"secondary"} onClick={onDelete}>
+							<Trash2 className="size-5 text-red-500" />
+						</Button>
+					</When>
 				</div>
 			</CardHeader>
 			<CardContent>

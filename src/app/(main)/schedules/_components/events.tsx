@@ -1,6 +1,12 @@
 "use client"
+import { PawLoader } from "@/components/paw-loader"
+import { When } from "@/components/when"
+import { useAuth } from "@/hooks/use-auth"
+import { contains } from "@/utils/contains"
 import { useAtomValue, useSetAtom } from "jotai"
+import Image from "next/image"
 import { EventCard } from "./cards/event-card"
+import { useGetEvents } from "./mutations/useEvents"
 import {
 	confirmDeleteInfo,
 	filterOrderAtom,
@@ -9,13 +15,12 @@ import {
 	modalCreateEvent,
 	updateEventData,
 } from "./store"
-import { useGetEvents } from "./mutations/useEvents"
-import { When } from "@/components/when"
-import { PawLoader } from "@/components/paw-loader"
-import Image from "next/image"
-import { contains } from "@/utils/contains"
+
+import { UserRoles } from "@/models/user.model"
 
 export function Events() {
+	const { user } = useAuth()
+
 	const { data, isLoading } = useGetEvents()
 	const search = useAtomValue(filterSearchAtom)
 	const order = useAtomValue(filterOrderAtom)
@@ -73,6 +78,8 @@ export function Events() {
 							description={event.description}
 							title={event.title}
 							imageUrl={event.image}
+							hasEditButton={user?.role === UserRoles.Admin}
+							hasDeleteButton={user?.role === UserRoles.Admin}
 							onDelete={() => handleDelete(event.id, event.title)}
 							onEdit={() => {
 								setUpdateData({ ...event })
