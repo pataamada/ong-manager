@@ -5,29 +5,20 @@ import type {
 	IPaymentCreateBoletoOrPix,
 	IPaymentCreateCreditCard,
 } from "@/types/Asaas/Payment"
+import { AxiosError } from "axios"
 import { type NextRequest, NextResponse } from "next/server"
 
-interface AsaasErrorResponse {
-	response: {
-		data: {
-			errors: IErrorAsaas[]
-		}
-	}
-}
-
 export async function POST(req: NextRequest) {
-	const dataValiding = (await req.json()) as IPaymentCreateBoletoOrPix | IPaymentCreateCreditCard
-	const urlRelative = "/payments"
-
+	const dataValiding: IPaymentCreateBoletoOrPix | IPaymentCreateCreditCard = await req.json()
 	try {
-		const { data } = await asaasGateway.post<IPayment>(urlRelative, dataValiding)
+		const { data } = await asaasGateway.post<IPayment>("/payments", dataValiding)
 		return NextResponse.json(data, { status: 201 })
 	} catch (error: unknown) {
-		console.log(error)
-		return NextResponse.json(
-			(error as AsaasErrorResponse).response.data.errors.map(
-				(i: IErrorAsaas) => i.description,
-			),
-		)
+		if (error instanceof AxiosError) {
+			return NextResponse.json(
+				error.response?.data.errors.map((i: IErrorAsaas) => i.description),
+			)
+		}
+		return NextResponse.json({ message: "Erro interno do servidor" }, { status: 500 })
 	}
 }
