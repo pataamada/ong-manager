@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Log Repository Names
+        run: |
+          echo "Repository Name from vars: ${{ vars.REPO_NAME }}"
+          echo "Current GitHub Repository: ${{ github.repository }}"
+          
       - uses: actions/checkout@v3
       - name: Set up SSH key
         env:
