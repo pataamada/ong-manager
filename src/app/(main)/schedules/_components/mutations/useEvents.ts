@@ -1,11 +1,11 @@
+import { createEventAction } from "@/actions/agenda/create"
+import { deleteEventAction } from "@/actions/agenda/delete"
 import { findAllEventsAction } from "@/actions/agenda/find-all"
+import { updateEventAction } from "@/actions/agenda/update"
+import type { Toast } from "@/hooks/use-toast"
+import type { Event } from "@/models/event.model"
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { eventSchema, updateEventSchema } from "../modals/create-event/schemas"
-import { createEventAction } from "@/actions/agenda/create"
-import type { Event } from "@/models/event.model"
-import { deleteEventAction } from "@/actions/agenda/delete"
-import type { Toast } from "@/hooks/use-toast"
-import { updateEventAction } from "@/actions/agenda/update"
 
 export const getEventsOptions = queryOptions({
 	queryKey: ["events"],
@@ -44,16 +44,17 @@ export const useCreateEvent = () => {
 			if (!data) {
 				return
 			}
+			const parsedData = JSON.parse(data) as Event
 			await queryClient.cancelQueries(getEventsOptions)
 			const previousEvents = queryClient.getQueryData(getEventsOptions.queryKey)
 			const event: Event = {
 				...variables,
 				date: variables.date,
 				updatedBy: variables.updatedBy,
-				id: data.id,
+				id: parsedData.id,
 				title: variables.title,
 				description: variables.description,
-				image: data.image!,
+				image: parsedData.image!,
 			}
 			if (previousEvents) {
 				const newEvents: Event[] = [event, ...previousEvents]
@@ -124,6 +125,10 @@ export const useUpdateEvent = () => {
 			return request?.data
 		},
 		onSuccess: async (data, variables) => {
+			if (!data) {
+				return
+			}
+			const parsedData = JSON.parse(data) as Event
 			await queryClient.cancelQueries(getEventsOptions)
 			const previousEvents = queryClient.getQueryData(getEventsOptions.queryKey)
 			if (previousEvents) {
@@ -134,7 +139,7 @@ export const useUpdateEvent = () => {
 							title: variables?.title || events?.title,
 							description: variables?.description || events?.description,
 							updatedBy: variables?.updatedBy || events.updatedBy,
-							image: data?.photo || events.image,
+							image: parsedData?.image || events.image,
 							date: variables?.date || events.date,
 						}
 					}

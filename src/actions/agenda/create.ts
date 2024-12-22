@@ -1,7 +1,7 @@
 import { createEvent } from "@/services/event.service"
-import { actionClient } from "../safe-action"
 import { z } from "zod"
 import { zfd } from "zod-form-data"
+import { actionClient } from "../safe-action"
 
 const fileSchema = zfd.formData({
 	image: zfd.file(),
@@ -17,5 +17,5 @@ export const createEventAction = actionClient
 	.bindArgsSchemas([createSchema])
 	.action(async ({ parsedInput: { image }, bindArgsParsedInputs: [rest] }) => {
 		const createdNews = await createEvent({ image, ...rest })
-		return createdNews
+		return JSON.stringify(createdNews)
 	})
