@@ -3,7 +3,6 @@
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
 import { Icon } from "@iconify/react"
 import Autoplay from "embla-carousel-autoplay"
-import useEmblaCarousel from "embla-carousel-react"
 import Image from "next/image"
 
 interface Partner {
@@ -92,9 +91,9 @@ const autoplayPlugin = Autoplay({
 })
 
 export function Partners() {
-	const [teamApi] = useEmblaCarousel({ loop: true, align: "start", slidesToScroll: 1 }, [
-		autoplayPlugin,
-	])
+	// const [teamApi] = useEmblaCarousel({ loop: true, align: "start", slidesToScroll: 1 }, [
+	// 	autoplayPlugin,
+	// ])
 
 	return (
 		<div id="partners" className="text-center py-8">
@@ -162,7 +161,13 @@ export function Partners() {
 
 				<div className="flex justify-center gap-16 py-6 mx-auto mt-12 flex-wrap">
 					{institutionalPartners.map(partner => (
-						<img key={partner.id} src={partner.image} alt={`Logo ${partner.name}`} />
+						<Image
+							key={partner.id}
+							src={partner.image}
+							alt={`Logo ${partner.name}`}
+							width={150}
+							height={150}
+						/>
 					))}
 				</div>
 			</div>

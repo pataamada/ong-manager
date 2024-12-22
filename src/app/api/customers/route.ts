@@ -4,6 +4,14 @@ import type { IErrorAsaas } from "@/types/Asaas/Error"
 import type { IPaginationAsaas } from "@/types/Asaas/Pagination"
 import { type NextRequest, NextResponse } from "next/server"
 
+interface AsaasErrorResponse {
+	response: {
+		data: {
+			errors: IErrorAsaas[]
+		}
+	}
+}
+
 export async function GET(req: NextRequest) {
 	const searchParams = req.nextUrl.searchParams
 	const cpf = searchParams.get("cpf")
@@ -27,9 +35,12 @@ export async function POST(req: NextRequest) {
 	try {
 		const { data } = await asaasGateway.post<IClient>(urlRelative, dataValiding)
 		return NextResponse.json(data, { status: 201 })
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	} catch (error: any) {
+	} catch (error: unknown) {
 		console.log(error, "error")
-		return NextResponse.json(error.response.data.errors.map((i: IErrorAsaas) => i.description))
+		return NextResponse.json(
+			(error as AsaasErrorResponse).response.data.errors.map(
+				(i: IErrorAsaas) => i.description,
+			),
+		)
 	}
 }
