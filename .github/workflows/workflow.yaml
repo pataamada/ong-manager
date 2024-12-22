@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   update-prod-repo:
-    if: github.repository == secrets.DEV_REPO_NAME
+    if: github.repository == 'quallifica-tech/caodominio'
     runs-on: ubuntu-latest
     
     steps: 
