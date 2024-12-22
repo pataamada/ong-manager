@@ -1,15 +1,15 @@
-import Image from "next/image"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
-import { forwardRef, type ChangeEvent, type MouseEvent } from "react"
-import { When } from "../when"
-import { Button } from "../ui/button"
 import { Trash } from "lucide-react"
+import Image from "next/image"
+import { type ChangeEvent, type MouseEvent, forwardRef } from "react"
+import { Button } from "../ui/button"
+import { When } from "../when"
 
 interface ImageUploadProps {
-	value?: string | File
-	onChange?: (value?: string | File) => void
+	value?: string | File | null
+	onChange?: (value?: string | File | null) => void
 	onRemoveImage?: () => void
 	className?: string
 	height?: string
@@ -28,7 +28,7 @@ const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(
 			}
 		}
 		const handleRemoveImage = (e: MouseEvent<HTMLButtonElement>) => {
-			onChange?.()
+			onChange?.(null)
 			onRemoveImage?.()
 			e.stopPropagation()
 		}

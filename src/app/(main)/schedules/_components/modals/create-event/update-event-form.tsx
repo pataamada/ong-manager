@@ -1,9 +1,9 @@
-import { Textarea } from "@/components/ui/textarea"
-import { cn } from "@/lib/utils"
-import { CalendarIcon } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { format } from "date-fns"
-import { ptBR } from "date-fns/locale"
+import {
+	type UpdateEventFormValues,
+	updateEventSchema,
+} from "@/app/(main)/schedules/_components/modals/create-event/schemas"
+import { ImageUpload } from "@/components/custom-ui/image-upload"
+import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
 	Form,
@@ -13,19 +13,19 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import {
-	type UpdateEventFormValues,
-	updateEventSchema,
-} from "@/app/(main)/schedules/_components/modals/create-event/schemas"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { ImageUpload } from "@/components/custom-ui/image-upload"
+import { Textarea } from "@/components/ui/textarea"
 import { When } from "@/components/when"
 import { useAuth } from "@/hooks/use-auth"
-import { useUpdateEvent } from "../../mutations/useEvents"
+import { cn } from "@/lib/utils"
 import type { Event } from "@/models/event.model"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
+import { CalendarIcon } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { useUpdateEvent } from "../../mutations/useEvents"
 
 export function UpdateEventForm({
 	data,
@@ -63,7 +63,7 @@ export function UpdateEventForm({
 								<ImageUpload
 									value={field.value}
 									onChange={field.onChange}
-									onRemoveImage={() => form.setValue("image", undefined)}
+									onRemoveImage={() => form.setValue("image", null)}
 								/>
 							</FormControl>
 						</FormItem>
