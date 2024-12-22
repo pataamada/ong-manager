@@ -20,6 +20,11 @@ jobs:
         env:
           TOKEN: ${{ secrets.PROD_REPO_TOKEN }}
         run: |
+          if [ -z "${{ secrets.PROD_REPO_TOKEN }}" ]; then
+            echo "PROD_REPO_TOKEN is not set"
+          else
+            echo "PROD_REPO_TOKEN is set"
+          fi
           git remote add production https://oauth2:${TOKEN}@github.com/caodominio/ong-manager.git
           git config --global user.email "$(git log -1 --pretty=format:'%ae')"
           git config --global user.name "$(git log -1 --pretty=format:'%an')"
