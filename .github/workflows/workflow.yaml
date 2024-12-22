@@ -1,4 +1,4 @@
-name: Update Production Repository 
+name: Update Production Repository
 on:
   push:
     branches:
@@ -8,10 +8,10 @@ jobs:
   update-prod-repo:
     if: github.repository == 'quallifica-tech/caodominio'
     runs-on: ubuntu-latest
-    
-    steps: 
+
+    steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set up SSH key
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
@@ -21,21 +21,21 @@ jobs:
           ssh-keyscan github.com >> /home/runner/.ssh/known_hosts
           echo "${{ secrets.SSH_CAODOMINIO }}" > /home/runner/.ssh/id_ed25519
           chmod 600 /home/runner/.ssh/id_ed25519
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null	
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add /home/runner/.ssh/id_ed25519
           echo "SSH key setup completed."
-      
+
       - name: Push to production repository
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
-          
           echo "Adding remote repository..."
           git remote add production git@github.com:caodominio/ong-manager.git
-          git config --global user.email "qualificatech.caodominio@gmail.com"
-          git config --global user.name "caodominio"
-          
-          
+          git config --local user.email "qualificatech.caodominio@gmail.com"
+          git config --local user.name "caodominio"
+
+          git commit --amend --author="caodominio <qualificatech.caodominio@gmail.com>" --no-edit
+
           echo "Pushing changes to production..."
           git push --force production main || { echo "Push failed"; exit 10; }
           echo "Push completed successfully."
