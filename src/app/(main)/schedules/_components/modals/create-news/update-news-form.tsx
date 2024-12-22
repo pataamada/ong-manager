@@ -1,5 +1,6 @@
-import { Textarea } from "@/components/ui/textarea"
-import { Input } from "@/components/ui/input"
+import { ImageUpload } from "@/components/custom-ui/image-upload"
+import { MultiSelect } from "@/components/custom-ui/multiple-select"
+import { Button } from "@/components/ui/button"
 import {
 	Form,
 	FormControl,
@@ -8,15 +9,14 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { ImageUpload } from "@/components/custom-ui/image-upload"
-import { MultiSelect } from "@/components/custom-ui/multiple-select"
-import { type UpdateNewsSchema, updateNewsSchema } from "./schemas"
-import { useUpdateNews } from "../../mutations/useNews"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { useAuth } from "@/hooks/use-auth"
 import type { News } from "@/models/news.model"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { useUpdateNews } from "../../mutations/useNews"
+import { type UpdateNewsSchema, updateNewsSchema } from "./schemas"
 
 export function NewsUpdateForm({
 	data,
@@ -52,10 +52,7 @@ export function NewsUpdateForm({
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<ImageUpload
-									{...field}
-									onRemoveImage={() => form.setValue("photo", undefined)}
-								/>
+								<ImageUpload {...field} isUpdating={true} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>

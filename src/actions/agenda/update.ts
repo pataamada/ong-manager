@@ -1,7 +1,7 @@
-import { z } from "zod"
-import { actionClient } from "../safe-action"
 import { updateEvent } from "@/services/event.service"
+import { z } from "zod"
 import { zfd } from "zod-form-data"
+import { actionClient } from "../safe-action"
 
 const fileSchema = zfd.formData({
 	image: zfd.file().optional(),
@@ -19,5 +19,6 @@ export const updateEventAction = actionClient
 	.schema(fileSchema)
 	.bindArgsSchemas([eventSchema])
 	.action(async ({ parsedInput: { image }, bindArgsParsedInputs: [rest] }) => {
-		return await updateEvent({ image, ...rest })
+		const updatedEvent = await updateEvent({ image, ...rest })
+		return JSON.stringify(updatedEvent)
 	})

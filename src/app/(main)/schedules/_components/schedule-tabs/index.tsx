@@ -1,14 +1,19 @@
 "use client"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Filters } from "../filters"
-import { useQueryState } from "nuqs"
-import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { When } from "@/components/when"
+import { useAuth } from "@/hooks/use-auth"
+import { UserRoles } from "@/models/user.model"
 import { useSetAtom } from "jotai"
-import { modalCreateEvent, modalCreateNews } from "../store"
+import { Plus } from "lucide-react"
+import { useQueryState } from "nuqs"
 import { Events } from "../events"
+import { Filters } from "../filters"
 import { News } from "../news"
+import { modalCreateEvent, modalCreateNews } from "../store"
 export default function ScheduleTabs() {
+	const { user } = useAuth()
+
 	const [tab, setTab] = useQueryState("tab", { defaultValue: "events" })
 	const setOpenEventModal = useSetAtom(modalCreateEvent)
 	const setOpenNewsModal = useSetAtom(modalCreateNews)
@@ -32,12 +37,14 @@ export default function ScheduleTabs() {
 					<TabsTrigger value="news">Notícias</TabsTrigger>
 				</TabsList>
 				<Filters />
-				<Button onClick={handleOpenModal}>
-					<Plus size={16} />
-					<span className="ml-2">
-						{tab === "events" ? "Criar Evento" : "Criar Notícias"}
-					</span>
-				</Button>
+				<When condition={user?.role === UserRoles.Admin}>
+					<Button onClick={handleOpenModal}>
+						<Plus size={16} />
+						<span className="ml-2">
+							{tab === "events" ? "Criar Evento" : "Criar Notícias"}
+						</span>
+					</Button>
+				</When>
 			</div>
 			<TabsContent value="events" className="flex flex-1 data-[state=inactive]:hidden">
 				<Events />

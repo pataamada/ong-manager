@@ -1,12 +1,13 @@
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Pen, Trash2 } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { When } from "@/components/when"
+import { cn } from "@/lib/utils"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
-import { cn } from "@/lib/utils"
+import { Pen, Trash2 } from "lucide-react"
 
 type NewsCardProps = {
 	title: string
@@ -14,6 +15,8 @@ type NewsCardProps = {
 	createdAt: string | number
 	image: string
 	tags?: string[]
+	hasEditButton?: boolean
+	hasDeleteButton?: boolean
 	className?: string
 	onDelete?: () => void
 	onEdit?: () => void
@@ -24,6 +27,8 @@ export function NewsCard({
 	createdAt,
 	tags = [],
 	title,
+	hasEditButton = false,
+	hasDeleteButton = false,
 	className,
 	onDelete,
 	onEdit,
@@ -65,12 +70,16 @@ export function NewsCard({
 				</p>
 
 				<div className="absolute gap-2 flex top-6 right-6 md:top-4 md:right-4">
-					<Button className="size-fit p-2" variant={"secondary"} onClick={onEdit}>
-						<Pen className="size-4" />
-					</Button>
-					<Button className="size-fit p-2" variant={"secondary"} onClick={onDelete}>
-						<Trash2 className="size-4 text-red-500" />
-					</Button>
+					<When condition={hasEditButton}>
+						<Button className="size-fit p-2" variant={"secondary"} onClick={onEdit}>
+							<Pen className="size-4" />
+						</Button>
+					</When>
+					<When condition={hasDeleteButton}>
+						<Button className="size-fit p-2" variant={"secondary"} onClick={onDelete}>
+							<Trash2 className="size-4 text-red-500" />
+						</Button>
+					</When>
 				</div>
 			</CardContent>
 		</Card>
