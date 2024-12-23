@@ -51,20 +51,38 @@ export function Card({
 				</div>
 
 				{showButton && (
-					<Link href="/finance">
-					<Button
-						variant="link"
-						className="bg-foreground text-white font-normal flex items-center gap-2"
-					>
-						Ver completo
-						<Image
-							src={"/dashboard/arrow-icon.svg"}
-							width={20}
-							height={20}
-							alt="icon de botão"
-						/>
-					</Button>
-				</Link>
+					<>
+						{/* telas pequenas */}
+						<Link href="/finance" className="sm:hidden">
+							<Button
+								variant="link"
+								className="bg-foreground text-white font-normal flex items-center gap-2 p-2"
+							>
+								<Image
+									src={"/dashboard/arrow-icon.svg"}
+									width={20}
+									height={20}
+									alt="ícone de botão"
+								/>
+							</Button>
+						</Link>
+
+						{/* telas maiores */}
+						<Link href="/finance" className="hidden sm:flex">
+							<Button
+								variant="link"
+								className="bg-foreground text-white font-normal flex items-center gap-2"
+							>
+								Ver completo
+								<Image
+									src={"/dashboard/arrow-icon.svg"}
+									width={20}
+									height={20}
+									alt="ícone de botão"
+								/>
+							</Button>
+						</Link>
+					</>
 				)}
 			</div>
 
