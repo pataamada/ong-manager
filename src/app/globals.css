@@ -41,6 +41,16 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --color-aluguel: #A855F7;
+    --color-racao: #EF4444;
+    --color-limpeza: #22C55E;
+    --color-energia: #FACC15;
+    --color-manutencao: #FDE047;
+    --color-agua: #3B82F6;
+    --color-internet: #F87171;
+    --color-brinquedos: #F43F5E;
+    --color-default: #D1D5DB;
   }
  
   .dark {
@@ -76,6 +86,16 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --color-aluguel: #a855f7;
+    --color-racao: #EF4444;
+    --color-limpeza: #22C55E;
+    --color-energia: #FACC15;
+    --color-manutencao: #fddf49;
+    --color-agua: #3B82F6;
+    --color-internet: #F87171;
+    --color-brinquedos: #F43F5E;
+    --color-default: #d1d5db;
   }
 }
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Public+Sans:wght@300;400;700&display=swap');

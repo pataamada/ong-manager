@@ -14,16 +14,16 @@ import { Label, Pie, PieChart } from "recharts"
 
 function getChartColor(entry: string): string | undefined {
 	const colorMap: { [key: string]: string } = {
-		aluguel: "#A855F7",
-		racao: "#EF4444",
-		limpeza: "#22C55E",
-		energia: "#FACC15",
-		manutencao: "#FDE047",
-		agua: "#3B82F6",
-		internet: "#F87171",
-		brinquedos: "#F43F5E",
-	}
-	return colorMap[entry] || "#D1D5DB"
+		aluguel: "var(--color-aluguel)",
+		racao: "var(--color-racao)",
+		limpeza: "var(--color-limpeza)",
+		energia: "var(--color-energia)",
+		manutencao: "var(--color-manutencao)",
+		agua: "var(--color-agua)",
+		internet: "var(--color-internet)",
+		brinquedos: "var(--color-brinquedos)",
+	  }
+	  return colorMap[entry] || "var(--color-default)"
 }
 export function DonutChart() {
 	const { data, isError } = useExpensesCategory()
