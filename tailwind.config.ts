@@ -48,7 +48,15 @@ const config: Config = {
   				'2': 'hsl(var(--chart-2))',
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
-  				'5': 'hsl(var(--chart-5))'
+  				'5': 'hsl(var(--chart-5))',
+  				rent: 'var(--chart-rent)',
+  				feed: 'var(--chart-feed)',
+  				cleaning: 'var(--chart-cleaning)',
+  				energy: 'var(--chart-energy)',
+  				maintenance: 'var(--chart-maintenance)',
+  				water: 'var(--chart-water)',
+  				internet: 'var(--chart-internet)',
+  				toys: 'var(--chart-toys)',
   			},
   			sidebar: {
   				DEFAULT: 'hsl(var(--sidebar-background))',
