@@ -41,6 +41,14 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --chart-rent: #A855F7;
+		--chart-feed: #EF4444;
+		--chart-cleaning: #22C55E;
+		--chart-energy: #FACC15;
+		--chart-maintenance: #FDE047;
+		--chart-water: #3B82F6;
+		--chart-internet: #F87171;
+		--chart-toys: #F43F5E;
   }
  
   .dark {

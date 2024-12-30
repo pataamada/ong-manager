@@ -14,16 +14,16 @@ import { Label, Pie, PieChart } from "recharts"
 
 function getChartColor(entry: string): string | undefined {
 	const colorMap: { [key: string]: string } = {
-		aluguel: "#A855F7",
-		racao: "#EF4444",
-		limpeza: "#22C55E",
-		energia: "#FACC15",
-		manutencao: "#FDE047",
-		agua: "#3B82F6",
-		internet: "#F87171",
-		brinquedos: "#F43F5E",
+		aluguel: "var(--chart-rent)",
+		racao: "var(--chart-feed)",
+		limpeza: "var(--chart-cleaning)",
+		energia: "var(--chart-energy)",
+		manutencao: "var(--chart-maintenance)",
+		agua: "var(--chart-water)",
+		internet: "var(--chart-internet)",
+		brinquedos: "var(--chart-toys)",
 	}
-	return colorMap[entry] || "#D1D5DB"
+	return colorMap[entry] || "hsl(var(--primary))"
 }
 export function DonutChart() {
 	const { data, isError } = useExpensesCategory()
@@ -46,14 +46,13 @@ export function DonutChart() {
 	const chartData = Object.entries(data).map(([key, value]) => {
 		return { name: key, despesas: value, fill: getChartColor(key) }
 	})
-	// console.log("Data:", chartData)
 
 	return (
 		<Card className="flex flex-col border-none shadow-none">
-			<CardContent className="flex-1 pb-0">
+			<CardContent className="flex-1 !p-0">
 				<ChartContainer
 					config={chartConfig}
-					className="mx-auto aspect-square h-[380px] w-full"
+					className="mx-auto w-full h-[380px]"
 				>
 					<PieChart>
 						<ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
