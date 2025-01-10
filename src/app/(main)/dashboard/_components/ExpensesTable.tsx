@@ -17,37 +17,12 @@ import { Badge } from "@/components/ui/badge"
 import { ptBR } from "date-fns/locale"
 import { useGetExpense } from "./queries/useDashboard"
 import type { Expense } from "@/services/finance.service"
-
-const legendaProdutos = [
-	{
-		label: "Aluguel",
-		color: "hsl(var(--chart-1))",
-	},
-	{
-		label: "Ração",
-		color: "hsl(var(--chart-5))",
-	},
-	{
-		label: "Produtos de Limpeza",
-		color: "hsl(var(--chart-2))",
-	},
-	{
-		label: "Visitors",
-	},
-	{
-		label: "Energia",
-		color: "hsl(var(--chart-3))",
-	},
-	{
-		label: "Água",
-		color: "hsl(var(--chart-4))",
-	},
-]
+import { colorMap } from "./DonutChart"
 
 export function ExpensesTable() {
 	const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null)
 	const { data } = useGetExpense(true)
-	// console.log(data)
+
 	return (
 		<>
 			<div className="relative overflow-hidden">
@@ -76,9 +51,7 @@ export function ExpensesTable() {
 										<Badge
 											className="text-nowrap"
 											style={{
-												backgroundColor: legendaProdutos.find(
-													item => item.label === expense.category,
-												)?.color,
+												backgroundColor: colorMap[expense.category] || "hsl(var(--primary))",
 											}}
 										>
 											{expense.category}

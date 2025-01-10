@@ -12,19 +12,21 @@ import {
 import * as React from "react"
 import { Label, Pie, PieChart } from "recharts"
 
+export const colorMap: { [key: string]: string } = {
+	aluguel: "var(--chart-rent)",
+	racao: "var(--chart-feed)",
+	limpeza: "var(--chart-cleaning)",
+	energia: "var(--chart-energy)",
+	manutencao: "var(--chart-maintenance)",
+	agua: "var(--chart-water)",
+	internet: "var(--chart-internet)",
+	brinquedos: "var(--chart-toys)",
+};
+
 function getChartColor(entry: string): string | undefined {
-	const colorMap: { [key: string]: string } = {
-		aluguel: "var(--chart-rent)",
-		racao: "var(--chart-feed)",
-		limpeza: "var(--chart-cleaning)",
-		energia: "var(--chart-energy)",
-		manutencao: "var(--chart-maintenance)",
-		agua: "var(--chart-water)",
-		internet: "var(--chart-internet)",
-		brinquedos: "var(--chart-toys)",
-	}
-	return colorMap[entry] || "hsl(var(--primary))"
+	return colorMap[entry] || "hsl(var(--primary))";
 }
+
 export function DonutChart() {
 	const { data, isError } = useExpensesCategory()
 
