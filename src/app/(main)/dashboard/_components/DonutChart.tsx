@@ -21,10 +21,10 @@ export const colorMap: { [key: string]: string } = {
 	agua: "var(--chart-water)",
 	internet: "var(--chart-internet)",
 	brinquedos: "var(--chart-toys)",
-};
+}
 
 function getChartColor(entry: string): string | undefined {
-	return colorMap[entry] || "hsl(var(--primary))";
+	return colorMap[entry] || "hsl(var(--primary))"
 }
 
 export function DonutChart() {
@@ -52,10 +52,7 @@ export function DonutChart() {
 	return (
 		<Card className="flex flex-col border-none shadow-none">
 			<CardContent className="flex-1 !p-0">
-				<ChartContainer
-					config={chartConfig}
-					className="mx-auto w-full h-[380px]"
-				>
+				<ChartContainer config={chartConfig} className="mx-auto w-full h-[380px]">
 					<PieChart>
 						<ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
 						<Pie

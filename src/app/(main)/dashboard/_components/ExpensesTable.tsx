@@ -51,7 +51,9 @@ export function ExpensesTable() {
 										<Badge
 											className="text-nowrap"
 											style={{
-												backgroundColor: colorMap[expense.category] || "hsl(var(--primary))",
+												backgroundColor:
+													colorMap[expense.category] ||
+													"hsl(var(--primary))",
 											}}
 										>
 											{expense.category}
