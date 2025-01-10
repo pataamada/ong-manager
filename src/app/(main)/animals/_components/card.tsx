@@ -52,12 +52,12 @@ export default function AnimalsCard(animal: AnimalsCardProps) {
 							{animal.castration ? "Castrado" : "Não castrado"}
 						</span>
 					</Badge>
-					<Badge variant={animal.avaliable ? "default" : "destructive"}>
+					<Badge variant={animal.available ? "default" : "destructive"}>
 						<span className="mr-2">
-							{animal.avaliable ? "Disponível" : "Indisponível"}
+							{animal.available ? "Disponível" : "Indisponível"}
 						</span>
 						<Icon
-							name={animal.avaliable ? "Check" : "X"}
+							name={animal.available ? "Check" : "X"}
 							className="w-4 h-4"
 							strokeWidth="2px"
 						/>

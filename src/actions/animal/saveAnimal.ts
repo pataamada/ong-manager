@@ -15,7 +15,7 @@ const schema = z.object({
 	type: z.nativeEnum(AnimalType),
 	sex: z.nativeEnum(AnimalSex),
 	observations: z.string(),
-	avaliable: z.boolean(),
+	available: z.boolean(),
 	castration: z.boolean(),
 	updatedBy: z.string(),
 })

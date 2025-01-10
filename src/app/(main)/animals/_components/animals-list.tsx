@@ -31,7 +31,7 @@ export default function AnimalsList() {
 				contains(animal.name, searchValue) &&
 				(!filters.type || animal.type === filters.type) &&
 				(!filters.sex || animal.sex === filters.sex) &&
-				(!filters.available || animal.avaliable === filters.available)
+				(!filters.available || animal.available === filters.available)
 			)
 		}) || []
 

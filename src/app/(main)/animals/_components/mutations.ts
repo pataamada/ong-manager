@@ -34,7 +34,7 @@ const createAnimalSchema = z.object({
 	type: z.nativeEnum(AnimalType),
 	sex: z.nativeEnum(AnimalSex),
 	observations: z.string(),
-	avaliable: z.boolean(),
+	available: z.boolean(),
 	castration: z.boolean(),
 	updatedBy: z.string(),
 	photo: z.instanceof(File).optional(),
@@ -47,7 +47,7 @@ const updateAnimalSchema = z.object({
 	type: z.nativeEnum(AnimalType).optional(),
 	sex: z.nativeEnum(AnimalSex).optional(),
 	observations: z.string().optional(),
-	avaliable: z.boolean().optional(),
+	available: z.boolean().optional(),
 	castration: z.boolean().optional(),
 	updatedBy: z.string(),
 	photo: z.instanceof(File).optional(),
@@ -170,10 +170,10 @@ export const useUpdateAnimal = () => {
 							type: variables?.type || animal.type,
 							sex: variables?.sex || animal.sex,
 							observations: variables?.observations || animal.observations,
-							avaliable:
-								variables?.avaliable !== undefined
-									? variables.avaliable
-									: animal.avaliable,
+							available:
+								variables?.available !== undefined
+									? variables.available
+									: animal.available,
 							castration:
 								variables?.castration !== undefined
 									? variables.castration
