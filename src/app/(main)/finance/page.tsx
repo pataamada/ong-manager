@@ -3,16 +3,16 @@ import { findDonationsAction, findExpensesAction } from "@/actions/transaction/f
 import { PawLoader } from "@/components/paw-loader"
 import { Button } from "@/components/ui/button"
 import { When } from "@/components/when"
+import { ETransactionType } from "@/models/transaction.model"
+import type { Donation, Expense } from "@/services/finance.service"
 import { PAGE_SIZES_TABLE } from "@/utils"
 import { paginateItems } from "@/utils/paginateItems"
 import { Plus } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Totalizer } from "./_components/Totalizer"
 import { NewRegister } from "./_components/modals/new-register"
-import { TableDonation } from "./_components/tables/TableDonation"
+import { TableDonations } from "./_components/tables/TableDonations"
 import { TableExpense } from "./_components/tables/TableExpense"
-import type { Donation, Expense } from "@/services/finance.service"
-import { ETransactionType } from "@/models/transaction.model"
 
 export default function Finance() {
 	const [isModalNewRegister, setIsModalNewRegister] = useState(false)
@@ -160,7 +160,7 @@ export default function Finance() {
 						}
 					>
 						{filterType === "donations" && (
-							<TableDonation
+							<TableDonations
 								data={donations.map(
 									({ animalId, category, userName, date, value }) => ({
 										type: ETransactionType.Donation,
@@ -171,11 +171,6 @@ export default function Finance() {
 										value,
 									}),
 								)}
-								totalData={totalDataDonations}
-								page={page}
-								pageSize={pageSize}
-								handlePage={currentPage => setPage(currentPage)}
-								handlePageSize={pageSize => setPageSize(pageSize)}
 							/>
 						)}
 						{filterType === "expense" && (
@@ -186,11 +181,6 @@ export default function Finance() {
 									date,
 									value,
 								}))}
-								totalData={totalDataExpenses}
-								page={page}
-								pageSize={pageSize}
-								handlePage={currentPage => setPage(currentPage)}
-								handlePageSize={pageSize => setPageSize(pageSize)}
 							/>
 						)}
 					</When>
