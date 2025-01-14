@@ -1,9 +1,9 @@
 import { saveDonationAction } from "@/actions/transaction/saveDonation"
 import { asaasGateway } from "@/lib/axiosConfig/asaasGateway"
-import { INotificationTranferPix } from "@/models/asaas.model"
-import { ESaveDonationMethod, ETransactionType } from "@/models/transaction.model"
-import { IErrorAsaas } from "@/types/Asaas/Error"
-import type { IPixPaginate } from "@/types/Asaas/Pix"
+import type { INotificationTranferPix } from "@/models/asaas.model"
+import { ESaveDonationMethod, ETransactionType } from "@/models/donation.model"
+import type { IErrorAsaas } from "@/models/error.model"
+import type { IPixPaginate } from "@/models/pix.model"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET() {

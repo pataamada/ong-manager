@@ -1,6 +1,6 @@
 "use server"
 import { actionClient } from "@/actions/safe-action"
-import { ETransactionType, type IExpense } from "@/models/transaction.model"
+import { ETransactionType, type IExpense } from "@/models/expense.model"
 import { handleSaveTransaction } from "@/services/finance.service"
 import { z } from "zod"
 

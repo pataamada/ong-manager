@@ -1,10 +1,10 @@
 import { asaasGateway } from "@/lib/axiosConfig/asaasGateway"
-import type { IErrorAsaas } from "@/types/Asaas/Error"
+import type { IErrorAsaas } from "@/models/error.model"
 import type {
 	IPayment,
 	IPaymentCreateBoletoOrPix,
 	IPaymentCreateCreditCard,
-} from "@/types/Asaas/Payment"
+} from "@/models/payment.model"
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest) {

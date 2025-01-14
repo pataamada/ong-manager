@@ -3,7 +3,7 @@ import type {
 	IPayment,
 	IPaymentCreateBoletoOrPix,
 	IPaymentCreateCreditCard,
-} from "@/types/Asaas/Payment"
+} from "@/models/payment.model"
 
 export const createPayment = async (
 	form: IPaymentCreateBoletoOrPix | IPaymentCreateCreditCard,

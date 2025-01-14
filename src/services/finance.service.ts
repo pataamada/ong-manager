@@ -1,5 +1,6 @@
 import { db } from "@/lib/firebase/firebase-secret"
-import type { IDonation, IExpense } from "@/models/transaction.model"
+import type { IDonation } from "@/models/donation.model"
+import type { IExpense } from "@/models/expense.model"
 import { format, subMonths } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { addDoc, collection, getDocs, limit, orderBy, query, where } from "firebase/firestore"

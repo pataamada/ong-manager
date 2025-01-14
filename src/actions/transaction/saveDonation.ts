@@ -1,7 +1,7 @@
 "use server"
 import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
-import { ETransactionType, ESaveDonationMethod, type IDonation } from "@/models/transaction.model"
+import { ESaveDonationMethod, ETransactionType, type IDonation } from "@/models/donation.model"
 import { handleSaveTransaction } from "@/services/finance.service"
 
 const schema = z.object({

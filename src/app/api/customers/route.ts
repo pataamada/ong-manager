@@ -1,7 +1,7 @@
 import { asaasGateway } from "@/lib/axiosConfig/asaasGateway"
-import type { IClient, IClientCreate } from "@/types/Asaas/Customer"
-import type { IErrorAsaas } from "@/types/Asaas/Error"
-import type { IPaginationAsaas } from "@/types/Asaas/Pagination"
+import type { IClient, IClientCreate } from "@/models/customer.model"
+import type { IErrorAsaas } from "@/models/error.model"
+import type { IPaginationAsaas } from "@/models/pagination.model"
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest) {
