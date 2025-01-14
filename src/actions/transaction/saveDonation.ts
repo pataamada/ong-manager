@@ -1,12 +1,12 @@
 "use server"
 import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
-import { ESaveDonationMethod, ETransactionType, type IDonation } from "@/models/donation.model"
+import { ESaveDonationMethod, ETransactionType } from "@/models/donation.model"
 import { handleSaveTransaction } from "@/services/finance.service"
 
 const schema = z.object({
 	transactionType: z.nativeEnum(ETransactionType),
-  saveDonationMethod: z.nativeEnum(ESaveDonationMethod),
+	saveDonationMethod: z.nativeEnum(ESaveDonationMethod),
 	userName: z.string().optional(),
 	userCpfCnpj: z.string().optional(),
 	animalId: z.string().optional(),
@@ -21,7 +21,7 @@ export const saveDonationAction = actionClient
 		async ({
 			parsedInput: {
 				transactionType,
-        saveDonationMethod,
+				saveDonationMethod,
 				userName,
 				userCpfCnpj,
 				animalId,
@@ -30,9 +30,9 @@ export const saveDonationAction = actionClient
 				description,
 			},
 		}) => {
-			const donationObject: IDonation = {
+			const savedDonation = await handleSaveTransaction({
 				transactionType,
-        saveDonationMethod,
+				saveDonationMethod,
 				animalId,
 				userName,
 				userCpfCnpj,
@@ -40,8 +40,7 @@ export const saveDonationAction = actionClient
 				value,
 				description,
 				date: new Date().toISOString(),
-			}
-			const savedDonation = await handleSaveTransaction(donationObject)
+			})
 			return JSON.parse(savedDonation)
 		},
 	)

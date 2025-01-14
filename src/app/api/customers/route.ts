@@ -23,9 +23,8 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
 	const dataValiding = (await req.json()) as IClientCreate
 
-	const urlRelative = "/customers"
 	try {
-		const { data } = await asaasGateway.post<IClient>(urlRelative, dataValiding)
+		const { data } = await asaasGateway.post<IClient>("/customers", dataValiding)
 		return NextResponse.json(data, { status: 201 })
 	} catch (error: any) {
 		console.log(error, "error")

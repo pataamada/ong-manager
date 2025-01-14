@@ -9,10 +9,9 @@ import { type NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest) {
 	const dataValiding = (await req.json()) as IPaymentCreateBoletoOrPix | IPaymentCreateCreditCard
-	const urlRelative = "/payments"
 
 	try {
-		const { data } = await asaasGateway.post<IPayment>(urlRelative, dataValiding)
+		const { data } = await asaasGateway.post<IPayment>("/payments", dataValiding)
 		return NextResponse.json(data, { status: 201 })
 	} catch (error: any) {
 		console.log(error)

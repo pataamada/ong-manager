@@ -4,12 +4,11 @@ import type { INotificationTranferPix } from "@/models/asaas.model"
 import { ESaveDonationMethod, ETransactionType } from "@/models/donation.model"
 import type { IErrorAsaas } from "@/models/error.model"
 import type { IPixPaginate } from "@/models/pix.model"
-import { NextRequest, NextResponse } from "next/server"
+import { type NextRequest, NextResponse } from "next/server"
 
 export async function GET() {
-	const urlRelative = "/pix/addressKeys"
 	try {
-		const { data } = await asaasGateway.get<IPixPaginate>(urlRelative)
+		const { data } = await asaasGateway.get<IPixPaginate>("/pix/addressKeys")
 		return NextResponse.json(data, { status: 200 })
 	} catch (error) {
 		console.log(error, "error")
@@ -19,22 +18,22 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
 	const notification = (await req.json()) as INotificationTranferPix
+	const ownerName = notification.transfer.bankAccount.ownerName
+	const transferValue = notification.transfer.value
 
 	try {
-		const data = {
+		await saveDonationAction({
 			transactionType: ETransactionType.Donation,
 			saveDonationMethod: ESaveDonationMethod.System,
-			userName: notification.transfer.bankAccount.ownerName,
+			userName: ownerName,
 			userCpfCnpj: notification.transfer.bankAccount.cpfCnpj,
 			animalId: "Todos",
 			category: "Geral",
-			value: notification.transfer.value,
+			value: transferValue,
 			description: "Geral",
-		}
-		await saveDonationAction(data)
+		})
 
-		const message = `Doação realizada por ${notification.transfer.bankAccount.ownerName} no valor de ${notification.transfer.value} reais`
-
+		const message = `Doação realizada por ${ownerName} no valor de R$${transferValue}`
 		return NextResponse.json(message, { status: 201 })
 	} catch (error: any) {
 		console.log(error, "error")
