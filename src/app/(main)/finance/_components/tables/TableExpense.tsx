@@ -1,6 +1,4 @@
 "use client"
-
-import { Input } from "@/components/ui/input"
 import {
 	Table,
 	TableBody,
@@ -11,7 +9,6 @@ import {
 } from "@/components/ui/table"
 import { formatDateToBrazilian } from "@/utils/formatData"
 import { type ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
-import Image from "next/image"
 import { useState } from "react"
 
 interface Data {
@@ -26,7 +23,7 @@ interface TableProps {
 }
 
 export function TableExpense({ data }: TableProps) {
-	const [filter, setFilter] = useState("")
+	const [filter, setFilter] = useState("") // Valor não usado
 
 	const columns: ColumnDef<Data>[] = [
 		{

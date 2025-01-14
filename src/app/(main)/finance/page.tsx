@@ -3,7 +3,7 @@ import { findDonationsAction, findExpensesAction } from "@/actions/transaction/f
 import { PawLoader } from "@/components/paw-loader"
 import { Button } from "@/components/ui/button"
 import { When } from "@/components/when"
-import { ETransactionType } from "@/models/transaction.model"
+import { ETransactionType } from "@/models/transaction.model" // módulo não encontrado
 import type { Donation, Expense } from "@/services/finance.service"
 import { PAGE_SIZES_TABLE } from "@/utils"
 import { paginateItems } from "@/utils/paginateItems"
@@ -17,10 +17,10 @@ import { TableExpense } from "./_components/tables/TableExpense"
 export default function Finance() {
 	const [isModalNewRegister, setIsModalNewRegister] = useState(false)
 	const [filterType, setFilterType] = useState<"all" | "donations" | "expense">("donations")
-	const [page, setPage] = useState(1)
+	const [page, setPage] = useState(1) // Valor não usado
 	const [pageSize, setPageSize] = useState(PAGE_SIZES_TABLE[0])
-	const [totalDataDonations, setTotalDataDonations] = useState(0)
-	const [totalDataExpenses, setTotalDataExpenses] = useState(0)
+	const [totalDataDonations, setTotalDataDonations] = useState(0) // Valor não usado
+	const [totalDataExpenses, setTotalDataExpenses] = useState(0) // Valor não usado
 	const [donations, setDonations] = useState<Donation[]>([])
 	const [expenses, setExpenses] = useState<Expense[]>([])
 	const [isLoading, setIsLoading] = useState(true)

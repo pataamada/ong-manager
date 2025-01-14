@@ -1,5 +1,4 @@
 "use client"
-
 import { flexRender, getCoreRowModel, useReactTable, type ColumnDef } from "@tanstack/react-table"
 import { useState } from "react"
 import {
@@ -10,7 +9,6 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table"
-import { Input } from "@/components/ui/input"
 import Image from "next/image"
 import { formatDateToBrazilian } from "@/utils/formatData"
 
@@ -27,7 +25,7 @@ interface TableProps {
 }
 
 export function TableDonations({ data }: TableProps) {
-	const [filter, setFilter] = useState("")
+	const [filter, setFilter] = useState("") // valor não usado
 
 	const columns: ColumnDef<Data>[] = [
 		{
