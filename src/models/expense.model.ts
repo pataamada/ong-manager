@@ -1,26 +1,9 @@
-export interface IDonation {
-	transactionType: ETransactionType
-  saveDonationMethod: ESaveDonationMethod
-	animalId?: string
-	userName?: string
-	userCpfCnpj?: string
-	category: string
-	value: number
-	description: string
-	date: string
-}
-
 export interface IExpense {
 	transactionType: ETransactionType
 	category: string
 	value: number
 	description: string
 	date: string
-}
-
-export enum ETransactionType {
-	Donation = "donation",
-	Expense = "expense",
 }
 
 export enum Category {
@@ -40,7 +23,6 @@ export enum Category {
 	Manutencao = "manutencao",
 }
 
-export enum ESaveDonationMethod {
-  Manual = "manual",
-  System = "system",
+export enum ETransactionType {
+  Expense = "expense"
 }
