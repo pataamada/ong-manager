@@ -15,13 +15,16 @@ import {
 } from "@/components/ui/table";
 import Image from "next/image";
 import { formatDateToBrazilian } from "@/utils/formatData";
+import { ETransactionTypeDonation } from "@/models/donation.model";
 
 interface Data {
-  animal?: string;
+  animalId: string;
   category: string;
   userName?: string;
+  type: ETransactionTypeDonation.Donation;
   date: string;
   value: number;
+  avatar?: string;
 }
 
 interface TableProps {
@@ -34,7 +37,8 @@ export function TableDonations({ data }: TableProps) {
       accessorKey: "animal",
       header: "Animal",
       cell: ({ row }) => {
-        const { animalId, avatar } = row.original; // Obter dados da linha.
+        console.log(row, "row rowrowrow");
+        const { animalId, avatar } = row.original;
 
         return (
           <div className="flex items-center gap-2">
@@ -108,9 +112,7 @@ export function TableDonations({ data }: TableProps) {
   ];
 
   const table = useReactTable({
-    data: data.filter((row) =>
-      row.category.toLowerCase().includes(filter.toLowerCase())
-    ),
+    data: data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });

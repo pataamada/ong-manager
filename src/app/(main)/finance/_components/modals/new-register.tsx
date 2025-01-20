@@ -32,7 +32,11 @@ import { z } from "zod";
 import { Steps } from "../Steps";
 import { findAnimalAction } from "@/actions/animal/findAnimals";
 import type { Animal } from "@/models/animal.model";
-import { ETransactionTypeDonation } from "@/models/donation.model";
+import {
+  Category,
+  ESaveDonationMethod,
+  ETransactionTypeDonation,
+} from "@/models/donation.model";
 import { ETransactionTypeExpense } from "@/models/expense.model";
 
 interface INewRegisterModal extends DialogProps {
@@ -164,6 +168,7 @@ export const NewRegister = ({
         description: validatedData.description,
         transactionType: ETransactionTypeDonation.Donation,
         cause: validatedData.cause,
+        saveDonationMethod: ESaveDonationMethod.Manual,
       };
       const response = await saveDonationAction({ ...allData });
       if (response?.serverError) {

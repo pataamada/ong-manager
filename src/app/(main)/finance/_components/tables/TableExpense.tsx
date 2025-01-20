@@ -70,9 +70,7 @@ export function TableExpense({ data }: TableProps) {
   ];
 
   const table = useReactTable({
-    data: data.filter((row) =>
-      row.category.toLowerCase().includes(filter.toLowerCase())
-    ),
+    data: data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });

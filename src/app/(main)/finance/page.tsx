@@ -6,15 +6,14 @@ import {
 import { PawLoader } from "@/components/paw-loader";
 import { Button } from "@/components/ui/button";
 import { When } from "@/components/when";
+import { ETransactionTypeDonation } from "@/models/donation.model";
 import type { Donation, Expense } from "@/services/finance.service";
-import { paginateItems } from "@/utils/paginateItems";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Totalizer } from "./_components/Totalizer";
 import { NewRegister } from "./_components/modals/new-register";
 import { TableDonations } from "./_components/tables/TableDonations";
 import { TableExpense } from "./_components/tables/TableExpense";
-import { ETransactionTypeDonation } from "@/models/donation.model";
 
 export default function Finance() {
   const [isModalNewRegister, setIsModalNewRegister] = useState(false);
@@ -31,11 +30,11 @@ export default function Finance() {
       const response = await findDonationsAction();
       if (response?.data) {
         setDonations(response.data);
-        handlePaginationDonations(response.data);
       }
     } catch (error) {
       console.log(error, "error");
     }
+    setIsLoading(false);
   };
   const getAllExpenses = async () => {
     setIsLoading(true);
@@ -43,25 +42,10 @@ export default function Finance() {
       const response = await findExpensesAction();
       if (response?.data) {
         setExpenses(response.data);
-        handlePaginationExpenses(response.data);
       }
     } catch (error) {
       console.log(error, "error");
     }
-  };
-
-  const handlePaginationDonations = (items: Donation[]) => {
-    setIsLoading(true);
-    const { data, totalItems } = paginateItems(items, page, pageSize);
-    setDonations(data);
-    setTotalDataDonations(totalItems);
-    setIsLoading(false);
-  };
-  const handlePaginationExpenses = (items: Expense[]) => {
-    setIsLoading(true);
-    const { data, totalItems } = paginateItems(items, page, pageSize);
-    setExpenses(data);
-    setTotalDataExpenses(totalItems);
     setIsLoading(false);
   };
 
@@ -74,15 +58,6 @@ export default function Finance() {
     getAllDonations();
     getAllExpenses();
   }, []);
-
-  useEffect(() => {
-    setIsLoading(true);
-    if (filterType === "donations") {
-      handlePaginationDonations(donations);
-    } else if (filterType === "expense") {
-      handlePaginationExpenses(expenses);
-    }
-  }, [filterType, page, pageSize]);
 
   return (
     <div>
@@ -171,7 +146,7 @@ export default function Finance() {
                 data={donations.map(
                   ({ animalId, category, userName, date, value }) => ({
                     type: ETransactionTypeDonation.Donation,
-                    animalId,
+                    animalId: animalId ?? "",
                     category,
                     userName,
                     date,
