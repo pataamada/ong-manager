@@ -1,7 +1,7 @@
 import { asaasGateway } from "@/lib/axiosConfig/asaasGateway"
-import type { IClient, IClientCreate } from "@/types/Asaas/Customer"
-import type { IErrorAsaas } from "@/types/Asaas/Error"
-import type { IPaginationAsaas } from "@/types/Asaas/Pagination"
+import type { IClient, IClientCreate } from "@/models/customer.model"
+import type { IErrorAsaas, IResponseErrorAsaas } from "@/models/error.model"
+import type { IPaginationAsaas } from "@/models/pagination.model"
 import { type NextRequest, NextResponse } from "next/server"
 import { AxiosError } from "axios"
 
@@ -24,16 +24,17 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-	const dataValiding: IClientCreate = await req.json()
+	const dataValiding = (await req.json()) as IClientCreate
+
 	try {
 		const { data } = await asaasGateway.post<IClient>("/customers", dataValiding)
 		return NextResponse.json(data, { status: 201 })
 	} catch (error: unknown) {
-		if (error instanceof AxiosError) {
-			return NextResponse.json(
-				error.response?.data.errors.map((i: IErrorAsaas) => i.description),
-			)
-		}
-		return NextResponse.json({ message: "Erro interno do servidor" }, { status: 500 })
+		console.log(error, "error")
+		return NextResponse.json(
+			(error as IResponseErrorAsaas).response.data.errors.map(
+				(i: IErrorAsaas) => i.description,
+			),
+		)
 	}
 }

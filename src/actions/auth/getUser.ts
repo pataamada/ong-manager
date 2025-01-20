@@ -1,6 +1,6 @@
-import { getAllUsers, findOne, findUserByEmailPassword } from "@/services/user.service"
+import { findAll, findOne } from "@/services/user.service"
 
-export const getUser = async (id?: string, email?: string, password?: string) => {
+export const getUser = async (id?: string) => {
 	try {
 		if (id) {
 			// Busca usuário por ID
@@ -8,13 +8,13 @@ export const getUser = async (id?: string, email?: string, password?: string) =>
 			return user ? [user] : []
 		}
 
-		if (email && password) {
-			// Busca usuário por email e senha
-			const user = await findUserByEmailPassword(email, password)
-			return user ? [user] : []
-		}
+		// if (email && password) {
+		// 	// Busca usuário por email e senha
+		// 	const user = await findUserByEmailPassword(email, password)
+		// 	return user ? [user] : []
+		// }
 
-		const users = await getAllUsers()
+		const users = await findAll()
 		return users
 	} catch (error) {
 		console.error("Erro ao requisitar usuários: ", error)

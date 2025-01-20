@@ -2,7 +2,7 @@ import { collection, addDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebase-secret"
 import { createPayment } from "@/services/Asaas/payment.service"
 import { checkIfCustomerExists } from "./Asaas/customer.service"
-import type { IPaymentCreateBoletoOrPix } from "@/types/Asaas/Payment"
+import type { IPaymentCreateBoletoOrPix } from "@/models/payment.model"
 
 export const handleDonationCreation = async (
 	animalId: string | undefined,

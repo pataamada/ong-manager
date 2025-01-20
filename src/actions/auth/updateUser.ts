@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase/firebase-admin"
-import type { User } from "@/types/user"
+import type { User } from "@/models/user.model"
 
 export const updateUser = async (userId: string, updatedData: Partial<User>) => {
 	try {

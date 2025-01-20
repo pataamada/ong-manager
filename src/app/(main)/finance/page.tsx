@@ -3,24 +3,18 @@ import { findDonationsAction, findExpensesAction } from "@/actions/transaction/f
 import { PawLoader } from "@/components/paw-loader"
 import { Button } from "@/components/ui/button"
 import { When } from "@/components/when"
-import { PAGE_SIZES_TABLE } from "@/utils"
-import { paginateItems } from "@/utils/paginateItems"
+import { ETransactionTypeDonation } from "@/models/donation.model"
+import type { Donation, Expense } from "@/services/finance.service"
 import { Plus } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Totalizer } from "./_components/Totalizer"
 import { NewRegister } from "./_components/modals/new-register"
-import { TableDonation } from "./_components/tables/TableDonation"
+import { TableDonations } from "./_components/tables/TableDonations"
 import { TableExpense } from "./_components/tables/TableExpense"
-import type { Donation, Expense } from "@/services/finance.service"
-import { ETransactionType } from "@/models/transaction.model"
 
 export default function Finance() {
 	const [isModalNewRegister, setIsModalNewRegister] = useState(false)
 	const [filterType, setFilterType] = useState<"all" | "donations" | "expense">("donations")
-	const [page, setPage] = useState(1)
-	const [pageSize, setPageSize] = useState(PAGE_SIZES_TABLE[0])
-	const [totalDataDonations, setTotalDataDonations] = useState(0)
-	const [totalDataExpenses, setTotalDataExpenses] = useState(0)
 	const [donations, setDonations] = useState<Donation[]>([])
 	const [expenses, setExpenses] = useState<Expense[]>([])
 	const [isLoading, setIsLoading] = useState(true)
@@ -31,11 +25,11 @@ export default function Finance() {
 			const response = await findDonationsAction()
 			if (response?.data) {
 				setDonations(response.data)
-				handlePaginationDonations(response.data)
 			}
 		} catch (error) {
 			console.log(error, "error")
 		}
+		setIsLoading(false)
 	}
 	const getAllExpenses = async () => {
 		setIsLoading(true)
@@ -43,25 +37,10 @@ export default function Finance() {
 			const response = await findExpensesAction()
 			if (response?.data) {
 				setExpenses(response.data)
-				handlePaginationExpenses(response.data)
 			}
 		} catch (error) {
 			console.log(error, "error")
 		}
-	}
-
-	const handlePaginationDonations = (items: Donation[]) => {
-		setIsLoading(true)
-		const { data, totalItems } = paginateItems(items, page, pageSize)
-		setDonations(data)
-		setTotalDataDonations(totalItems)
-		setIsLoading(false)
-	}
-	const handlePaginationExpenses = (items: Expense[]) => {
-		setIsLoading(true)
-		const { data, totalItems } = paginateItems(items, page, pageSize)
-		setExpenses(data)
-		setTotalDataExpenses(totalItems)
 		setIsLoading(false)
 	}
 
@@ -70,23 +49,10 @@ export default function Finance() {
 		await getAllExpenses()
 	}
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		getAllDonations()
 		getAllExpenses()
 	}, [])
-
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	useEffect(() => {
-		setIsLoading(true)
-		if (filterType === "donations") {
-			handlePaginationDonations(donations)
-		} else if (filterType === "expense") {
-			handlePaginationExpenses(expenses)
-		}
-	}, [filterType, page, pageSize])
 
 	return (
 		<div>
@@ -164,22 +130,17 @@ export default function Finance() {
 						}
 					>
 						{filterType === "donations" && (
-							<TableDonation
+							<TableDonations
 								data={donations.map(
 									({ animalId, category, userName, date, value }) => ({
-										type: ETransactionType.Donation,
-										animalId,
+										type: ETransactionTypeDonation.Donation,
+										animalId: animalId ?? "",
 										category,
 										userName,
 										date,
 										value,
 									}),
 								)}
-								totalData={totalDataDonations}
-								page={page}
-								pageSize={pageSize}
-								handlePage={currentPage => setPage(currentPage)}
-								handlePageSize={pageSize => setPageSize(pageSize)}
 							/>
 						)}
 						{filterType === "expense" && (
@@ -190,11 +151,6 @@ export default function Finance() {
 									date,
 									value,
 								}))}
-								totalData={totalDataExpenses}
-								page={page}
-								pageSize={pageSize}
-								handlePage={currentPage => setPage(currentPage)}
-								handlePageSize={pageSize => setPageSize(pageSize)}
 							/>
 						)}
 					</When>

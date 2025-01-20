@@ -1,6 +1,6 @@
 import { Api } from "@/lib/axiosConfig"
-import type { IClient } from "@/types/Asaas/Customer"
-import type { IPagination, IPaginationAsaas } from "@/types/Asaas/Pagination"
+import type { IClient } from "@/models/customer.model"
+import type { IPagination, IPaginationAsaas } from "@/models/pagination.model"
 
 export const listPaginate = async (): Promise<IPagination<IClient> | Error> => {
 	try {

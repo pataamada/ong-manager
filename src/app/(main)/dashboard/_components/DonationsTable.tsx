@@ -35,7 +35,6 @@ export function DonationsTable() {
 						<TableBody>
 							{data?.map((doador, index) => (
 								<TableRow
-									// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 									key={index}
 									className={cn(
 										"border-none hover:bg-black/10 group hover:cursor-pointer",

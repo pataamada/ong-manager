@@ -161,13 +161,7 @@ export function Partners() {
 
 				<div className="flex justify-center gap-16 py-6 mx-auto mt-12 flex-wrap">
 					{institutionalPartners.map(partner => (
-						<Image
-							key={partner.id}
-							src={partner.image}
-							alt={`Logo ${partner.name}`}
-							width={150}
-							height={150}
-						/>
+						<img key={partner.id} src={partner.image} alt={`Logo ${partner.name}`} />
 					))}
 				</div>
 			</div>
