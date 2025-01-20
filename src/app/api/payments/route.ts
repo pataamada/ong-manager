@@ -1,5 +1,5 @@
 import { asaasGateway } from "@/lib/axiosConfig/asaasGateway"
-import type { IErrorAsaas } from "@/models/error.model"
+import type { IErrorAsaas, IResponseErrorAsaas } from "@/models/error.model"
 import type {
 	IPayment,
 	IPaymentCreateBoletoOrPix,
@@ -13,8 +13,12 @@ export async function POST(req: NextRequest) {
 	try {
 		const { data } = await asaasGateway.post<IPayment>("/payments", dataValiding)
 		return NextResponse.json(data, { status: 201 })
-	} catch (error: any) {
-		console.log(error)
-		return NextResponse.json(error.response.data.errors.map((i: IErrorAsaas) => i.description))
+	} catch (error: unknown) {
+		console.log(error, "error")
+		return NextResponse.json(
+			(error as IResponseErrorAsaas).response.data.errors.map(
+				(i: IErrorAsaas) => i.description,
+			),
+		)
 	}
 }

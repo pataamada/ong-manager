@@ -2,7 +2,7 @@ import { saveDonationAction } from "@/actions/transaction/saveDonation"
 import { asaasGateway } from "@/lib/axiosConfig/asaasGateway"
 import type { INotificationTranferPix } from "@/models/asaas.model"
 import { ESaveDonationMethod, ETransactionType } from "@/models/donation.model"
-import type { IErrorAsaas } from "@/models/error.model"
+import type { IErrorAsaas, IResponseErrorAsaas } from "@/models/error.model"
 import type { IPixPaginate } from "@/models/pix.model"
 import { type NextRequest, NextResponse } from "next/server"
 
@@ -35,8 +35,12 @@ export async function POST(req: NextRequest) {
 
 		const message = `Doação realizada por ${ownerName} no valor de R$${transferValue}`
 		return NextResponse.json(message, { status: 201 })
-	} catch (error: any) {
+	} catch (error: unknown) {
 		console.log(error, "error")
-		return NextResponse.json(error.response.data.errors.map((i: IErrorAsaas) => i.description))
+		return NextResponse.json(
+			(error as IResponseErrorAsaas).response.data.errors.map(
+				(i: IErrorAsaas) => i.description,
+			),
+		)
 	}
 }

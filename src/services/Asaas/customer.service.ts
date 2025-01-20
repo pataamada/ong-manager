@@ -1,7 +1,8 @@
 import { Api } from "@/lib/axiosConfig"
-import { LINE_LIMIT } from "@/lib/axiosConfig/asaasGateway"
 import type { IClient, IClientCreate } from "@/models/customer.model"
 import type { IPagination, IPaginationAsaas } from "@/models/pagination.model"
+
+const LINE_LIMIT = 10
 
 export const listPaginate = async (
 	page: number,

@@ -1,6 +1,6 @@
 import { asaasGateway } from "@/lib/axiosConfig/asaasGateway"
 import type { IClient, IClientCreate } from "@/models/customer.model"
-import type { IErrorAsaas } from "@/models/error.model"
+import type { IErrorAsaas, IResponseErrorAsaas } from "@/models/error.model"
 import type { IPaginationAsaas } from "@/models/pagination.model"
 import { type NextRequest, NextResponse } from "next/server"
 
@@ -26,8 +26,12 @@ export async function POST(req: NextRequest) {
 	try {
 		const { data } = await asaasGateway.post<IClient>("/customers", dataValiding)
 		return NextResponse.json(data, { status: 201 })
-	} catch (error: any) {
+	} catch (error: unknown) {
 		console.log(error, "error")
-		return NextResponse.json(error.response.data.errors.map((i: IErrorAsaas) => i.description))
+		return NextResponse.json(
+			(error as IResponseErrorAsaas).response.data.errors.map(
+				(i: IErrorAsaas) => i.description,
+			),
+		)
 	}
 }
