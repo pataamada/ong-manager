@@ -1,7 +1,7 @@
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebase-secret"
-import type { IDonation } from "@/models/transaction.model"
-import type { IExpense } from "@/models/transaction.model"
+import type { IDonation } from "@/models/donation.model"
+import type { IExpense } from "@/models/expense.model"
 
 export const handleSaveTransaction = async (Transaction: IExpense | IDonation) => {
 	const document = await addDoc(collection(db, "transactions"), Transaction)
