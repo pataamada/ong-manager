@@ -1,5 +1,5 @@
 export interface IExpense {
-	transactionType: ETransactionType
+	transactionType: ETransactionTypeExpense
 	category: string
 	value: number
 	description: string
@@ -23,6 +23,6 @@ export enum Category {
 	Manutencao = "manutencao",
 }
 
-export enum ETransactionType {
-  Expense = "expense"
+export enum ETransactionTypeExpense {
+	Expense = "expense",
 }

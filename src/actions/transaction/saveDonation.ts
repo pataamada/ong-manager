@@ -1,11 +1,11 @@
 "use server"
 import { z } from "zod"
 import { actionClient } from "@/actions/safe-action"
-import { ESaveDonationMethod, ETransactionType } from "@/models/donation.model"
+import { ESaveDonationMethod, ETransactionTypeDonation } from "@/models/donation.model"
 import { handleSaveTransaction } from "@/services/finance.service"
 
 const schema = z.object({
-	transactionType: z.nativeEnum(ETransactionType),
+	transactionType: z.nativeEnum(ETransactionTypeDonation),
 	saveDonationMethod: z.nativeEnum(ESaveDonationMethod),
 	userName: z.string().optional(),
 	userCpfCnpj: z.string().optional(),

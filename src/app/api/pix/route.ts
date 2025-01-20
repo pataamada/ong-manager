@@ -1,7 +1,7 @@
 import { saveDonationAction } from "@/actions/transaction/saveDonation"
 import { asaasGateway } from "@/lib/axiosConfig/asaasGateway"
 import type { INotificationTranferPix } from "@/models/asaas.model"
-import { ESaveDonationMethod, ETransactionType } from "@/models/donation.model"
+import { ESaveDonationMethod, ETransactionTypeDonation } from "@/models/donation.model"
 import type { IErrorAsaas, IResponseErrorAsaas } from "@/models/error.model"
 import type { IPixPaginate } from "@/models/pix.model"
 import { type NextRequest, NextResponse } from "next/server"
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 
 	try {
 		await saveDonationAction({
-			transactionType: ETransactionType.Donation,
+			transactionType: ETransactionTypeDonation.Donation,
 			saveDonationMethod: ESaveDonationMethod.System,
 			userName: ownerName,
 			userCpfCnpj: notification.transfer.bankAccount.cpfCnpj,

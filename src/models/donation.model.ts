@@ -1,5 +1,5 @@
 export interface IDonation {
-	transactionType: ETransactionType
+	transactionType: ETransactionTypeDonation
 	saveDonationMethod: ESaveDonationMethod
 	animalId?: string
 	userName?: string
@@ -32,6 +32,6 @@ export enum Category {
 	Manutencao = "manutencao",
 }
 
-export enum ETransactionType {
-  Donation = "donation"
+export enum ETransactionTypeDonation {
+	Donation = "donation",
 }
