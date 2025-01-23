@@ -1,14 +1,23 @@
 import { asaasGateway } from "@/lib/axiosConfig/asaasGateway"
+import { getCurrentUser } from "@/lib/firebase/firebase-admin"
 import type { IClient, IClientCreate } from "@/models/customer.model"
 import type { IErrorAsaas, IResponseErrorAsaas } from "@/models/error.model"
 import type { IPaginationAsaas } from "@/models/pagination.model"
-import { type NextRequest, NextResponse } from "next/server"
+import { UserRoles } from "@/models/user.model"
 import { AxiosError } from "axios"
+import { type NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest) {
-	const searchParams = req.nextUrl.searchParams
-	const cpf = searchParams.get("cpf")
+	const currentUser = await getCurrentUser()
+
+	if (currentUser?.role !== UserRoles.Admin) {
+		return NextResponse.json({ error: "Acesso negado!" }, { status: 403 })
+	}
+
 	try {
+		const searchParams = req.nextUrl.searchParams
+		const cpf = searchParams.get("cpf")
+
 		const { data } = await asaasGateway.get<IPaginationAsaas<IClient>>(
 			`/customers?cpfCnpj=${cpf}`,
 		)
@@ -24,6 +33,12 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+	const currentUser = await getCurrentUser()
+
+	if (currentUser?.role !== UserRoles.Admin) {
+		return NextResponse.json({ error: "Acesso negado!" }, { status: 403 })
+	}
+
 	const dataValiding = (await req.json()) as IClientCreate
 
 	try {
