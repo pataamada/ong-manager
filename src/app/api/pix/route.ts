@@ -3,14 +3,15 @@ import { asaasGateway } from "@/lib/axiosConfig/asaasGateway"
 import type { INotificationTranferPix } from "@/models/asaas.model"
 import { ESaveDonationMethod, ETransactionTypeDonation } from "@/models/donation.model"
 import type { IErrorAsaas, IResponseErrorAsaas } from "@/models/error.model"
-import type { IPixPaginate } from "@/models/pix.model"
 import { AxiosError } from "axios"
 import { type NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
+import { IPaginationAsaas } from "@/models/pagination.model"
+import { IPix } from "@/models/pix.model"
 
 export async function GET() {
 	try {
-		const { data } = await asaasGateway.get<IPixPaginate>("/pix/addressKeys")
+		const { data } = await asaasGateway.get<IPaginationAsaas<IPix>>("/pix/addressKeys")
 		return NextResponse.json(data, { status: 200 })
 	} catch (error) {
 		if (error instanceof AxiosError) {

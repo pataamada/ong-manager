@@ -1,10 +1,10 @@
 import { Api } from "@/lib/axiosConfig"
-import type { IClient } from "@/models/customer.model"
 import type { IPagination, IPaginationAsaas } from "@/models/pagination.model"
+import { IPix } from "@/models/pix.model"
 
-export const listPaginate = async (): Promise<IPagination<IClient> | Error> => {
+export const listPaginate = async (): Promise<IPagination<IPix> | Error> => {
 	try {
-		const { data } = await Api.get<IPaginationAsaas<IClient>>("/pix")
+		const { data } = await Api.get<IPaginationAsaas<IPix>>("/pix")
 
 		if (data) return data
 
