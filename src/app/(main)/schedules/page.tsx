@@ -6,17 +6,20 @@ import { CreateNewsModal } from "./_components/modals/create-news"
 import { DeleteScheduleModal } from "./_components/modals/delete-schedule"
 import { FilterDrawer } from "./_components/modals/filter"
 import ScheduleTabs from "./_components/schedule-tabs"
+import { Suspense } from "react"
 
 export const dynamic = "force-dynamic"
 
 export default function Schedules() {
 	return (
-		<Card className="flex flex-col p-6 flex-1">
+	<Suspense>
+			<Card className="flex flex-col p-6 flex-1">
 			<ScheduleTabs />
 			<CreateEventModal />
 			<CreateNewsModal />
 			<DeleteScheduleModal />
 			<FilterDrawer />
 		</Card>
+	</Suspense>
 	)
 }

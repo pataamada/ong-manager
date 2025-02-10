@@ -1,7 +1,11 @@
-import React from "react"
-import FormLogin from "./form-login"
+import React, { Suspense } from "react";
+import FormLogin from "./form-login";
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 export default function Login() {
-	return <FormLogin />
+	return (
+		<Suspense>
+			<FormLogin />
+		</Suspense>
+	);
 }

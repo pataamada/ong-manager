@@ -1,5 +1,6 @@
 "use client"
 import { useExpensesCategory } from "@/app/(main)/dashboard/_components/queries/useDashboard"
+import { PawLoader } from "@/components/paw-loader"
 import { Card, CardContent } from "@/components/ui/card"
 import {
 	type ChartConfig,
@@ -28,7 +29,11 @@ function getChartColor(entry: string): string | undefined {
 }
 
 export function DonutChart() {
-	const { data, isError } = useExpensesCategory()
+	const { data, isError, isLoading } = useExpensesCategory()
+
+	if (isLoading) {
+		return  <div>Carregando...</div>
+	}
 
 	if (isError || data === undefined || data === null) {
 		return "Error while loading"

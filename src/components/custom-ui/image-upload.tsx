@@ -14,11 +14,12 @@ interface ImageUploadProps {
 	className?: string
 	height?: string
 	objectFit?: "cover" | "contain"
+	onRemoveImage?: () => void
 }
 
 const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(
 	(
-		{ value, onChange, isUpdating, className, height = "h-[200px]", objectFit = "contain" },
+		{ value, onChange, isUpdating, onRemoveImage, className, height = "h-[200px]", objectFit = "contain" },
 		ref,
 	) => {
 		const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,6 +30,7 @@ const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(
 		}
 		const handleRemoveImage = (e: MouseEvent<HTMLButtonElement>) => {
 			onChange?.(null)
+			onRemoveImage?.()
 			e.stopPropagation()
 		}
 		const hasValue = value || (typeof value === "string" && value?.length > 0)

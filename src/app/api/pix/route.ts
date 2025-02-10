@@ -4,6 +4,7 @@ import type { INotificationTranferPix } from "@/models/asaas.model"
 import { ESaveDonationMethod, ETransactionTypeDonation } from "@/models/donation.model"
 import type { IErrorAsaas, IResponseErrorAsaas } from "@/models/error.model"
 import type { IPixPaginate } from "@/models/pix.model"
+import { AxiosError } from "axios"
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function GET() {
