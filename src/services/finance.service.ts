@@ -29,7 +29,7 @@ export interface Donation {
 }
 
 export const getDonations = async (limited?: boolean) => {
-	let q = query(collection(db, "donations"))
+	let q = query(collection(db, "donations"), orderBy("date", "desc"))
 	if (limited) q = query(collection(db, "donations"), limit(20), orderBy("date", "desc"))
 	const querySnapshot = await getDocs(q)
 	const donations = querySnapshot.docs.map(doc => ({
@@ -40,7 +40,7 @@ export const getDonations = async (limited?: boolean) => {
 }
 
 export const getExpenses = async (limited?: boolean) => {
-	let q = query(collection(db, "expenses"))
+	let q = query(collection(db, "expenses"), orderBy("date", "desc"))
 	if (limited) q = query(collection(db, "expenses"), limit(20), orderBy("date", "desc"))
 	const querySnapshot = await getDocs(q)
 	const expenses = querySnapshot.docs.map(doc => ({

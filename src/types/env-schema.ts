@@ -11,6 +11,8 @@ export const envSchema = z.object({
 	firebaseAdminProjectId: z.string(),
 	firebaseAdminPrivateKey: z.string(),
 	asaasKey: z.string(),
+	jwtSecretKey: z.string(),
+	jwtTokenVerify: z.string(),
 })
 
 export const envServer = envSchema.safeParse({
@@ -24,6 +26,8 @@ export const envServer = envSchema.safeParse({
 	firebaseAdminProjectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
 	firebaseAdminPrivateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY,
 	asaasKey: process.env.ASAAS_KEY,
+	jwtSecretKey: process.env.JWT_SECRET_KEY,
+	jwtTokenVerify: process.env.JWT_TOKEN_VERIFY,
 })
 
 if (!envServer.success) {
