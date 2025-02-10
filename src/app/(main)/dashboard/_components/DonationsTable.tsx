@@ -35,7 +35,6 @@ export function DonationsTable() {
 						<TableBody>
 							{data?.map((doador, index) => (
 								<TableRow
-									// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 									key={index}
 									className={cn(
 										"border-none hover:bg-black/10 group hover:cursor-pointer",
@@ -43,8 +42,8 @@ export function DonationsTable() {
 									)}
 									onClick={() => setSelectedDonation(doador)}
 								>
-									<TableCell>{doador.userName}</TableCell>
-									<TableCell className="font-semibold">
+									<TableCell className="capitalize">{doador.userName}</TableCell>
+									<TableCell>
 										{formatRelative(new Date(doador.date), new Date(), {
 											locale: ptBR,
 										})}

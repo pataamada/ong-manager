@@ -17,7 +17,7 @@ export interface Animal {
 	sex: AnimalSex
 	photo: string
 	observations?: string
-	avaliable: boolean
+	available: boolean
 	castration: boolean
 	createdAt: Timestamp
 	updatedAt: Timestamp

@@ -3,7 +3,6 @@
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
 import { Icon } from "@iconify/react"
 import Autoplay from "embla-carousel-autoplay"
-import useEmblaCarousel from "embla-carousel-react"
 import Image from "next/image"
 
 interface Partner {
@@ -92,9 +91,9 @@ const autoplayPlugin = Autoplay({
 })
 
 export function Partners() {
-	const [teamApi] = useEmblaCarousel({ loop: true, align: "start", slidesToScroll: 1 }, [
-		autoplayPlugin,
-	])
+	// const [teamApi] = useEmblaCarousel({ loop: true, align: "start", slidesToScroll: 1 }, [
+	// 	autoplayPlugin,
+	// ])
 
 	return (
 		<div id="partners" className="text-center py-8">

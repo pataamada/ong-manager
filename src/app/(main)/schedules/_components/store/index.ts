@@ -17,3 +17,4 @@ export const confirmDeleteInfo = atom<null | {
 
 export const filterSearchAtom = atom("")
 export const filterOrderAtom = atom<"older" | "newer">("newer")
+export const filterDrawerAtom = atom(false)

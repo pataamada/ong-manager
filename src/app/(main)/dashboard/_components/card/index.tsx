@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import clsx from "clsx"
 import Image from "next/image"
+import Link from "next/link"
 import type { ReactNode } from "react"
 
 interface ICard {
@@ -50,18 +51,20 @@ export function Card({
 				</div>
 
 				{showButton && (
-					<Button
-						variant="link"
-						className="bg-foreground text-white font-normal flex items-center gap-2"
-					>
-						Ver completo
-						<Image
-							src={"/dashboard/arrow-icon.svg"}
-							width={20}
-							height={20}
-							alt="icon de botão"
-						/>
-					</Button>
+					<Link href="/finance">
+						<Button
+							variant="link"
+							className="bg-foreground text-white font-normal flex items-center gap-2 p-2 sm:p-4"
+						>
+							<span className="hidden sm:flex">Ver completo</span>
+							<Image
+								src={"/dashboard/arrow-icon.svg"}
+								width={20}
+								height={20}
+								alt="ícone de botão"
+							/>
+						</Button>
+					</Link>
 				)}
 			</div>
 

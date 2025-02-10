@@ -93,7 +93,7 @@ export function AnimalForm() {
 			type: data?.type,
 			sex: data?.sex,
 			castration: data?.castration,
-			available: data?.avaliable,
+			available: data?.available,
 		},
 	})
 
@@ -110,7 +110,7 @@ export function AnimalForm() {
 				id: data.id,
 				updatedBy: user?.user.displayName,
 				...formData,
-				avaliable: formData.available !== undefined ? formData.available : data.avaliable,
+				available: formData.available !== undefined ? formData.available : data.available,
 				age: Number(formData.age),
 			})
 			setOpen(false)
@@ -119,7 +119,7 @@ export function AnimalForm() {
 		await createAnimal({
 			age: Number(formData.age),
 			name: formData.name,
-			avaliable: formData.available !== undefined ? formData.available : false,
+			available: formData.available !== undefined ? formData.available : false,
 			castration: formData.castration !== undefined ? formData.castration : false,
 			observations: formData.observations || "",
 			photo: formData.image instanceof File ? formData.image : undefined,

@@ -2,7 +2,7 @@ import { db } from "@/lib/firebase/firebase-secret"
 import { createPayment } from "@/services/Asaas/payment.service"
 import { addDoc, collection } from "firebase/firestore"
 import { checkIfCustomerExists } from "./Asaas/customer.service"
-import type { IPaymentCreateBoletoOrPix } from "@/types/Asaas/Payment"
+import type { IPaymentCreateBoletoOrPix } from "@/models/payment.model"
 
 export const handleExpenseCreation = async (
 	userId: string,

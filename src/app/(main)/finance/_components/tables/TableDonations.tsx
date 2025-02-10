@@ -1,4 +1,5 @@
 "use client"
+import { flexRender, getCoreRowModel, useReactTable, type ColumnDef } from "@tanstack/react-table"
 import {
 	Table,
 	TableBody,
@@ -7,34 +8,77 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table"
+import Image from "next/image"
 import { formatDateToBrazilian } from "@/utils/formatData"
-import { type ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
+import type { ETransactionTypeDonation } from "@/models/donation.model"
 
 interface Data {
+	animalId: string
 	category: string
-	description: string
+	userName?: string
+	type: ETransactionTypeDonation.Donation
 	date: string
 	value: number
+	avatar?: string
 }
 
 interface TableProps {
 	data: Data[]
 }
 
-export function TableExpense({ data }: TableProps) {
+export function TableDonations({ data }: TableProps) {
 	const columns: ColumnDef<Data>[] = [
+		{
+			accessorKey: "animal",
+			header: "Animal",
+			cell: ({ row }) => {
+				console.log(row, "row rowrowrow")
+				const { animalId, avatar } = row.original
+
+				return (
+					<div className="flex items-center gap-2">
+						<Image
+							src={avatar || "/finance/dog.svg"} // Imagem padrão.
+							width={40}
+							height={40}
+							alt="animal avatar"
+							className="rounded"
+						/>
+						{animalId ? (
+							<div className="font-normal text-base text-[#09090B]">{animalId}</div>
+						) : (
+							<div className="font-normal text-[#A1A1AA]">
+								Nenhum animal especificado
+							</div>
+						)}
+					</div>
+				)
+			},
+		},
 		{
 			accessorKey: "category",
 			header: "Categoria",
 			cell: ({ getValue }) => (
-				<div className="font-normal text-base text-[#09090B]">{getValue() as string}</div>
+				<div className="flex justify-center items-center p-1 px-3 rounded-full bg-[#F4F4F5] max-w-max">
+					<div className="text-sm text-center font-semibold text-[#09090B]">
+						{getValue() as string}
+					</div>
+				</div>
 			),
 		},
 		{
-			accessorKey: "description",
-			header: "Descrição",
+			accessorKey: "userName",
+			header: "Doador",
 			cell: ({ getValue }) => (
-				<div className="font-normal text-base text-[#09090B]">{getValue() as string}</div>
+				<div className="font-normal text-base text-[#09090B]">
+					{(getValue() as string) ? (
+						<div className="font-normal text-base text-[#09090B]">
+							{getValue() as string}
+						</div>
+					) : (
+						<div className="font-normal text- text-[#A1A1AA]">Anônimo</div>
+					)}
+				</div>
 			),
 		},
 		{
@@ -50,7 +94,7 @@ export function TableExpense({ data }: TableProps) {
 			accessorKey: "value",
 			header: "Valor",
 			cell: ({ getValue }) => (
-				<div className={"font-normal text-base text-[#EF4444]"}>
+				<div className={"font-normal text-base text-[#10B981]"}>
 					{(getValue() as number).toLocaleString("pt-BR", {
 						style: "currency",
 						currency: "BRL",

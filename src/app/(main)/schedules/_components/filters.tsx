@@ -5,10 +5,11 @@ import { Input } from "@/components/ui/input"
 import { useAtom, useSetAtom } from "jotai"
 import { Filter } from "lucide-react"
 import { useMemo } from "react"
-import { filterOrderAtom, filterSearchAtom } from "./store"
+import { filterDrawerAtom, filterOrderAtom, filterSearchAtom } from "./store"
 
 export function Filters() {
 	const [search, setSearch] = useAtom(filterSearchAtom)
+	const setDrawerFilter = useSetAtom(filterDrawerAtom)
 	const setOrder = useSetAtom(filterOrderAtom)
 	const sorts = useMemo(
 		() => [
@@ -32,7 +33,12 @@ export function Filters() {
 				className="!w-[200px] hidden lg:flex"
 				onChange={e => setOrder(e as "older" | "newer")}
 			/>
-			<Button size="icon" variant="outline" className="lg:hidden">
+			<Button
+				size="icon"
+				variant="outline"
+				className="lg:hidden"
+				onClick={() => setDrawerFilter(true)}
+			>
 				<Filter size={16} />
 			</Button>
 		</div>

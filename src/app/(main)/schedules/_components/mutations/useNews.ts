@@ -1,13 +1,13 @@
-import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { findNewsAction } from "@/actions/news/find-news"
-import type { newsSchema, updateNewsSchema } from "../modals/create-news/schemas"
-import { saveNewsAction } from "@/actions/news/save-news"
 import { deleteNewsAction } from "@/actions/news/delete-news"
+import { findNewsAction } from "@/actions/news/find-news"
+import { saveNewsAction } from "@/actions/news/save-news"
+import { updateNewsAction } from "@/actions/news/update-news"
+import type { Toast } from "@/hooks/use-toast"
 import type { News } from "@/models/news.model"
 import { getNewsImage } from "@/services/news.service"
+import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Timestamp } from "firebase/firestore"
-import type { Toast } from "@/hooks/use-toast"
-import { updateNewsAction } from "@/actions/news/update-news"
+import type { newsSchema, updateNewsSchema } from "../modals/create-news/schemas"
 
 export const getNewsOptions = queryOptions({
 	queryKey: ["news"],
@@ -43,16 +43,23 @@ export const useCreateNews = () => {
 			if (!data) {
 				return
 			}
+			const parsedData = JSON.parse(data) as News
 			await queryClient.cancelQueries(getNewsOptions)
-			const photo = await getNewsImage(data.id)
+			const photo = await getNewsImage(parsedData.id)
 			const previousNews = queryClient.getQueryData(getNewsOptions.queryKey)
 			const news: News = {
 				...values,
 				photo: photo[0][0],
-				createdAt: new Timestamp(data.createdAt.seconds, data.createdAt.nanoseconds),
-				updatedAt: new Timestamp(data.updatedAt.seconds, data.updatedAt.nanoseconds),
-				updatedBy: data.updatedBy,
-				id: data.id,
+				createdAt: new Timestamp(
+					parsedData.createdAt.seconds,
+					parsedData.createdAt.nanoseconds,
+				),
+				updatedAt: new Timestamp(
+					parsedData.updatedAt.seconds,
+					parsedData.updatedAt.nanoseconds,
+				),
+				updatedBy: parsedData.updatedBy,
+				id: parsedData.id,
 				title: values.title,
 				description: values.description,
 				tags: values.tags,
@@ -127,7 +134,11 @@ export const useUpdateNews = () => {
 			return request?.data
 		},
 		onSuccess: async (data, variables) => {
-			await queryClient.cancelQueries(getNewsOptions)
+			if (!data) {
+				return
+			}
+			const parsedData = JSON.parse(data) as News
+			await queryClient.invalidateQueries(getNewsOptions)
 			const previousNews = queryClient.getQueryData(getNewsOptions.queryKey)
 			if (previousNews) {
 				const newNews = previousNews.map((news: News) => {
@@ -144,7 +155,7 @@ export const useUpdateNews = () => {
 									)
 								: news.updatedAt,
 							updatedBy: variables?.updatedBy || news.updatedBy,
-							photo: data?.photo || news.photo,
+							photo: parsedData?.photo || news.photo,
 						}
 					}
 					return news

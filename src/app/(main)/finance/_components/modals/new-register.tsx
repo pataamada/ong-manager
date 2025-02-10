@@ -1,5 +1,4 @@
 "use client"
-
 import { saveDonationAction } from "@/actions/transaction/saveDonation"
 import { saveExpenseAction } from "@/actions/transaction/saveExpense"
 import { Button } from "@/components/ui/button"
@@ -32,7 +31,12 @@ import { z } from "zod"
 import { Steps } from "../Steps"
 import { findAnimalAction } from "@/actions/animal/findAnimals"
 import type { Animal } from "@/models/animal.model"
-import { ETransactionType, type Category } from "@/models/transaction.model"
+import {
+	type Category,
+	ESaveDonationMethod,
+	ETransactionTypeDonation,
+} from "@/models/donation.model"
+import { ETransactionTypeExpense } from "@/models/expense.model"
 
 interface INewRegisterModal extends DialogProps {
 	open: boolean
@@ -99,7 +103,9 @@ const ExpensiveStepTwoSchema = z.object({
 })
 
 export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INewRegisterModal) => {
-	const [type, setType] = useState<ETransactionType>(ETransactionType.Donation)
+	const [type, setType] = useState<ETransactionTypeDonation | ETransactionTypeExpense>(
+		ETransactionTypeDonation.Donation,
+	)
 	const [step, setStep] = useState(1)
 	const [donationsFiles] = useState<{ file: File; preview: string }[]>([])
 	const [animals, setAnimals] = useState<Animal[]>([])
@@ -151,8 +157,9 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 				category: validatedData.cause as Category,
 				value: Number(validatedData.value),
 				description: validatedData.description,
-				transactionType: ETransactionType.Donation,
+				transactionType: ETransactionTypeDonation.Donation,
 				cause: validatedData.cause,
+				saveDonationMethod: ESaveDonationMethod.Manual,
 			}
 			const response = await saveDonationAction({ ...allData })
 			if (response?.serverError) {
@@ -182,7 +189,7 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 				category: data.categoryId,
 				description: data.description,
 				value: Number(data.value),
-				transactionType: ETransactionType.Expense,
+				transactionType: ETransactionTypeExpense.Expense,
 			}
 			const response = await saveExpenseAction({
 				category: form.category,
@@ -229,7 +236,6 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 		}
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		getAnimals()
 	}, [])
@@ -237,8 +243,12 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 	let content = (
 		<div className="flex gap-4">
 			<div
-				onClick={() => setType(ETransactionType.Donation)}
-				className={`flex w-full flex-col ${type === ETransactionType.Donation ? "border-2 border-[#27272A]" : "border border-[#E4E4E7]"} gap-4 p-6 rounded-lg hover:cursor-pointer`}
+				onClick={() => setType(ETransactionTypeDonation.Donation)}
+				className={`flex w-full flex-col ${
+					type === ETransactionTypeDonation.Donation
+						? "border-2 border-[#27272A]"
+						: "border border-[#E4E4E7]"
+				} gap-4 p-6 rounded-lg hover:cursor-pointer`}
 			>
 				<div
 					className={
@@ -261,8 +271,12 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 				</div>
 			</div>
 			<div
-				onClick={() => setType(ETransactionType.Expense)}
-				className={`flex w-full flex-col ${type === ETransactionType.Expense ? "border-2 border-[#27272A]" : "border border-[#E4E4E7]"} gap-4 p-6 rounded-lg hover:cursor-pointer`}
+				onClick={() => setType(ETransactionTypeExpense.Expense)}
+				className={`flex w-full flex-col ${
+					type === ETransactionTypeExpense.Expense
+						? "border-2 border-[#27272A]"
+						: "border border-[#E4E4E7]"
+				} gap-4 p-6 rounded-lg hover:cursor-pointer`}
 			>
 				<div
 					className={
@@ -287,7 +301,7 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 		</div>
 	)
 
-	if (type === ETransactionType.Donation && step === 2) {
+	if (type === ETransactionTypeDonation.Donation && step === 2) {
 		content = (
 			<>
 				<div className="flex w-full rounded-md mb-4 py-2 px-3 gap-2 bg-[#FFF7ED] border border-[#FB923C]">
@@ -368,7 +382,7 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 		)
 	}
 
-	if (type === ETransactionType.Donation && step === 3) {
+	if (type === ETransactionTypeDonation.Donation && step === 3) {
 		content = (
 			<Form {...formDonationStepThree}>
 				<form onSubmit={handleOnSubmitStepThree} className="flex flex-col gap-6">
@@ -487,7 +501,7 @@ export const NewRegister = ({ open, onOpenChange, onReloadData, ...props }: INew
 		)
 	}
 
-	if (type === ETransactionType.Expense && step === 2) {
+	if (type === ETransactionTypeExpense.Expense && step === 2) {
 		content = (
 			<Form {...formExpensiveStepTwo}>
 				<form

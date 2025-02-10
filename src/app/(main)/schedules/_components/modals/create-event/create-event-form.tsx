@@ -1,9 +1,9 @@
-import { Textarea } from "@/components/ui/textarea"
-import { cn } from "@/lib/utils"
-import { CalendarIcon } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { format } from "date-fns"
-import { ptBR } from "date-fns/locale"
+import {
+	type EventFormValues,
+	eventSchema,
+} from "@/app/(main)/schedules/_components/modals/create-event/schemas"
+import { ImageUpload } from "@/components/custom-ui/image-upload"
+import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
 	Form,
@@ -13,18 +13,18 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import {
-	type EventFormValues,
-	eventSchema,
-} from "@/app/(main)/schedules/_components/modals/create-event/schemas"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { ImageUpload } from "@/components/custom-ui/image-upload"
+import { Textarea } from "@/components/ui/textarea"
 import { When } from "@/components/when"
-import { useCreateEvent } from "../../mutations/useEvents"
 import { useAuth } from "@/hooks/use-auth"
+import { cn } from "@/lib/utils"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
+import { CalendarIcon } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { useCreateEvent } from "../../mutations/useEvents"
 
 export function CreateEventForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 	const { isPending, mutateAsync } = useCreateEvent()
@@ -52,6 +52,7 @@ export function CreateEventForm({ setOpen }: { setOpen: (value: boolean) => void
 							<FormControl>
 								<ImageUpload value={field.value} onChange={field.onChange} />
 							</FormControl>
+							<FormMessage />
 						</FormItem>
 					)}
 				/>

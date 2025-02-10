@@ -17,37 +17,12 @@ import { Badge } from "@/components/ui/badge"
 import { ptBR } from "date-fns/locale"
 import { useGetExpense } from "./queries/useDashboard"
 import type { Expense } from "@/services/finance.service"
-
-const legendaProdutos = [
-	{
-		label: "Aluguel",
-		color: "hsl(var(--chart-1))",
-	},
-	{
-		label: "Ração",
-		color: "hsl(var(--chart-5))",
-	},
-	{
-		label: "Produtos de Limpeza",
-		color: "hsl(var(--chart-2))",
-	},
-	{
-		label: "Visitors",
-	},
-	{
-		label: "Energia",
-		color: "hsl(var(--chart-3))",
-	},
-	{
-		label: "Água",
-		color: "hsl(var(--chart-4))",
-	},
-]
+import { colorMap } from "./DonutChart"
 
 export function ExpensesTable() {
 	const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null)
 	const { data } = useGetExpense(true)
-	// console.log(data)
+
 	return (
 		<>
 			<div className="relative overflow-hidden">
@@ -55,8 +30,8 @@ export function ExpensesTable() {
 					<Table className="w-full">
 						<TableHeader>
 							<TableRow className="border-none">
-								<TableHead className="w-5/12">Descrição</TableHead>
 								<TableHead className="w-5/12">Categoria</TableHead>
+								<TableHead className="w-5/12">Descrição</TableHead>
 								<TableHead className="w-5/12">Data</TableHead>
 								<TableHead className="w-5/12">Valor</TableHead>
 								<TableHead className="w-1/12" />
@@ -72,19 +47,19 @@ export function ExpensesTable() {
 									)}
 									onClick={() => setSelectedExpense(expense)}
 								>
-									<TableCell>{expense.description}</TableCell>
 									<TableCell className="font-medium">
 										<Badge
 											className="text-nowrap"
 											style={{
-												backgroundColor: legendaProdutos.find(
-													item => item.label === expense.category,
-												)?.color,
+												backgroundColor:
+													colorMap[expense.category] ||
+													"hsl(var(--primary))",
 											}}
 										>
 											{expense.category}
 										</Badge>
 									</TableCell>
+									<TableCell>{expense.description}</TableCell>
 									<TableCell>
 										{formatRelative(new Date(expense.date), new Date(), {
 											locale: ptBR,

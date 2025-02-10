@@ -1,25 +1,9 @@
-export interface IDonation {
-	transactionType: ETransactionType
-	animalId?: string
-	userName?: string
-	userCpfCnpj?: string
-	category: string
-	value: number
-	description: string
-	date: string
-}
-
 export interface IExpense {
-	transactionType: ETransactionType
+	transactionType: ETransactionTypeExpense
 	category: string
 	value: number
 	description: string
 	date: string
-}
-
-export enum ETransactionType {
-	Donation = "donation",
-	Expense = "expense",
 }
 
 export enum Category {
@@ -37,4 +21,8 @@ export enum Category {
 	Gas = "gas",
 	Internet = "internet",
 	Manutencao = "manutencao",
+}
+
+export enum ETransactionTypeExpense {
+	Expense = "expense",
 }
