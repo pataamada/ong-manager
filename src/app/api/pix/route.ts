@@ -6,8 +6,8 @@ import type { IErrorAsaas, IResponseErrorAsaas } from "@/models/error.model"
 import { AxiosError } from "axios"
 import { type NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
-import { IPaginationAsaas } from "@/models/pagination.model"
-import { IPix } from "@/models/pix.model"
+import type { IPaginationAsaas } from "@/models/pagination.model"
+import type { IPix } from "@/models/pix.model"
 
 export async function GET() {
 	try {

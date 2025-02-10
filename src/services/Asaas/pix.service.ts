@@ -1,6 +1,6 @@
 import { Api } from "@/lib/axiosConfig"
 import type { IPagination, IPaginationAsaas } from "@/models/pagination.model"
-import { IPix } from "@/models/pix.model"
+import type { IPix } from "@/models/pix.model"
 
 export const listPaginate = async (): Promise<IPagination<IPix> | Error> => {
 	try {
