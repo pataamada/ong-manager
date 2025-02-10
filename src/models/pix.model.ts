@@ -1,11 +1,3 @@
-export interface IPixPaginate {
-	totalCount: number
-	limit: number
-	offset: number
-	hasMore: boolean
-	data: IPix[]
-}
-
 export interface IPix {
 	id: string
 	key: string
