@@ -42,8 +42,8 @@ export function DonationsTable() {
 									)}
 									onClick={() => setSelectedDonation(doador)}
 								>
-									<TableCell>{doador.userName}</TableCell>
-									<TableCell className="font-semibold">
+									<TableCell className="capitalize">{doador.userName}</TableCell>
+									<TableCell>
 										{formatRelative(new Date(doador.date), new Date(), {
 											locale: ptBR,
 										})}
