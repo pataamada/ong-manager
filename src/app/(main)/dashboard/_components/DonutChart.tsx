@@ -1,6 +1,5 @@
 "use client"
 import { useExpensesCategory } from "@/app/(main)/dashboard/_components/queries/useDashboard"
-import { PawLoader } from "@/components/paw-loader"
 import { Card, CardContent } from "@/components/ui/card"
 import {
 	type ChartConfig,
