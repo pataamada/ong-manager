@@ -31,4 +31,9 @@ export const links: Link[] = [
 		icon: "CalendarRange",
 		title: "Agenda",
 	},
+	{
+		href: "/settings",
+		icon: "Settings",
+		title: "Configurações",
+	},
 ]

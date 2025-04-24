@@ -11,7 +11,7 @@ const sidebarItemVariants = cva(
 		variants: {
 			variant: {
 				default: "w-full text-foreground hover:bg-zinc-200 active:bg-black-700",
-				select: "w-full text-white bg-emerald-500 hover:bg-emerald-600",
+				select: "w-full text-white bg-primary hover:bg-primary/80 active:bg-primary/70",
 			},
 			size: {
 				default: "",

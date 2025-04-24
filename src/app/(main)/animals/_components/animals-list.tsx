@@ -1,5 +1,6 @@
 "use client"
 import { useAtom, useSetAtom } from "jotai"
+import { Timestamp } from "firebase/firestore"
 import {
 	confirmDeleteAnimalAtom,
 	confirmDeleteInfoAtom,
@@ -16,8 +17,8 @@ import { useGetAnimals } from "./mutations"
 import { useCallback } from "react"
 import { PawLoader } from "@/components/paw-loader"
 import type { Animal } from "@/models/animal.model"
-
-export default function AnimalsList() {
+import { differenceInYears } from "date-fns"
+export default function AnimalsList({ isAdmin = true }: { isAdmin?: boolean }) {
 	const { data: animals, isLoading } = useGetAnimals()
 	const [searchValue] = useAtom(searchFilterAtom)
 	const [filters] = useAtom(filtersAtom)
@@ -25,13 +26,24 @@ export default function AnimalsList() {
 	const setDeleteInfo = useSetAtom(confirmDeleteInfoAtom)
 	const setUpdateInfo = useSetAtom(updateAnimalInfo)
 	const setDeleteModal = useSetAtom(confirmDeleteAnimalAtom)
+	const getYears = (animal: Animal) => {
+		if (!animal.birthDate) return 0
+		return (
+			differenceInYears(
+				Date(),
+				new Timestamp(animal.birthDate.seconds, animal.birthDate.nanoseconds).toDate(),
+			) || 0
+		)
+	}
 	const filteredAnimals =
 		animals?.filter(animal => {
 			return (
 				contains(animal.name, searchValue) &&
 				(!filters.type || animal.type === filters.type) &&
 				(!filters.sex || animal.sex === filters.sex) &&
-				(!filters.available || animal.available === filters.available)
+				(!filters.available || animal.available === filters.available) &&
+				(!filters.neutered || animal.castration === filters.neutered) &&
+				(filters.maxAge === undefined || (animal.birthDate && getYears(animal) <= filters.maxAge))
 			)
 		}) || []
 
@@ -55,7 +67,7 @@ export default function AnimalsList() {
 		[setUpdateInfo, setCreateModal],
 	)
 	return (
-		<div className="w-full flex flex-col bg-white rounded-lg gap-6 min-h-full">
+		<div className="w-full flex flex-1 flex-col rounded-lg gap-6 min-h-full">
 			<When
 				condition={!isLoading}
 				fallback={
@@ -84,9 +96,10 @@ export default function AnimalsList() {
 						{filteredAnimals.map(animal => (
 							<AnimalsCard
 								key={animal.id}
-								{...animal}
+								animal={animal}
 								onDelete={handleDelete}
 								onEdit={handleEdit}
+								showActions={isAdmin}
 							/>
 						))}
 					</div>

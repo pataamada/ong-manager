@@ -1,32 +1,31 @@
-import { AvailablePets } from "./-components/available-pets"
-import { CampaignSection } from "./-components/Campaigns"
-import { Events } from "./-components/events"
-import { Footer } from "./-components/Footer"
-import { HeroSection } from "./-components/hero-section"
-import { HowToHelp } from "./-components/how-to-help"
-import { Header } from "./-components/Navbar"
-import { OurStory } from "./-components/our-story"
-import { Partners } from "./-components/Partners"
-import { Volunteers } from "./-components/Volunteers"
+import "@/app/globals.css"
+import Adopt from "./-components/adopt"
+import Events from "./-components/events"
+import Finance from "./-components/finance"
+import Footer from "./-components/footer"
+import Hero from "./-components/hero"
+import History from "./-components/history"
+import MeetAnimals from "./-components/meet-animals"
+import Navbar from "./-components/navbar"
+import PartnersCarousel from "./-components/partners-carousel"
 import "./style.css"
 
-export default function LandingPage() {
+export default function Home() {
 	return (
-		<div className="flex flex-col items-center lg:bg-[url('/Patinhas.png')]">
-			<Header />
-			<div className="relative w-full min-h-screen">
-				<div className="max-w-[1440px] mx-auto relative px-2 [&>div]:lg:pb-[128px] [&>div]:pb-[64px]">
-					<HeroSection />
+		<div className="h-screen w-full">
+			<Navbar />
+			<main>
+				<Hero />
+				<PartnersCarousel />
+				<div className="max-w-[1600px] mx-auto px-2 [&>section]:lg:pb-[128px] [&>section]:pb-[64px]">
 					<Events />
-					<OurStory />
-					<HowToHelp />
-					<AvailablePets />
-					<CampaignSection />
-					<Volunteers />
-					<Partners />
+					<History />
+					<Adopt />
+					<MeetAnimals />
+					<Finance />
 				</div>
-				<Footer />
-			</div>
+			</main>
+			<Footer />
 		</div>
 	)
 }

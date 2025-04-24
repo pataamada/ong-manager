@@ -7,6 +7,7 @@ import {
 	deleteDoc,
 	serverTimestamp,
 	query,
+	orderBy
 } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebase-secret"
 import type { CreateEvent, Event, UpdateEvent } from "@/models/event.model"
@@ -41,7 +42,7 @@ export const createEvent = async (params: CreateEvent) => {
 }
 
 export const findAllEvents = async () => {
-	const q = query(collection(db, "eventos"))
+	const q = query(collection(db, "eventos"), orderBy("date", "desc"))
 	const querySnapshot = await getDocs(q)
 	const events = querySnapshot.docs.map(doc => ({
 		...doc.data(),

@@ -58,6 +58,7 @@ export default function FormForgotPassword() {
 			>
 				<div className="flex flex-col items-center gap-2 mx-auto">
 					<h2 className="text-center text-h5">Recuperação de senha</h2>
+					<p className="text-center text-subtitle-2">Digite seu email para receber instruções de recuperação</p>
 				</div>
 
 				<FormField
@@ -74,11 +75,13 @@ export default function FormForgotPassword() {
 					)}
 				/>
 
-				<Button className="w-full" type="submit" disabled={isPending}>
+				<Button variant="default" className="w-full bg-red-600 hover:bg-red-700 text-white" type="submit" disabled={isPending}>
 					{isPending ? "Enviando..." : "Enviar email de recuperação"}
 				</Button>
-				<Button asChild variant="ghost">
-					<Link href="/login">Voltar para login</Link>
+				<Button asChild variant="ghost" className="w-full mt-4">
+					<Link href="/login" className="text-red-600 hover:text-red-500">
+						Voltar para login
+					</Link>
 				</Button>
 			</form>
 		</FormProvider>

@@ -24,10 +24,10 @@ import {
 export const saveAnimal = async (params: CreateAnimal) => {
 	const document = await addDoc(collection(db, "animais"), {
 		name: params.name,
-		age: params.age,
 		type: params.type,
 		sex: params.sex,
 		observations: params.observations,
+		birthDate: params.birthDate,
 		available: params.available,
 		castration: params.castration,
 		createdAt: serverTimestamp(),
@@ -36,7 +36,9 @@ export const saveAnimal = async (params: CreateAnimal) => {
 	})
 	let photos: string[] = []
 	try {
-		photos = await uploadAnimalImage([params.photo], document.id)
+		if (params.photo) {
+			photos = await uploadAnimalImage([params.photo], document.id)
+		}
 	} catch (error) {
 		console.log(error)
 	}
@@ -92,21 +94,8 @@ export const updateAnimal = async (params: AtLeast<UpdateAnimal, "id">) => {
 			await uploadAnimalImage([params.photo], params.id)
 		}
 	}
-
-	console.log({
-		name: params.name,
-		age: params.age,
-		type: params.type,
-		sex: params.sex,
-		observations: params.observations,
-		available: params.available,
-		castration: params.castration,
-		updatedAt: serverTimestamp(),
-		updatedBy: params.updatedBy,
-	})
 	await updateDoc(doc(db, `animais/${params.id}`), {
 		name: params.name,
-		age: params.age,
 		type: params.type,
 		sex: params.sex,
 		observations: params.observations,
@@ -114,6 +103,7 @@ export const updateAnimal = async (params: AtLeast<UpdateAnimal, "id">) => {
 		castration: params.castration,
 		updatedAt: serverTimestamp(),
 		updatedBy: params.updatedBy,
+		birthDate: params.birthDate ? Timestamp.fromDate(params.birthDate) : undefined,
 	})
 	return true
 }

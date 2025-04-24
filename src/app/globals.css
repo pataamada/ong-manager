@@ -2,31 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-/* styles matine datatable */
-@layer mantine, mantine-datatable;
-
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --background-second: 240 0% 96%;
+    --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 160 84% 39%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 84% 60%;
+    --primary-foreground: 0 85.7% 97.3%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: var(--primary);
-    --ring: 240 5.9% 10%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 72.2% 50.6%;
     --radius: 0.5rem;
     --chart-1: 215 20% 72%;
     --chart-2: 158 75% 53%;
@@ -34,13 +31,13 @@
     --chart-4: 213 94% 68%;
     --chart-5: 0 91% 71%;
     --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-foreground: 0 0% 9%;
+    --sidebar-primary: 0 84% 60%;
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 0 0% 96.1%;
+    --sidebar-accent-foreground: 0 0% 9%;
+    --sidebar-border: 0 0% 89.8%;
+    --sidebar-ring: 0 72.2% 50.6%;
     --chart-rent: #A855F7;
 		--chart-feed: #EF4444;
 		--chart-cleaning: #22C55E;
@@ -50,42 +47,36 @@
 		--chart-internet: #71d4f8;
 		--chart-toys: #F43F5E;
   }
- 
+
   .dark {
-    --background: 240 10% 3.9%;
+    --background: 0 0% 3.9%;
+    --background-second: 0 0% 10%;
     --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
+    --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
+    --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 160 84% 39%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
+    --primary: 0 84% 60%;
+    --primary-foreground: 0 85.7% 97.3%;
+    --secondary: 0 0% 14.9%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 215 20% 72%;
-    --chart-2: 158 75% 53%;
-    --chart-3: 27 96% 61%;
-    --chart-4: 213 94% 68%;
-    --chart-5: 0 91% 71%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 72.2% 50.6%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
   }
 }
+
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Public+Sans:wght@300;400;700&display=swap');
 
 html {
@@ -149,6 +140,7 @@ html {
 .text-paragraph-6 {
   @apply text-[0.75rem] leading-[20px] font-semibold;
 }
+
 @layer base {
   * {
     @apply border-border;
@@ -156,140 +148,4 @@ html {
   body {
     @apply bg-background text-foreground;
   }
-}
-
-/* styles matine datatable */
-.mantine-datatable {
-  background-color: #FFF;
-}
-.mantine-Text-root {
-  color: var(--Gray-900, #5E6777);
-}
-.mantine-ScrollArea-viewport {
-  min-height: 450px;
-}
-.mantine-datatable-pagination{
-  padding-top: 20px !important;
-  padding-bottom: 0px !important;
-}
-.mantine-datatable-pagination .m_4081bf90.mantine-Group-root{
-  margin-right: auto;
-  @media (max-width: 767px) {
-      margin-right: 0px;
-  }
-}
-/* button pagination */
-.mantine-Pagination-control {
-  border-radius: 8px;
-  background-color: #E8EAEC;
-      color: #000;   
-  &[data-active = true] {
-      background-color: #09090B;
-      color: #fff;    
-  }
-  &[data-disabled] {
-      background-color: #C2C5CB;
-      color: black;  
-  }
-}
-/* button pagination dots */
-.mantine-Pagination-dots {
-  border-radius: 8px;
-  background: var(--General-Neutral-White, #FFF);
-  background-color: #E8EAEC;
-  color: black;  
-}
-/* button select per page */
-.mantine-focus-auto.mantine-active.m_77c9d27d.mantine-Button-root.m_87cf2631.mantine-UnstyledButton-root {
-  color: #000;
-  border-radius: 8px;
-  border: 1px solid var(--Gray-400, #C2C5CB);
-  background: var(--General-Neutral-White, #FFF);
-  .m_811560b9.mantine-Button-label {
-      margin-right: 8px;
-  }
-}
-/* dropdown select per page */
-.m_38a85659.mantine-Menu-dropdown.m_dc9b7c9f {
-  background-color: #fff;
-  border: 1px solid var(--Gray-400, #C2C5CB);
-  padding: 8px;
-  button {
-      padding: 4px
-  }
-  button[data-disabled = true] {
-      background-color: #09090B;
-      color: #fff;   
-      
-      .mantine-Text-root {
-          color: #fff;
-      }
-  }
-  button:hover {
-      background-color: #09090B;
-      
-      .mantine-Text-root {
-          color: #fff;
-      }
-  }
-}input[type="date"]:not(.has-value):before{
-  color: lightgray;
-  content: attr(placeholder);
-}
-
-.text-h1 {
-  @apply font-bold text-[4rem] leading-[72px];
-}
-
-.text-h2 {
-  @apply font-bold text-[3.25rem] leading-[60px];
-}
-
-
-.text-h3 {
-  @apply font-bold text-[2.625rem] leading-[50px];
-}
-
-.text-h4 {
-  @apply font-bold text-[2rem] leading-[40px];
-}
-
-.text-h5 {
-  @apply font-bold text-[1.5rem] leading-[32px];
-}
-
-.text-subtitle {
-  @apply text-[1.75rem] leading-[36px];
-}
-
-.text-subtitle-2 {
-  @apply text-[1.25rem] leading-[28px];
-}
-
-.text-subtitle-3 {
-  @apply text-[1rem] leading-[24px];
-}
-
-.text-paragraph {
-  @apply text-[1rem] leading-[24px];
-}
-
-.text-paragraph-2 {
-  @apply text-[1rem] leading-[24px] font-semibold;
-}
-
-.text-paragraph-3 {
-  @apply text-[0.875rem] leading-[22px];
-}
-
-.text-paragraph-4 {
-  @apply text-[0.875rem] leading-[22px] font-semibold;
-}
-
-.text-paragraph-5 {
-  @apply text-[0.75rem] leading-[20px];
-}
-
-.text-paragraph-6 {
-  @apply text-[0.75rem] leading-[20px] font-semibold;
 }

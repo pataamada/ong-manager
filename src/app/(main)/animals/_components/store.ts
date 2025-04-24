@@ -2,16 +2,16 @@
 import type { Animal } from "@/models/animal.model"
 import { atom } from "jotai"
 
+export type FilterType = Partial<{
+	type: string
+	sex: string
+	maxAge: number
+	available: boolean
+	neutered: boolean
+}>
+
 export const filterDrawerAtom = atom(false)
-export const filtersAtom = atom<
-	Partial<{
-		type: string
-		sex: string
-		maxAge: number
-		available: boolean
-		neutered: boolean
-	}>
->({})
+export const filtersAtom = atom<FilterType>({})
 export const searchFilterAtom = atom<string>("")
 export const modalAnimalAtom = atom(false)
 export const updateAnimalInfo = atom<AtLeast<Animal, "id" | "updatedBy"> | null>(null)

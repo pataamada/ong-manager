@@ -31,6 +31,8 @@ import { createAnimalModalAtom, updateAnimalInfo } from "../../store"
 import { useCreateAnimal, useUpdateAnimal } from "../../mutations"
 import { Step } from "../../step"
 import { When } from "@/components/when"
+import { DatePicker } from "@/components/custom-ui/date-picker"
+import { Timestamp } from "firebase/firestore"
 
 const steps = {
 	info: [
@@ -41,11 +43,9 @@ const steps = {
 
 const Step1CreateModalSchema = z.object({
 	name: z.string().min(2, "Mínimo de 2 caracteres"),
-	age: z.string({ message: "Idade é obrigatória" }).refine(value => !/[^0-9]/g.test(value), {
-		message: "Apenas valores inteiros são permitidos",
-	}),
+	birthDate: z.date(),
 	observations: z.string().optional(),
-	image: z.union(
+	photo: z.union(
 		[
 			z
 				.instanceof(File, { message: "Imagem é obrigatória" })
@@ -81,9 +81,9 @@ export function AnimalForm() {
 		resolver: zodResolver(Step1CreateModalSchema),
 		defaultValues: {
 			name: data?.name || "",
-			age: String(data?.age || ""),
 			observations: data?.observations || "",
-			image: data?.photo,
+			photo: data?.photo,
+			birthDate: data?.birthDate ? new Timestamp(data?.birthDate.seconds, data?.birthDate.nanoseconds).toDate() : undefined,
 		},
 	})
 
@@ -111,21 +111,22 @@ export function AnimalForm() {
 				updatedBy: user?.user.displayName,
 				...formData,
 				available: formData.available !== undefined ? formData.available : data.available,
-				age: Number(formData.age),
+				photo: formData.photo instanceof File ? formData.photo : undefined,
+				birthDate: formData.birthDate,
 			})
 			setOpen(false)
 			return
 		}
 		await createAnimal({
-			age: Number(formData.age),
 			name: formData.name,
 			available: formData.available !== undefined ? formData.available : false,
 			castration: formData.castration !== undefined ? formData.castration : false,
 			observations: formData.observations || "",
-			photo: formData.image instanceof File ? formData.image : undefined,
+			photo: formData.photo instanceof File ? formData.photo : undefined,
 			sex: formData.sex,
 			type: formData.type,
 			updatedBy: user?.user.displayName,
+			birthDate: formData.birthDate,
 		})
 		setOpen(false)
 	}
@@ -172,7 +173,7 @@ export function AnimalForm() {
 					<form className="space-y-4">
 						<FormField
 							control={formStep1CreateModalSchema.control}
-							name="image"
+							name="photo"
 							render={({ field }) => (
 								<FormItem className="col-span-4 flex items-center justify-center">
 									<FormControl>
@@ -184,7 +185,7 @@ export function AnimalForm() {
 											onChange={field.onChange}
 											onRemoveImage={() =>
 												formStep1CreateModalSchema.setValue(
-													"image",
+													"photo",
 													undefined,
 												)
 											}
@@ -199,7 +200,10 @@ export function AnimalForm() {
 							name="name"
 							render={({ field }) => (
 								<FormItem className="col-span-4">
-									<FormLabel>Nome</FormLabel>
+									<FormLabel className="flex gap-1">
+										<span className="text-red-500">*</span>
+										Nome
+									</FormLabel>
 									<FormControl>
 										<Input placeholder="Digite o nome completo" {...field} />
 									</FormControl>
@@ -209,13 +213,22 @@ export function AnimalForm() {
 						/>
 						<FormField
 							control={formStep1CreateModalSchema.control}
-							name="age"
+							name="birthDate"
 							render={({ field }) => (
-								<FormItem className="col-span-4">
-									<FormLabel>Idade</FormLabel>
+								<FormItem className="flex flex-col">
+									<FormLabel className="flex gap-1">
+										<span className="text-red-500">*</span>
+										Data de aniversário
+									</FormLabel>
 									<FormControl>
-										<Input placeholder="Ex: 2" {...field} />
+										<DatePicker
+											value={field.value}
+											onChange={field.onChange}
+											className="w-full"
+											placeholder="Selecione uma data"
+										/>
 									</FormControl>
+
 									<FormMessage />
 								</FormItem>
 							)}
@@ -266,7 +279,10 @@ export function AnimalForm() {
 								name="type"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Tipo</FormLabel>
+										<FormLabel className="flex gap-1">
+											<span className="text-red-500">*</span>
+											Tipo
+										</FormLabel>
 										<Select
 											onValueChange={field.onChange}
 											defaultValue={field.value}
@@ -292,7 +308,10 @@ export function AnimalForm() {
 								name="sex"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Sexo</FormLabel>
+										<FormLabel className="flex gap-1">
+											<span className="text-red-500">*</span>
+											Sexo
+										</FormLabel>
 										<Select
 											onValueChange={field.onChange}
 											defaultValue={field.value}

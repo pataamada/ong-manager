@@ -41,7 +41,7 @@ export const getColumns = (
 						<AvatarImage src={row.original.photo} />
 						<AvatarFallback
 							className={cn(
-								isCurrentUser(row) && "bg-emerald-500 text-white font-bold",
+								isCurrentUser(row) && "bg-primary text-white font-bold",
 							)}
 						>
 							{initialLetters(row.original.name)}

@@ -24,7 +24,7 @@ export default function BreadCrumb() {
 						className="text-2xl font-bold text-black"
 						href={currentRoute?.href}
 					>
-						{currentRoute?.alias ?? "Nome da roda não definido"}
+						{currentRoute?.alias ?? "Nome da rota não definido"}
 					</BreadcrumbLink>
 				</BreadcrumbItem>
 				{pathSegments.map((_, index) => {

@@ -47,7 +47,7 @@ export function ConfirmDeleteAlert({
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
-					<AlertDialogCancel onClick={console.log}>Cancel</AlertDialogCancel>
+					<AlertDialogCancel>Cancel</AlertDialogCancel>
 					<Button onClick={onSubmit} disabled={loading} variant={"destructive"}>
 						{loading ? "Apagando..." : "Excluir"}
 					</Button>

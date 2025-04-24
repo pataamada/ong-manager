@@ -32,13 +32,11 @@ export function TableDonations({ data }: TableProps) {
 			accessorKey: "animal",
 			header: "Animal",
 			cell: ({ row }) => {
-				console.log(row, "row rowrowrow")
 				const { animalId, avatar } = row.original
-
 				return (
 					<div className="flex items-center gap-2">
 						<Image
-							src={avatar || "/finance/dog.svg"} // Imagem padrão.
+							src={avatar || "/finance/dog.svg"}
 							width={40}
 							height={40}
 							alt="animal avatar"
@@ -112,12 +110,6 @@ export function TableDonations({ data }: TableProps) {
 
 	return (
 		<div className="flex flex-col gap-4">
-			{/* <Input
-        placeholder="Filter by category..."
-        value={filter}
-        onChange={(e) => setFilter(e.target.value)}
-        className="max-w-md"
-      /> */}
 			<Table>
 				<TableHeader>
 					{table.getHeaderGroups().map(headerGroup => (

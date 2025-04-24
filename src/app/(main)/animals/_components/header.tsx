@@ -10,7 +10,7 @@ import {
 	updateAnimalInfo,
 } from "./store"
 
-export function Header() {
+export function Header({ isAdmin = true }: { isAdmin?: boolean }) {
 	const setFilterDrawerOpen = useSetAtom(filterDrawerAtom)
 	const setCreateOpen = useSetAtom(createAnimalModalAtom)
 	const [searchValue, setSearchValue] = useAtom(searchFilterAtom)
@@ -28,15 +28,17 @@ export function Header() {
 			<Button variant="outline" size="icon" onClick={() => setFilterDrawerOpen(true)}>
 				<Filter className="h-4 w-4 text-black" />
 			</Button>
-			<Button
-				onClick={() => {
-					setUpdateInfo(null)
-					setCreateOpen(true)
-				}}
-			>
-				<Plus className="h-4 w-4 mr-2 text-white" />
-				Adicionar
-			</Button>
+			{isAdmin && (
+				<Button
+					onClick={() => {
+						setUpdateInfo(null)
+						setCreateOpen(true)
+					}}
+				>
+					<Plus className="h-4 w-4 mr-2 text-white" />
+					Adicionar
+				</Button>
+			)}
 		</div>
 	)
 }

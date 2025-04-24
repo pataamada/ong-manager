@@ -115,7 +115,7 @@ export default function FormRegister() {
 			>
 				<div className="flex flex-col items-center gap-2">
 					<h2 className="text-center text-h5">Apadrinhe seu animal</h2>
-					<h3 className="text-center text-subtitle-2">Cadastre-se na plataforma</h3>
+					<h3 className="text-center text-subtitle-2">Cadastre-se na plataforma Pata Amada</h3>
 				</div>
 
 				<FormField
@@ -230,14 +230,14 @@ export default function FormRegister() {
 						</FormItem>
 					)}
 				/>
-				<Button className="w-full" variant="success" type="submit" disabled={isPending}>
+				<Button variant="default" className="w-full bg-red-600 hover:bg-red-700 text-white" type="submit" disabled={isPending}>
 					Cadastrar
 				</Button>
 				<div className="text-center mt-4">
 					<span className="text-sm font-normal">Já tem uma conta?</span>
 					<Link
 						href="/login"
-						className="text-sm font-semibold text-primary hover:text-primary/80"
+						className="text-sm font-semibold text-red-600 hover:text-red-500 ml-1"
 					>
 						Entrar
 					</Link>

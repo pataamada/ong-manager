@@ -1,17 +1,11 @@
-import AnimalsList from "./_components/animals-list"
-import { Header } from "./_components/header"
-import { CreateAnimalModal } from "./_components/modals/create-animal"
-import { DeleteAnimalModal } from "./_components/modals/delete-animal"
-import { FilterDrawer } from "./_components/modals/filter"
+import { Suspense } from "react"
+import { AnimalsComponent } from "./_components"
+import { Loader2 } from "lucide-react"
 
 export default function Animals() {
 	return (
-		<div className="w-full flex flex-col bg-white rounded-lg p-6 gap-6 min-h-full">
-			<Header />
-			<AnimalsList />
-			<FilterDrawer />
-			<CreateAnimalModal />
-			<DeleteAnimalModal />
-		</div>
+		<Suspense fallback={<Loader2 className="h-6 w-6 animate-spin" />}>
+			<AnimalsComponent />
+		</Suspense>
 	)
 }

@@ -12,10 +12,10 @@ export enum AnimalSex {
 export interface Animal {
 	id: string
 	name: string
-	age?: number
 	type: AnimalType
 	sex: AnimalSex
-	photo: string
+	photo?: string
+	birthDate?: Timestamp
 	observations?: string
 	available: boolean
 	castration: boolean
@@ -24,10 +24,12 @@ export interface Animal {
 	updatedBy: string
 }
 
-export type CreateAnimal = Omit<Animal, "id" | "createdAt" | "updatedAt" | "photo"> & {
-	photo: File
+export type CreateAnimal = Omit<Animal, "id" | "createdAt" | "updatedAt" | "photo" | "birthDate"> & {
+	photo?: File
+	birthDate?: Date
 }
 
-export type UpdateAnimal = Omit<Animal, "createdAt" | "updatedAt" | "photo"> & {
-	photo: File
+export type UpdateAnimal = Omit<Animal, "createdAt" | "updatedAt" | "photo" | "birthDate"> & {
+	photo?: File
+	birthDate?: Date
 }

@@ -3,7 +3,7 @@ import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/r
 import { AnimalSex, AnimalType, type Animal } from "@/models/animal.model"
 import { saveAnimalAction } from "@/actions/animal/saveAnimal"
 import { z } from "zod"
-import type { Timestamp } from "firebase/firestore"
+import { Timestamp } from "firebase/firestore"
 import { deleteAnimalAction } from "@/actions/animal/deleteAnimal"
 import type { Toast } from "@/hooks/use-toast"
 import { updateAnimalAction } from "@/actions/animal/updateAnimal"
@@ -30,12 +30,12 @@ export const useGetAnimals = () => {
 
 const createAnimalSchema = z.object({
 	name: z.string(),
-	age: z.number(),
 	type: z.nativeEnum(AnimalType),
 	sex: z.nativeEnum(AnimalSex),
 	observations: z.string(),
 	available: z.boolean(),
 	castration: z.boolean(),
+	birthDate: z.date().optional(),
 	updatedBy: z.string(),
 	photo: z.instanceof(File).optional(),
 })
@@ -43,7 +43,6 @@ const createAnimalSchema = z.object({
 const updateAnimalSchema = z.object({
 	id: z.string(),
 	name: z.string().optional(),
-	age: z.number().optional(),
 	type: z.nativeEnum(AnimalType).optional(),
 	sex: z.nativeEnum(AnimalSex).optional(),
 	observations: z.string().optional(),
@@ -51,6 +50,7 @@ const updateAnimalSchema = z.object({
 	castration: z.boolean().optional(),
 	updatedBy: z.string(),
 	photo: z.instanceof(File).optional(),
+	birthDate: z.date().optional(),
 })
 
 export const useCreateAnimal = () => {
@@ -94,6 +94,7 @@ export const useCreateAnimal = () => {
 				createdAt: parsedData.createdAt,
 				updatedAt: parsedData.updatedAt,
 				updatedBy: parsedData.updatedBy,
+				birthDate: variables.birthDate ? Timestamp.fromDate(variables.birthDate) : undefined,
 			}
 			if (previousAnimals) {
 				const newAnimals: Animal[] = [animal, ...previousAnimals]
@@ -166,7 +167,6 @@ export const useUpdateAnimal = () => {
 						return {
 							...animal,
 							name: variables?.name || animal.name,
-							age: variables?.age || animal.age,
 							type: variables?.type || animal.type,
 							sex: variables?.sex || animal.sex,
 							observations: variables?.observations || animal.observations,
@@ -179,6 +179,7 @@ export const useUpdateAnimal = () => {
 									? variables.castration
 									: animal.castration,
 							updatedBy: variables?.updatedBy || animal.updatedBy,
+							birthDate: variables?.birthDate ? Timestamp.fromDate(variables.birthDate) : undefined,
 						}
 					}
 					return animal

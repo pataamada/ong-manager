@@ -10,7 +10,7 @@ interface ICard {
 	subtitle: string
 	className?: string
 	textColor?: string
-	showButton?: boolean
+	redirectTo?: string
 	textPosition?: "top" | "bottom"
 	childrenPosition?: "top" | "bottom"
 }
@@ -21,7 +21,7 @@ export function Card({
 	subtitle,
 	className,
 	textColor = "text-black",
-	showButton = false,
+	redirectTo,
 	textPosition = "top",
 	childrenPosition = "bottom",
 }: ICard) {
@@ -50,8 +50,8 @@ export function Card({
 					<h2 className="text-base font-normal">{subtitle}</h2>
 				</div>
 
-				{showButton && (
-					<Link href="/finance">
+				{redirectTo && (
+					<Link href={redirectTo}>
 						<Button
 							variant="link"
 							className="bg-foreground text-white font-normal flex items-center gap-2 p-2 sm:p-4"

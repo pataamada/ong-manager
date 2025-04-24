@@ -23,6 +23,7 @@ import { useRouter } from "nextjs-toploader/app"
 import { UserRoles } from "@/models/user.model"
 import { PasswordInput } from "@/components/custom-ui/password-input"
 import { useSearchParams } from "next/navigation"
+import { useAuth } from "@/hooks/use-auth"
 
 // zod schema validation
 const formLoginSchema = z.object({
@@ -34,6 +35,7 @@ const formLoginSchema = z.object({
 export default function FormLogin() {
 	const router = useRouter()
 	const params = useSearchParams()
+	const { setUser } = useAuth()
 	const form = useForm<z.infer<typeof formLoginSchema>>({
 		resolver: zodResolver(formLoginSchema),
 		defaultValues: {
@@ -55,10 +57,13 @@ export default function FormLogin() {
 			return
 		}
 		toast({
-			title: "Bem vindo ao Cãodomínio",
+			title: "Bem vindo ao Pata Amada",
 			description: "Acompanhe/gerencia a ong",
 			variant: "default",
 		})
+		if (result?.data?.user) {
+			setUser(result?.data?.user)
+		}
 		const urlToRedirect = params.get("from")
 		if (urlToRedirect) {
 			router.replace(urlToRedirect)
@@ -68,90 +73,69 @@ export default function FormLogin() {
 	}
 	return (
 		<Form {...form}>
-			<form
-				onSubmit={form.handleSubmit(onSubmit)}
-				className="gap-6 w-full flex flex-col md:max-w-[400px] my-auto mx-auto"
-			>
-				<div className="flex flex-col items-center gap-2 mx-auto">
-					<h5 className="text-center text-h5">Entre em sua conta</h5>
-					<p className="text-center text-subtitle-2">Bem-vindo de volta</p>
-				</div>
+		<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-[400px] px-8 sm:p-0">
+			<div className="flex flex-col items-center gap-2 mx-auto">
+				<h5 className="text-center text-h5">Entre em sua conta</h5>
+				<p className="text-center text-subtitle-2">Bem-vindo de volta</p>
+			</div>
 
+			<FormField
+				control={form.control}
+				name="email"
+				render={({ field }) => (
+					<FormItem>
+						<FormLabel>Email</FormLabel>
+						<FormControl>
+							<Input placeholder="Digite seu email" type="email" {...field} />
+						</FormControl>
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
+
+			<FormField
+				control={form.control}
+				name="password"
+				render={({ field }) => (
+					<FormItem>
+						<FormLabel>Senha</FormLabel>
+						<FormControl>
+							<PasswordInput placeholder="Digite sua senha" {...field} />
+						</FormControl>
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
+
+			<div className="flex flex-row justify-between gap-4">
 				<FormField
 					control={form.control}
-					name="email"
+					name="rememberMe"
 					render={({ field }) => (
-						<FormItem>
-							<FormLabel className="font-semibold">Email</FormLabel>
+						<FormItem className="flex items-center gap-2 space-y-0">
 							<FormControl>
-								<Input id="email" placeholder="Digite seu email" {...field} />
+								<Checkbox checked={field.value} onCheckedChange={field.onChange} />
 							</FormControl>
-							<FormMessage />
+							<FormLabel className="mb-7 text-paragraph-4">Lembrar-se</FormLabel>
 						</FormItem>
 					)}
 				/>
+				<Link href="/forgot-password" className="underline text-zinc-400 text-paragraph-3">
+					Esqueceu a senha?
+				</Link>
+			</div>
 
-				<FormField
-					control={form.control}
-					name="password"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel className="font-semibold">Senha</FormLabel>
-							<FormControl>
-								<PasswordInput
-									id="password"
-									placeholder="Digite sua senha"
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<div className="flex items-center justify-between">
-					<FormField
-						control={form.control}
-						name="rememberMe"
-						render={({ field }) => (
-							<FormItem className="flex items-center space-y-0">
-								<FormControl>
-									<Checkbox
-										checked={field.value}
-										onCheckedChange={field.onChange}
-									/>
-								</FormControl>
-								<FormLabel
-									htmlFor="rememberMe"
-									className="ml-2 block text-sm font-semibold"
-								>
-									Lembrar-se
-								</FormLabel>
-							</FormItem>
-						)}
-					/>
-					<div className="text-sm">
-						<Link
-							href="/forgot-password"
-							className="font-normal text-emerald-600 hover:text-emerald-500 underline"
-						>
-							Esqueceu a senha?
-						</Link>
-					</div>
-				</div>
-				<Button variant="success" className="w-full" type="submit" disabled={isPending}>
-					{isPending ? "Entrando..." : "Entrar"}
-				</Button>
-
-				<div className="text-center">
-					<span className="text-sm font-normal">Ainda não tem uma conta? </span>
-					<Link
-						href="/register"
-						className="text-sm font-bold text-emerald-600 hover:text-emerald-500 no-underline"
-					>
-						Cadastre-se
-					</Link>
-				</div>
-			</form>
-		</Form>
+			<Button variant="default" className="w-full" type="submit" disabled={isPending}>
+				{isPending ? "Entrando..." : "Entrar"}
+			</Button>
+			<p className="text-zinc-400 text-center text-paragraph-3">
+				Ainda não tem uma conta?
+				<Link className="text-red-700 text-paragraph-4" href="/register">
+					{" "}
+					Cadastre-se
+				</Link>
+			</p>
+		</form>
+	</Form>
 	)
 }

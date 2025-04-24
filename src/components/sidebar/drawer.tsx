@@ -27,16 +27,19 @@ export function LeftDrawer() {
 					<DrawerTrigger>
 						<Menu className="size-6" />
 					</DrawerTrigger>
-					<Image src="/logo-h.svg" width={150} height={40} alt="Pata Amada Logo" />
+					<Image src="/logo_black.svg" width={120} height={40} alt="Pata Amada Logo" />
 				</div>
 				<DrawerContent className="min-w-[250px] h-screen top-0 left-0 right-auto mt-0 rounded-none p-4">
 					<DialogTitle className="sr-only">Menu lateral</DialogTitle>
 					<div className="flex gap-2">
 						<UserMenu
+							user={{
+								email: user?.user.email,
+								name: user?.user.displayName,
+								photo: user?.user.photoURL,
+							}}
 							className="mb-4"
-							email={user?.user.email}
 							onLogout={handleLogout}
-							photo={user?.user.photoURL}
 							side="bottom"
 						/>
 						<div className="flex flex-col">

@@ -5,6 +5,7 @@ import { signInWithEmailAndPassword } from "firebase/auth"
 import { auth } from "@/lib/firebase/firebase-secret"
 import { cookies } from "next/headers"
 import { revalidatePath } from "next/cache"
+import { getCurrentUser } from "@/lib/firebase/firebase-admin"
 
 const schema = z.object({
 	email: z.string().email(),
@@ -26,7 +27,9 @@ export const login = actionClient
 			priority: "high",
 		})
 		revalidatePath("/", "layout")
+		const currentUser = await getCurrentUser()
 		return {
+			user: currentUser,
 			role: tokenData.claims.role,
 		}
 	})

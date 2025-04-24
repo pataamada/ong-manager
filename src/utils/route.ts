@@ -24,4 +24,8 @@ export const routesAliasesList: Route[] = [
 		alias: "Agenda",
 		href: "/schedules",
 	},
+	{
+		alias: "Configurações",
+		href: "/settings",
+	},
 ]

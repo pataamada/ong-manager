@@ -6,12 +6,12 @@ import { AnimalSex, AnimalType } from "@/models/animal.model"
 import { zfd } from "zod-form-data"
 
 const fileSchema = zfd.formData({
-	file: zfd.file(),
+	file: zfd.file().optional(),
 })
 
 const schema = z.object({
 	name: z.string(),
-	age: z.number(),
+	birthDate: z.date().optional(),
 	type: z.nativeEnum(AnimalType),
 	sex: z.nativeEnum(AnimalSex),
 	observations: z.string(),
@@ -24,6 +24,6 @@ export const saveAnimalAction = actionClient
 	.schema(fileSchema)
 	.bindArgsSchemas([schema])
 	.action(async ({ parsedInput: { file }, bindArgsParsedInputs: [rest] }) => {
-		const createdAnimal = await saveAnimal({ photo: file, ...rest })
+		const createdAnimal = await saveAnimal({ photo: file instanceof File ? file : undefined, ...rest })
 		return createdAnimal
 	})

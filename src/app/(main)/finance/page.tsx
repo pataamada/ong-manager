@@ -11,10 +11,14 @@ import { Totalizer } from "./_components/Totalizer"
 import { NewRegister } from "./_components/modals/new-register"
 import { TableDonations } from "./_components/tables/TableDonations"
 import { TableExpense } from "./_components/tables/TableExpense"
+import { useSearchParams, useRouter } from "next/navigation"
 
 export default function Finance() {
 	const [isModalNewRegister, setIsModalNewRegister] = useState(false)
-	const [filterType, setFilterType] = useState<"all" | "donations" | "expense">("donations")
+	const searchParams = useSearchParams();
+	const router = useRouter();
+	const filterFromUrl = searchParams.get("filter") as "donations" | "expense" | null;
+	const [filterType, setFilterType] = useState<"donations" | "expense">(filterFromUrl ?? "donations")
 	const [donations, setDonations] = useState<Donation[]>([])
 	const [expenses, setExpenses] = useState<Expense[]>([])
 	const [isLoading, setIsLoading] = useState(true)
@@ -54,6 +58,17 @@ export default function Finance() {
 		getAllExpenses()
 	}, [])
 
+	useEffect(() => {
+		if (filterFromUrl && filterFromUrl !== filterType) {
+			setFilterType(filterFromUrl);
+		}
+	}, [filterFromUrl]);
+
+	const handleSetFilterType = (type: "donations" | "expense") => {
+		router.replace(`?filter=${type}`);
+		setFilterType(type);
+	};
+
 	return (
 		<div>
 			{isModalNewRegister && (
@@ -92,7 +107,7 @@ export default function Finance() {
 					<div className="flex w-full gap-4 flex-wrap lg:flex-nowrap">
 						<div className="flex p-[5px] rounded-[6px] bg-[#F4F4F5]">
 							<div
-								onClick={() => setFilterType("donations")}
+								onClick={() => handleSetFilterType("donations")}
 								className={`flex justify-center items-center rounded-[3px] px-3 h-[34px] hover:cursor-pointer ${
 									filterType === "donations" ? "bg-[#FFFFFF]" : "bg-[#F4F4F5]"
 								}`}
@@ -100,7 +115,7 @@ export default function Finance() {
 								<div className="font-semibold text-sm text-[##71717A]">Doações</div>
 							</div>
 							<div
-								onClick={() => setFilterType("expense")}
+								onClick={() => handleSetFilterType("expense")}
 								className={`flex justify-center items-center rounded-[3px] px-3 h-[34px] hover:cursor-pointer ${
 									filterType === "expense" ? "bg-[#FFFFFF]" : "bg-[#F4F4F5]"
 								}`}

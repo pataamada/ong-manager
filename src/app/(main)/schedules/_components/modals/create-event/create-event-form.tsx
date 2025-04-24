@@ -4,7 +4,6 @@ import {
 } from "@/app/(main)/schedules/_components/modals/create-event/schemas"
 import { ImageUpload } from "@/components/custom-ui/image-upload"
 import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
 import {
 	Form,
 	FormControl,
@@ -14,17 +13,12 @@ import {
 	FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Textarea } from "@/components/ui/textarea"
-import { When } from "@/components/when"
 import { useAuth } from "@/hooks/use-auth"
-import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { format } from "date-fns"
-import { ptBR } from "date-fns/locale"
-import { CalendarIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { useCreateEvent } from "../../mutations/useEvents"
+import { DateTimePicker } from "@/components/custom-ui/date-time-picker"
 
 export function CreateEventForm({ setOpen }: { setOpen: (value: boolean) => void }) {
 	const { isPending, mutateAsync } = useCreateEvent()
@@ -34,6 +28,7 @@ export function CreateEventForm({ setOpen }: { setOpen: (value: boolean) => void
 		defaultValues: {
 			title: "",
 			description: "",
+			date: new Date().toISOString(),
 		},
 	})
 
@@ -81,50 +76,10 @@ export function CreateEventForm({ setOpen }: { setOpen: (value: boolean) => void
 								<span className="text-red-500">*</span>
 								Data do evento
 							</FormLabel>
-							<Popover>
-								<PopoverTrigger asChild>
-									<FormControl>
-										<Button
-											variant={"outline"}
-											className={cn(
-												"w-full pl-3 text-left font-normal",
-												!field.value && "text-muted-foreground",
-											)}
-										>
-											<span className="flex w-full justify-start items-center">
-												<When
-													condition={field.value}
-													fallback={
-														<span className="mr-auto">
-															Selecionar Data
-														</span>
-													}
-												>
-													<span className="mr-auto">
-														{format(field.value || new Date(), "PPP", {
-															locale: ptBR,
-														})}
-													</span>
-												</When>
-												<CalendarIcon className="h-4 w-4 opacity-50" />
-											</span>
-										</Button>
-									</FormControl>
-								</PopoverTrigger>
-								<PopoverContent className="w-auto p-0" align="start">
-									<Calendar
-										mode="single"
-										selected={new Date(field.value)}
-										onSelect={date => field.onChange(date?.toISOString() ?? "")}
-										disabled={date => {
-											const today = new Date()
-											today.setHours(0, 0, 0, 0)
-											return date < today
-										}}
-										initialFocus
-									/>
-								</PopoverContent>
-							</Popover>
+							<DateTimePicker
+								date={field.value}
+								{...field}
+							/>
 							<FormMessage />
 						</FormItem>
 					)}

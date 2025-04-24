@@ -10,20 +10,26 @@ import {
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Input } from "@/components/ui/input"
-import { useAtom, useSetAtom } from "jotai"
-import { filterDrawerAtom, filtersAtom } from "../store"
+import { useAtom } from "jotai"
+import { filterDrawerAtom, filtersAtom, type FilterType } from "../store"
+import { useEffect, useState } from "react"
+import { AnimalSex, AnimalType } from "@/models/animal.model"
 
 export function FilterDrawer() {
 	const [open, setOpen] = useAtom(filterDrawerAtom)
-	const [localFilters, setLocalFilters] = useAtom(filtersAtom)
-	const setFilters = useSetAtom(filtersAtom)
+	const [filters, setFilters] = useAtom(filtersAtom)
+	const [localFilters, setLocalFilters] = useState<FilterType>({})
 	const handleApplyFilters = () => {
 		setFilters(localFilters)
+		setOpen(false)
 	}
 	const handleClearFilters = () => {
 		setFilters({})
+		setOpen(false)
 	}
-
+	useEffect(() => {
+		setLocalFilters(filters)
+	}, [filters])
 	return (
 		<Drawer open={open} onOpenChange={setOpen}>
 			<DrawerContent side="right">
@@ -42,8 +48,8 @@ export function FilterDrawer() {
 									<SelectValue placeholder="Selecionar tipo" />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="Gato">Gato</SelectItem>
-									<SelectItem value="Cachorro">Cachorro</SelectItem>
+									<SelectItem value={AnimalType.Cat}>Gato</SelectItem>
+									<SelectItem value={AnimalType.Dog}>Cachorro</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>
@@ -60,8 +66,8 @@ export function FilterDrawer() {
 									<SelectValue placeholder="Selecionar sexo" />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="Macho">Macho</SelectItem>
-									<SelectItem value="Fêmea">Fêmea</SelectItem>
+									<SelectItem value={AnimalSex.M}>Macho</SelectItem>
+									<SelectItem value={AnimalSex.F}>Fêmea</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>
@@ -117,7 +123,7 @@ export function FilterDrawer() {
 
 				<div className="flex justify-end gap-2 mt-auto">
 					<Button variant="outline" onClick={handleClearFilters}>
-						Cancelar
+						Limpar
 					</Button>
 					<Button variant="default" onClick={handleApplyFilters}>
 						Filtrar
