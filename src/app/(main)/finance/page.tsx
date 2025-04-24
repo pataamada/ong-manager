@@ -12,165 +12,175 @@ import { NewRegister } from "./_components/modals/new-register"
 import { TableDonations } from "./_components/tables/TableDonations"
 import { TableExpense } from "./_components/tables/TableExpense"
 import { useSearchParams, useRouter } from "next/navigation"
+import { Suspense } from "react"
+import { Loader2 } from "lucide-react"
 
-export default function Finance() {
-	const [isModalNewRegister, setIsModalNewRegister] = useState(false)
-	const searchParams = useSearchParams();
-	const router = useRouter();
-	const filterFromUrl = searchParams.get("filter") as "donations" | "expense" | null;
-	const [filterType, setFilterType] = useState<"donations" | "expense">(filterFromUrl ?? "donations")
-	const [donations, setDonations] = useState<Donation[]>([])
-	const [expenses, setExpenses] = useState<Expense[]>([])
-	const [isLoading, setIsLoading] = useState(true)
+export default function FinancePage() {
+  return (
+    <Suspense fallback={<Loader2 className="h-6 w-6 animate-spin" />}>
+      <Finance />
+    </Suspense>
+  )
+}
 
-	const getAllDonations = async () => {
-		setIsLoading(true)
-		try {
-			const response = await findDonationsAction()
-			if (response?.data) {
-				setDonations(response.data)
-			}
-		} catch (error) {
-			console.log(error, "error")
-		}
-		setIsLoading(false)
-	}
-	const getAllExpenses = async () => {
-		setIsLoading(true)
-		try {
-			const response = await findExpensesAction()
-			if (response?.data) {
-				setExpenses(response.data)
-			}
-		} catch (error) {
-			console.log(error, "error")
-		}
-		setIsLoading(false)
-	}
+function Finance() {
+  const [isModalNewRegister, setIsModalNewRegister] = useState(false)
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const filterFromUrl = searchParams.get("filter") as "donations" | "expense" | null;
+  const [filterType, setFilterType] = useState<"donations" | "expense">(filterFromUrl ?? "donations")
+  const [donations, setDonations] = useState<Donation[]>([])
+  const [expenses, setExpenses] = useState<Expense[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-	const onReloadData = async () => {
-		await getAllDonations()
-		await getAllExpenses()
-	}
+  const getAllDonations = async () => {
+    setIsLoading(true)
+    try {
+      const response = await findDonationsAction()
+      if (response?.data) {
+        setDonations(response.data)
+      }
+    } catch (error) {
+      console.log(error, "error")
+    }
+    setIsLoading(false)
+  }
+  const getAllExpenses = async () => {
+    setIsLoading(true)
+    try {
+      const response = await findExpensesAction()
+      if (response?.data) {
+        setExpenses(response.data)
+      }
+    } catch (error) {
+      console.log(error, "error")
+    }
+    setIsLoading(false)
+  }
 
-	useEffect(() => {
-		getAllDonations()
-		getAllExpenses()
-	}, [])
+  const onReloadData = async () => {
+    await getAllDonations()
+    await getAllExpenses()
+  }
 
-	useEffect(() => {
-		if (filterFromUrl && filterFromUrl !== filterType) {
-			setFilterType(filterFromUrl);
-		}
-	}, [filterFromUrl]);
+  useEffect(() => {
+    getAllDonations()
+    getAllExpenses()
+  }, [])
 
-	const handleSetFilterType = (type: "donations" | "expense") => {
-		router.replace(`?filter=${type}`);
-		setFilterType(type);
-	};
+  useEffect(() => {
+    if (filterFromUrl && filterFromUrl !== filterType) {
+      setFilterType(filterFromUrl);
+    }
+  }, [filterFromUrl]);
 
-	return (
-		<div>
-			{isModalNewRegister && (
-				<NewRegister
-					open={isModalNewRegister}
-					onOpenChange={open => setIsModalNewRegister(open)}
-					onReloadData={onReloadData}
-				/>
-			)}
+  const handleSetFilterType = (type: "donations" | "expense") => {
+    router.replace(`?filter=${type}`);
+    setFilterType(type);
+  };
 
-			<div className="flex flex-wrap lg:flex-nowrap gap-4">
-				{[
-					{
-						type: "total",
-						label: "Total",
-						value:
-							donations.reduce((sum, item) => sum + item.value, 0) -
-							expenses.reduce((sum, item) => sum + item.value, 0),
-					},
-					{
-						type: "donations",
-						label: "Doações",
-						value: donations.reduce((sum, item) => sum + item.value, 0),
-					},
-					{
-						type: "expenses",
-						label: "Despesas",
-						value: expenses.reduce((sum, item) => sum + item.value, 0),
-					},
-				].map(i => (
-					<Totalizer key={i.type} type={i.type} label={i.label} value={i.value} />
-				))}
-			</div>
-			<div className="flex w-full mt-4 p-6 gap-4 rounded-lg bg-[#FFFFFF] border border-[#E4E4E7]">
-				<div className="flex flex-col w-full gap-4">
-					<div className="flex w-full gap-4 flex-wrap lg:flex-nowrap">
-						<div className="flex p-[5px] rounded-[6px] bg-[#F4F4F5]">
-							<div
-								onClick={() => handleSetFilterType("donations")}
-								className={`flex justify-center items-center rounded-[3px] px-3 h-[34px] hover:cursor-pointer ${
-									filterType === "donations" ? "bg-[#FFFFFF]" : "bg-[#F4F4F5]"
-								}`}
-							>
-								<div className="font-semibold text-sm text-[##71717A]">Doações</div>
-							</div>
-							<div
-								onClick={() => handleSetFilterType("expense")}
-								className={`flex justify-center items-center rounded-[3px] px-3 h-[34px] hover:cursor-pointer ${
-									filterType === "expense" ? "bg-[#FFFFFF]" : "bg-[#F4F4F5]"
-								}`}
-							>
-								<div className="font-semibold text-sm text-[##71717A]">
-									Despesas
-								</div>
-							</div>
-						</div>
-						<div className="flex justify-end flex-1 gap-4 flex-wrap lg:flex-nowrap">
-							<Button
-								className="flex items-center gap-2 bg-[#09090B] hover:bg-[#3A3A3B]"
-								onClick={() => setIsModalNewRegister(true)}
-							>
-								<Plus className="h-5 w-5" />
-								Novo registro
-							</Button>
-						</div>
-					</div>
+  return (
+    <div>
+      {isModalNewRegister && (
+        <NewRegister
+          open={isModalNewRegister}
+          onOpenChange={open => setIsModalNewRegister(open)}
+          onReloadData={onReloadData}
+        />
+      )}
 
-					<When
-						condition={!isLoading}
-						fallback={
-							<div className="flex flex-1 items-center justify-center">
-								<PawLoader />
-							</div>
-						}
-					>
-						{filterType === "donations" && (
-							<TableDonations
-								data={donations.map(
-									({ animalId, category, userName, date, value }) => ({
-										type: ETransactionTypeDonation.Donation,
-										animalId: animalId ?? "",
-										category,
-										userName,
-										date,
-										value,
-									}),
-								)}
-							/>
-						)}
-						{filterType === "expense" && (
-							<TableExpense
-								data={expenses.map(({ category, description, date, value }) => ({
-									category,
-									description,
-									date,
-									value,
-								}))}
-							/>
-						)}
-					</When>
-				</div>
-			</div>
-		</div>
-	)
+      <div className="flex flex-wrap lg:flex-nowrap gap-4">
+        {[
+          {
+            type: "total",
+            label: "Total",
+            value:
+              donations.reduce((sum, item) => sum + item.value, 0) -
+              expenses.reduce((sum, item) => sum + item.value, 0),
+          },
+          {
+            type: "donations",
+            label: "Doações",
+            value: donations.reduce((sum, item) => sum + item.value, 0),
+          },
+          {
+            type: "expenses",
+            label: "Despesas",
+            value: expenses.reduce((sum, item) => sum + item.value, 0),
+          },
+        ].map(i => (
+          <Totalizer key={i.type} type={i.type} label={i.label} value={i.value} />
+        ))}
+      </div>
+      <div className="flex w-full mt-4 p-6 gap-4 rounded-lg bg-[#FFFFFF] border border-[#E4E4E7]">
+        <div className="flex flex-col w-full gap-4">
+          <div className="flex w-full gap-4 flex-wrap lg:flex-nowrap">
+            <div className="flex p-[5px] rounded-[6px] bg-[#F4F4F5]">
+              <div
+                onClick={() => handleSetFilterType("donations")}
+                className={`flex justify-center items-center rounded-[3px] px-3 h-[34px] hover:cursor-pointer ${
+                  filterType === "donations" ? "bg-[#FFFFFF]" : "bg-[#F4F4F5]"
+               }`}
+              >
+                <div className="font-semibold text-sm text-[##71717A]">Doações</div>
+              </div>
+              <div
+                onClick={() => handleSetFilterType("expense")}
+                className={`flex justify-center items-center rounded-[3px] px-3 h-[34px] hover:cursor-pointer ${
+                  filterType === "expense" ? "bg-[#FFFFFF]" : "bg-[#F4F4F5]"
+               }`}
+              >
+                <div className="font-semibold text-sm text-[##71717A]">
+                  Despesas
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-end flex-1 gap-4 flex-wrap lg:flex-nowrap">
+              <Button
+                className="flex items-center gap-2 bg-[#09090B] hover:bg-[#3A3A3B]"
+                onClick={() => setIsModalNewRegister(true)}
+              >
+                <Plus className="h-5 w-5" />
+                Novo registro
+              </Button>
+            </div>
+          </div>
+
+          <When
+            condition={!isLoading}
+            fallback={
+              <div className="flex flex-1 items-center justify-center">
+                <PawLoader />
+              </div>
+            }
+          >
+            {filterType === "donations" && (
+              <TableDonations
+                data={donations.map(
+                  ({ animalId, category, userName, date, value }) => ({
+                    type: ETransactionTypeDonation.Donation,
+                    animalId: animalId ?? "",
+                    category,
+                    userName,
+                    date,
+                    value,
+                  }),
+                )}
+              />
+            )}
+            {filterType === "expense" && (
+              <TableExpense
+                data={expenses.map(({ category, description, date, value }) => ({
+                  category,
+                  description,
+                  date,
+                  value,
+                }))}
+              />
+            )}
+          </When>
+        </div>
+      </div>
+    </div>
+  )
 }
